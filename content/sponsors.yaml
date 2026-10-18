@@ -1,0 +1,41 @@
+# Sponsorpakketten (uit het sponsorboekje)
+pakketten:
+  - naam: Bronzen sponsor
+    prijs: 100
+    voordelen:
+      - Vermelding van uw bedrijf op sociale media
+      - Banner met uw logo tijdens het evenement
+      - Logo op affiche
+  - naam: Zilveren sponsor
+    prijs: 250
+    voordelen:
+      - Persoonlijke vermelding van uw bedrijf op sociale media
+      - Banner met uw logo tijdens het evenement
+      - Logo op affiche én op reclameflyer
+  - naam: Gouden sponsor
+    prijs: 500
+    voordelen:
+      - Persoonlijke vermelding van uw bedrijf op sociale media
+      - Banner met uw logo tijdens het evenement
+      - Logo op affiche én op reclameflyer
+      - Logo van uw bedrijf op de t-shirt van de lopers op de officiële run
+  - naam: Hoofdsponsor
+    prijs: 750
+    uitgelicht: true
+    voordelen:
+      - Gouden sponsorpakket
+      - Logo van uw bedrijf op de loopnummers van de lopers
+      - Pakket volgens uw voorkeuren in onderling overleg
+
+# Contact om sponsor te worden – VUL AAN
+contact:
+  tekst: Interesse om sponsor te worden? Neem contact met ons op.
+  email: ""
+
+# Bevestigde sponsors – logo's in static/img/sponsors/
+# Voorbeeld:
+#   - naam: Bakkerij De Zon
+#     niveau: Gouden sponsor
+#     logo: bakkerij-de-zon.png
+#     url: https://www.voorbeeld.be
+lijst: []

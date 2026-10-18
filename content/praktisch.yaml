@@ -1,0 +1,30 @@
+# Praktische info – items met "VUL AAN" nog invullen
+blokken:
+  - titel: Waar?
+    icoon: pin
+    tekst: Daverlostraat 164, 8310 Assebroek (bij Brugge).
+    link_label: Open in Google Maps
+    link: https://www.google.com/maps/search/?api=1&query=Daverlostraat+164+8310+Assebroek
+  - titel: Wanneer?
+    icoon: kalender
+    tekst: Zondag 14 februari 2027, van 12u tot 18u.
+  - titel: Parcours
+    icoon: loper
+    tekst: Lopers doen rondjes van 1,7 km, wandelaars rondjes van 5 km. Je kiest zelf hoeveel rondjes.
+  - titel: Inschrijven
+    icoon: nummer
+    tekst: "VUL AAN: hoe en waar schrijf je je in, en vanaf wanneer?"
+  - titel: Parking & bereikbaarheid
+    icoon: auto
+    tekst: "VUL AAN: waar kan je parkeren, fietsenstalling, openbaar vervoer."
+  - titel: Contact
+    icoon: info
+    tekst: "VUL AAN: e-mailadres of telefoonnummer van de organisatie."
+
+faq:
+  - vraag: Moet ik een minimumbedrag inzamelen?
+    antwoord: Nee, meedoen kan vanaf elk bedrag.
+  - vraag: Hoe werkt sponsoring per rondje?
+    antwoord: Je sponsors beloven een bedrag per rondje. Na afloop wordt dat vermenigvuldigd met het aantal rondjes dat je gelopen of gewandeld hebt.
+  - vraag: Waar gaat het geld naartoe?
+    antwoord: Naar een mogelijke behandeling voor Pauline. Een deel gaat mee naar de Kom op tegen Kanker-loop op 14 maart in Boom.

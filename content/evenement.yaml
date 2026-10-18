@@ -1,0 +1,19 @@
+# Algemene gegevens van het evenement – gebruikt op elke pagina
+naam: Sponsorloop
+ondertitel: Running for Pauline
+editie: Valentines Edition
+datum_label: zondag 14 februari 2027
+uren_label: 12u tot 18u
+
+# Start en einde voor de countdown (Belgische tijd, wintertijd = +01:00)
+start: "2027-02-14T12:00:00+01:00"
+einde: "2027-02-14T18:00:00+01:00"
+
+locatie:
+  adres: Daverlostraat 164
+  gemeente: 8310 Assebroek
+  kaart_url: https://www.google.com/maps/search/?api=1&query=Daverlostraat+164+8310+Assebroek
+
+goed_doel:
+  naam: Kom op tegen Kanker
+  url: https://www.komoptegenkanker.be

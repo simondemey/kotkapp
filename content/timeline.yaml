@@ -1,0 +1,20 @@
+# VOORBEELD – pas de uren en activiteiten aan naar het echte programma
+items:
+  - uur: "11u30"
+    titel: Deuren open
+    tekst: Inschrijven en loopnummers ophalen aan de infostand.
+  - uur: "12u00"
+    titel: Start sponsorloop
+    tekst: Lopers starten met rondjes van 1,7 km, wandelaars met rondjes van 5 km.
+  - uur: "14u00"
+    titel: Kinderloop
+    tekst: Een extra rondje speciaal voor de jongste supporters.
+  - uur: "16u00"
+    titel: Valentijnsmoment
+    tekst: Samen lopen voor Pauline, met een hartje.
+  - uur: "17u30"
+    titel: Laatste rondje
+    tekst: Nog één keer alles geven.
+  - uur: "18u00"
+    titel: Einde en bedankt
+    tekst: Bekendmaking van het opgehaalde bedrag.

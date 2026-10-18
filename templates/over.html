@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Over – {{ super() }}{% endblock %}
+
+{% block content %}
+<section class="pagina">
+  <h1 class="pagina-titel">Over <span class="geel">Pauline</span></h1>
+  <div class="tekst">
+    {{ over_html | safe }}
+  </div>
+</section>
+
+<section class="pagina">
+  <h2 class="sectie-titel">Zo ging het er vorige jaren aan toe</h2>
+  <div class="galerij">
+    {% for i in range(1, 8) %}
+    <img src="static/img/galerij/foto-{{ i }}.jpg" alt="Sfeerbeeld van een vorige editie" loading="lazy">
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

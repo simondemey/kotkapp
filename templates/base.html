@@ -1,0 +1,61 @@
+{% macro bloem(cls="") -%}
+<svg class="bloem {{ cls }}" viewBox="0 0 100 100" aria-hidden="true">
+  {% for hoek in range(0, 360, 45) %}
+  <ellipse cx="50" cy="24" rx="10" ry="20" transform="rotate({{ hoek }} 50 50)" />
+  {% endfor %}
+  <circle cx="50" cy="50" r="9" />
+</svg>
+{%- endmacro %}
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ event.naam }} – {{ event.ondertitel }}{% endblock %}</title>
+  <meta name="description" content="{{ event.naam }} {{ event.ondertitel }} – {{ event.editie }}. {{ event.datum_label }}, {{ event.locatie.adres }}, {{ event.locatie.gemeente }}.">
+  <meta name="theme-color" content="#E0611F">
+  <meta property="og:title" content="{{ event.naam }} – {{ event.ondertitel }}">
+  <meta property="og:description" content="{{ event.datum_label }} · {{ event.uren_label }} · {{ event.locatie.gemeente }}">
+  <meta property="og:image" content="static/img/banner.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Great+Vibes&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="index.html">
+      <span class="oranje">Sponsor</span><span class="geel">loop</span>
+    </a>
+    <button class="menu-knop" aria-expanded="false" aria-controls="hoofdmenu" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="hoofdmenu" class="hoofdmenu">
+      {% for href, label in nav %}
+      <a href="{{ href }}"{% if href == current %} aria-current="page"{% endif %}>{{ label }}</a>
+      {% endfor %}
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-info">
+      <strong>{{ event.datum_label }}</strong><br>
+      {{ event.uren_label }} · {{ event.locatie.adres }}, {{ event.locatie.gemeente }}
+    </div>
+    <a class="kotk" href="{{ event.goed_doel.url }}" target="_blank" rel="noopener">
+      <span class="kotk-tekst">
+        <small>Een actie voor</small>
+        <span><span class="oranje">Kom op</span> <span class="geel">tegen Kanker</span></span>
+      </span>
+      {{ bloem() }}
+    </a>
+  </footer>
+
+  <script src="static/js/main.js" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

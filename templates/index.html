@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <img class="lopers" src="static/img/lopers.png" alt="Twee lopers die samen over de finish lopen">
+
+  <h1 class="titel">
+    <span class="titel-groot"><span class="oranje">Sponsor</span><span class="geel">loop</span></span>
+    <span class="titel-sub">Running for <span class="geel">Pauline</span></span>
+    <span class="script">{{ event.editie }} <span aria-hidden="true">♡</span></span>
+  </h1>
+
+  <div class="countdown" data-start="{{ event.start }}" data-einde="{{ event.einde }}" aria-live="polite">
+    <div class="cd-blok"><span class="cd-getal" data-eenheid="dagen">--</span><span class="cd-label">dagen</span></div>
+    <div class="cd-blok"><span class="cd-getal" data-eenheid="uren">--</span><span class="cd-label">uren</span></div>
+    <div class="cd-blok"><span class="cd-getal" data-eenheid="minuten">--</span><span class="cd-label">min</span></div>
+    <div class="cd-blok"><span class="cd-getal" data-eenheid="seconden">--</span><span class="cd-label">sec</span></div>
+  </div>
+  <p class="countdown-bericht" hidden></p>
+
+  <p class="datum">
+    <span>Save the date</span>
+    {{ event.datum_label }} · {{ event.uren_label }}
+  </p>
+
+  <div class="knoppen">
+    <a class="knop" href="praktisch.html">Praktische info</a>
+    <a class="knop knop-licht" href="over.html">Waarom we lopen</a>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}<script src="static/js/countdown.js" defer></script>{% endblock %}

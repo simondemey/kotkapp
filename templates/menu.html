@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Food & Drinks – {{ super() }}{% endblock %}
+
+{% block content %}
+<section class="pagina">
+  <h1 class="pagina-titel">Food <span class="geel">&amp; drinks</span></h1>
+  {% if menu.info %}<p class="intro">{{ menu.info }}</p>{% endif %}
+
+  <div class="menu">
+    {% for cat in menu.categorieen %}
+    <div class="menu-categorie">
+      <h2>{{ cat.naam }}</h2>
+      <ul>
+        {% for item in cat["items"] %}
+        <li>
+          <span class="menu-naam">{{ item.naam }}{% if item.tag %} <em class="tag">{{ item.tag }}</em>{% endif %}</span>
+          <span class="menu-stippel" aria-hidden="true"></span>
+          <span class="menu-prijs">€{{ "%.2f"|format(item.prijs)|replace(".", ",") }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

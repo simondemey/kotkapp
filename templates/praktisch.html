@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Praktische info – {{ super() }}{% endblock %}
+
+{% block content %}
+{% set iconen = {
+  "pin": '<path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/>',
+  "kalender": '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  "loper": '<circle cx="14" cy="4" r="2"/><path d="M6 21l4-6 3 2v5M8 12l3-4 4 3 3 1M11 8l-2 7"/>',
+  "nummer": '<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M9 10h6M9 14h6"/>',
+  "auto": '<path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="13" r="1"/><circle cx="16.5" cy="13" r="1"/>',
+  "info": '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+} %}
+<section class="pagina">
+  <h1 class="pagina-titel">Praktische <span class="geel">info</span></h1>
+
+  <div class="info-raster">
+    {% for b in praktisch.blokken %}
+    <article class="info-kaart">
+      <svg class="icoon" viewBox="0 0 24 24" aria-hidden="true">{{ iconen.get(b.icoon, iconen.info) | safe }}</svg>
+      <h2>{{ b.titel }}</h2>
+      <p>{{ b.tekst }}</p>
+      {% if b.link %}<a href="{{ b.link }}" target="_blank" rel="noopener">{{ b.link_label or b.link }}</a>{% endif %}
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% if praktisch.faq %}
+<section class="pagina">
+  <h2 class="sectie-titel">Veelgestelde vragen</h2>
+  <div class="faq">
+    {% for f in praktisch.faq %}
+    <details>
+      <summary>{{ f.vraag }}</summary>
+      <p>{{ f.antwoord }}</p>
+    </details>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

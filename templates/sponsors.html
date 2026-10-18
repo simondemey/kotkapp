@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Sponsors – {{ super() }}{% endblock %}
+
+{% block content %}
+<section class="pagina">
+  <h1 class="pagina-titel">Onze <span class="geel">sponsors</span></h1>
+
+  {% if sponsors.lijst %}
+  <div class="sponsor-logos">
+    {% for s in sponsors.lijst %}
+    <a class="sponsor-logo" href="{{ s.url or '#' }}" target="_blank" rel="noopener">
+      {% if s.logo %}<img src="static/img/sponsors/{{ s.logo }}" alt="{{ s.naam }}">{% else %}<span>{{ s.naam }}</span>{% endif %}
+      {% if s.niveau %}<small>{{ s.niveau }}</small>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="intro">De eerste sponsors worden binnenkort bekendgemaakt.</p>
+  {% endif %}
+</section>
+
+<section class="pagina">
+  <h2 class="sectie-titel">Word jij onze sponsor?</h2>
+  <div class="pakketten">
+    {% for p in sponsors.pakketten %}
+    <article class="pakket{% if p.uitgelicht %} uitgelicht{% endif %}">
+      <h3>{{ p.naam }}</h3>
+      <p class="prijs">€{{ p.prijs }}</p>
+      <ul>
+        {% for v in p.voordelen %}<li>{{ v }}</li>{% endfor %}
+      </ul>
+    </article>
+    {% endfor %}
+  </div>
+  <p class="intro">
+    {{ sponsors.contact.tekst }}
+    {% if sponsors.contact.email %}<a href="mailto:{{ sponsors.contact.email }}">{{ sponsors.contact.email }}</a>{% endif %}
+  </p>
+</section>
+{% endblock %}

@@ -1,0 +1,36 @@
+# VOORBEELD – pas het assortiment en de prijzen aan
+info: Betalen kan met drankbonnetjes. Alle opbrengsten gaan naar Running for Pauline.
+
+categorieen:
+  - naam: Food
+    items:
+      - naam: Croque monsieur
+        prijs: 4.00
+      - naam: Hotdog
+        prijs: 3.50
+      - naam: Pannenkoek met suiker
+        prijs: 2.50
+      - naam: Valentijnswafel
+        prijs: 3.00
+        tag: Valentijn
+  - naam: Warme dranken
+    items:
+      - naam: Koffie of thee
+        prijs: 2.00
+      - naam: Warme chocomelk
+        prijs: 2.50
+      - naam: Soep van de dag
+        prijs: 3.00
+  - naam: Koude dranken
+    items:
+      - naam: Water, plat of bruis
+        prijs: 2.00
+      - naam: Frisdrank
+        prijs: 2.50
+      - naam: Sportdrank
+        prijs: 2.50
+      - naam: Pils
+        prijs: 2.50
+      - naam: Cava
+        prijs: 5.00
+        tag: Valentijn

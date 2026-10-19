@@ -4,8 +4,9 @@
 {% block content %}
 <section class="pagina">
   <h1 class="pagina-titel">Food <span class="geel">&amp; drinks</span></h1>
-  {% if menu.info %}<p class="intro">{{ menu.info }}</p>{% endif %}
 
+  {% if menu.categorieen %}
+  {% if menu.info %}<p class="intro">{{ menu.info }}</p>{% endif %}
   <div class="menu">
     {% for cat in menu.categorieen %}
     <div class="menu-categorie">
@@ -22,5 +23,19 @@
     </div>
     {% endfor %}
   </div>
+  {% else %}
+  <div class="tba">
+    <p class="tba-titel">To be <span class="geel">announced</span></p>
+    {% if menu.info %}<p>{{ menu.info }}</p>{% endif %}
+    {% if menu.voorproefje %}
+    <p class="tba-sub">Alvast een voorproefje:</p>
+    <ul class="tba-lijst">
+      {% for item in menu.voorproefje %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if menu.betaling %}<p class="intro">{{ menu.betaling | md }}</p>{% endif %}
 </section>
 {% endblock %}

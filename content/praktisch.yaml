@@ -1,30 +1,57 @@
-# Praktische info – items met "VUL AAN" nog invullen
+# Praktische info (van de affiche "Praktische informatie"). **vet** mag in de teksten.
 blokken:
   - titel: Waar?
     icoon: pin
-    tekst: Daverlostraat 164, 8310 Assebroek (bij Brugge).
+    tekst: Daverlostraat 164, 8310 Assebroek (Brugge).
     link_label: Open in Google Maps
     link: https://www.google.com/maps/search/?api=1&query=Daverlostraat+164+8310+Assebroek
-  - titel: Wanneer?
-    icoon: kalender
-    tekst: Zondag 14 februari 2027, van 12u tot 18u.
-  - titel: Parcours
-    icoon: loper
-    tekst: Lopers doen rondjes van 1,7 km, wandelaars rondjes van 5 km. Je kiest zelf hoeveel rondjes.
+  - titel: Starturen
+    icoon: klok
+    tekst: Lopers en wandelaars kunnen starten tussen **13.00 uur en 16.00 uur**.
   - titel: Inschrijven
     icoon: nummer
-    tekst: "VUL AAN: hoe en waar schrijf je je in, en vanaf wanneer?"
-  - titel: Parking & bereikbaarheid
+    tekst: >-
+      **Nog niet ingeschreven?** Geen probleem! Je kan je ter plaatse nog inschrijven.
+      Wie deelneemt, meldt zich eerst aan bij de **administratiepost** om zich in te schrijven.
+    link_label: Of schrijf je nu al online in
+    link: inschrijven.html
+  - titel: Parkeren
     icoon: auto
-    tekst: "VUL AAN: waar kan je parkeren, fietsenstalling, openbaar vervoer."
-  - titel: Contact
-    icoon: info
-    tekst: "VUL AAN: e-mailadres of telefoonnummer van de organisatie."
+    tekst: >-
+      Parkeren kan aan het **Sportcomplex Daverlo** (Dries 2, 8310 Brugge)
+      of in de **omliggende straten**. Op het domein zelf kan **niet** geparkeerd worden.
+    link_label: Sportcomplex Daverlo in Google Maps
+    link: https://www.google.com/maps/search/?api=1&query=Dries+2+8310+Brugge
+  - titel: Met de fiets
+    icoon: fiets
+    tekst: >-
+      Kom je met de fiets? Rij door de **witte poort**.
+      Op het einde van de dreef is een **fietsenstalling** voorzien.
+  - titel: Kleedkamers & douches
+    icoon: deur
+    tekst: >-
+      Er zijn **kleedkamers** voorzien voor **mannen en vrouwen**.
+      Douches zijn helaas **niet** beschikbaar.
+  - titel: Kledij
+    icoon: jas
+    tekst: >-
+      Kleed je warm aan en breng zeker **reservekledij** mee,
+      aangepast aan **koude of natte weersomstandigheden**.
+  - titel: Betaling
+    icoon: euro
+    tekst: Betalen kan **cash** of via **QR-code met de bankapp**.
+  - titel: Honger gekregen?
+    icoon: eten
+    tekst: De buikjes kunnen voldoende gevuld worden met **heerlijke taart, soep en frietjes**!
+    link_label: Food & drinks
+    link: food-drinks.html
 
 faq:
   - vraag: Moet ik een minimumbedrag inzamelen?
     antwoord: Nee, meedoen kan vanaf elk bedrag.
   - vraag: Hoe werkt sponsoring per rondje?
     antwoord: Je sponsors beloven een bedrag per rondje. Na afloop wordt dat vermenigvuldigd met het aantal rondjes dat je gelopen of gewandeld hebt.
+  - vraag: Kan ik ook gewoon komen supporteren?
+    antwoord: Zeker! Schrijf je in als supporter of kom gewoon langs om de lopers en wandelaars aan te moedigen.
   - vraag: Waar gaat het geld naartoe?
     antwoord: Naar een mogelijke behandeling voor Pauline. Een deel gaat mee naar de Kom op tegen Kanker-loop op 14 maart in Boom.

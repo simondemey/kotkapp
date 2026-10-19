@@ -15,6 +15,7 @@ from pathlib import Path
 import markdown
 import yaml
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from markupsafe import Markup
 
 ROOT = Path(__file__).parent
 CONTENT = ROOT / "content"
@@ -46,11 +47,18 @@ def load_markdown(name: str) -> str:
     return markdown.markdown(text, extensions=["extra"])
 
 
+def md_inline(text: str) -> Markup:
+    """Markdown voor één alinea (bv. **vet**), zonder omringende <p>."""
+    html = markdown.markdown(text or "")
+    return Markup(html.removeprefix("<p>").removesuffix("</p>"))
+
+
 def build() -> None:
     env = Environment(
         loader=FileSystemLoader(TEMPLATES),
         autoescape=select_autoescape(["html"]),
     )
+    env.filters["md"] = md_inline
 
     context = {
         "event": load_yaml("evenement.yaml"),

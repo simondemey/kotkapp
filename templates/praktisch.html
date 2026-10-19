@@ -9,6 +9,12 @@
   "nummer": '<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M9 10h6M9 14h6"/>',
   "auto": '<path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="13" r="1"/><circle cx="16.5" cy="13" r="1"/>',
   "info": '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+  "klok": '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  "fiets": '<circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l4-7h5l3 7M10 9l2 7h-6M14 6h2"/>',
+  "deur": '<path d="M6 21V4h12v17M3 21h18"/><circle cx="14.5" cy="12.5" r=".8"/>',
+  "jas": '<path d="M9 3l3 3 3-3 5 3v5h-3v10H7V11H4V6z"/>',
+  "euro": '<path d="M17 6.5A7 7 0 1 0 17 17.5M4 10h9M4 14h9"/>',
+  "eten": '<path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 3c-2 2-2 6 0 8v10"/>',
 } %}
 <section class="pagina">
   <h1 class="pagina-titel">Praktische <span class="geel">info</span></h1>
@@ -18,8 +24,8 @@
     <article class="info-kaart">
       <svg class="icoon" viewBox="0 0 24 24" aria-hidden="true">{{ iconen.get(b.icoon, iconen.info) | safe }}</svg>
       <h2>{{ b.titel }}</h2>
-      <p>{{ b.tekst }}</p>
-      {% if b.link %}<a href="{{ b.link }}" target="_blank" rel="noopener">{{ b.link_label or b.link }}</a>{% endif %}
+      <p>{{ b.tekst | md }}</p>
+      {% if b.link %}<a href="{{ b.link }}"{% if b.link.startswith("http") %} target="_blank" rel="noopener"{% endif %}>{{ b.link_label or b.link }}</a>{% endif %}
     </article>
     {% endfor %}
   </div>

@@ -612,6 +612,30 @@ a { color: var(--oranje); }
 .admin-tabel th { background: var(--creme); color: var(--oranje); font-weight: 800; white-space: nowrap; }
 .admin-tabel td:first-child { font-weight: 600; white-space: nowrap; }
 
+/* Deelnemers in het inschrijfformulier */
+.deelnemers { display: grid; gap: .75rem; }
+.deelnemer {
+  margin: 0; min-width: 0;
+  padding: 1rem;
+  border: 2px solid var(--kaart);
+  border-radius: 14px;
+  background: var(--creme);
+  display: grid; gap: .6rem;
+}
+.deelnemer legend { padding: 0 .4rem; font-weight: 800; color: var(--oranje); }
+.deelnemer .d-weg { justify-self: start; font-size: .85rem; }
+.keuze-rij { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: .5rem; }
+.keuze-rij label { background: #fff; }
+#deelnemer-toevoegen { justify-self: start; border: 0; font: inherit; font-weight: 800; }
+
+/* Beheer: zoeken en vragen */
+.admin-zoek { margin-top: 1.5rem; max-width: 420px; }
+.vragen-lijst { display: grid; gap: .75rem; margin-top: 1rem; }
+.vraag { background: #fff; border: 3px solid var(--lint); border-radius: var(--radius); padding: 1rem 1.2rem; }
+.vraag p { margin: 0 0 .4rem; white-space: pre-line; }
+.vraag footer { font-size: .85rem; color: var(--zalm); overflow-wrap: anywhere; }
+.ja { color: #2f6b2a; font-weight: 800; }
+
 /* ---------- Footer ---------- */
 .site-footer {
   display: flex;

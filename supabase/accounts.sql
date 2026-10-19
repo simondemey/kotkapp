@@ -33,17 +33,33 @@ $$;
 grant execute on function public.is_admin() to anon, authenticated;
 
 -- ---------- Inschrijvingen ----------
+-- Eén inschrijving per account met 1 tot 10 deelnemers.
+-- Elke deelnemer: {"naam": "...", "loopt": true/false, "wandelt": true/false}, minstens één van beide.
+create or replace function public.deelnemers_geldig(d jsonb)
+returns boolean
+language sql
+immutable
+set search_path = ''
+as $$
+  select jsonb_typeof(d) = 'array'
+     and jsonb_array_length(d) between 1 and 10
+     and not exists (
+       select 1 from jsonb_array_elements(d) e
+       where jsonb_typeof(e -> 'naam') is distinct from 'string'
+          or char_length(btrim(e ->> 'naam')) not between 1 and 100
+          or jsonb_typeof(e -> 'loopt') is distinct from 'boolean'
+          or jsonb_typeof(e -> 'wandelt') is distinct from 'boolean'
+          or not ((e ->> 'loopt')::boolean or (e ->> 'wandelt')::boolean)
+     );
+$$;
+
 create table if not exists public.inschrijvingen (
-  user_id      uuid primary key default auth.uid() references auth.users (id) on delete cascade,
-  email        text,
-  voornaam     text not null check (char_length(voornaam) between 1 and 60),
-  achternaam   text not null check (char_length(achternaam) between 1 and 60),
-  telefoon     text check (char_length(telefoon) <= 30),
-  deelname     text not null check (deelname in ('lopen', 'wandelen')),
-  rondjes_doel integer check (rondjes_doel between 0 and 100),
-  opmerking    text check (char_length(opmerking) <= 500),
-  created_at   timestamptz not null default now(),
-  updated_at   timestamptz not null default now()
+  user_id     uuid primary key default auth.uid() references auth.users (id) on delete cascade,
+  email       text,
+  deelnemers  jsonb not null check (public.deelnemers_geldig(deelnemers)),
+  vragen      text check (char_length(vragen) <= 1000),
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
 );
 
 -- E-mail altijd uit het account halen en wijzigdatum bijhouden

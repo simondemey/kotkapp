@@ -1,13 +1,15 @@
-// Beheer: overzicht van alle inschrijvingen + export naar CSV. Enkel voor beheerders (zie supabase/accounts.sql).
+// Beheer: inschrijvingen opvolgen (tellers, deelnemerslijst, vragen) + export naar CSV.
+// Enkel voor beheerders (zie supabase/accounts.sql).
 (function () {
   const db = window.sb;
   const status = document.getElementById("admin-status");
   const inhoud = document.getElementById("admin-inhoud");
   if (!db || !status) return;
 
-  const KM_PER_RONDJE = { lopen: 1.7, wandelen: 5 };
   const datumFormaat = new Intl.DateTimeFormat("nl-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-  let rijen = [];
+  const zoek = document.getElementById("zoek");
+  let inschrijvingen = [];
+  let deelnemers = []; // één rij per deelnemer
 
   async function start() {
     const { data: { session } } = await db.auth.getSession();
@@ -19,61 +21,120 @@
       status.textContent = `Het account ${session.user.email} heeft geen beheerdersrechten.`;
       return;
     }
+    await laad();
+  }
 
+  async function laad() {
     const { data, error } = await db.from("inschrijvingen").select("*").order("created_at");
     if (error) {
       console.error(error);
+      status.hidden = false;
       status.textContent = "De inschrijvingen konden niet geladen worden.";
       return;
     }
-    rijen = data;
+    inschrijvingen = data;
+    deelnemers = data.flatMap((i) =>
+      i.deelnemers.map((d) => ({ ...d, email: i.email, created_at: i.created_at, vragen: i.vragen, user_id: i.user_id }))
+    );
     status.hidden = true;
     inhoud.hidden = false;
-    toon();
+    toonStats();
+    toonTabel();
+    toonVragen();
   }
 
-  function toon() {
-    const lopers = rijen.filter((r) => r.deelname === "lopen");
-    const km = rijen.reduce((som, r) => som + (r.rondjes_doel || 0) * (KM_PER_RONDJE[r.deelname] || 0), 0);
-    document.getElementById("stat-totaal").textContent = rijen.length;
-    document.getElementById("stat-lopers").textContent = lopers.length;
-    document.getElementById("stat-wandelaars").textContent = rijen.length - lopers.length;
-    document.getElementById("stat-km").textContent = Math.round(km);
+  function toonStats() {
+    const weekGeleden = Date.now() - 7 * 864e5;
+    const zet = (id, w) => (document.getElementById(id).textContent = w);
+    zet("stat-deelnemers", deelnemers.length);
+    zet("stat-lopers", deelnemers.filter((d) => d.loopt).length);
+    zet("stat-wandelaars", deelnemers.filter((d) => d.wandelt).length);
+    zet("stat-inschrijvingen", inschrijvingen.length);
+    zet("stat-week", inschrijvingen.filter((i) => new Date(i.created_at) > weekGeleden).reduce((som, i) => som + i.deelnemers.length, 0));
+  }
 
+  function cel(tr, waarde, klasse) {
+    const td = document.createElement("td");
+    td.textContent = waarde;
+    if (klasse) td.className = klasse;
+    tr.append(td);
+    return td;
+  }
+
+  function toonTabel() {
+    const term = zoek.value.trim().toLowerCase();
+    const zichtbaar = deelnemers.filter((d) => !term || d.naam.toLowerCase().includes(term) || (d.email || "").toLowerCase().includes(term));
     const tbody = document.getElementById("admin-rijen");
     tbody.replaceChildren(
-      ...rijen.map((r) => {
+      ...zichtbaar.map((d, i) => {
         const tr = document.createElement("tr");
-        [
-          `${r.voornaam} ${r.achternaam}`,
-          r.deelname === "lopen" ? "🏃 lopen" : "🚶 wandelen",
-          r.rondjes_doel ?? "",
-          r.email ?? "",
-          r.telefoon ?? "",
-          r.opmerking ?? "",
-          datumFormaat.format(new Date(r.created_at)),
-        ].forEach((waarde) => {
-          const td = document.createElement("td");
-          td.textContent = waarde;
-          tr.append(td);
-        });
+        cel(tr, i + 1);
+        cel(tr, d.naam);
+        cel(tr, d.loopt ? "✓" : "", "ja");
+        cel(tr, d.wandelt ? "✓" : "", "ja");
+        cel(tr, d.email ?? "");
+        cel(tr, datumFormaat.format(new Date(d.created_at)));
+        const td = cel(tr, "");
+        const weg = document.createElement("button");
+        weg.type = "button";
+        weg.className = "link-knop gevaar";
+        weg.textContent = "Inschrijving verwijderen";
+        weg.title = `Verwijdert de volledige inschrijving van ${d.email}`;
+        weg.addEventListener("click", () => verwijder(d));
+        td.append(weg);
         return tr;
       })
     );
-    if (!rijen.length) {
+    if (!zichtbaar.length) {
       const tr = document.createElement("tr");
-      tr.innerHTML = '<td colspan="7">Nog geen inschrijvingen.</td>';
+      cel(tr, term ? "Geen deelnemers gevonden." : "Nog geen inschrijvingen.").colSpan = 7;
       tbody.append(tr);
     }
   }
 
-  // CSV met ; en BOM zodat Excel (Belgische instellingen) het meteen goed opent
+  function toonVragen() {
+    const lijst = document.getElementById("vragen-lijst");
+    const metVraag = inschrijvingen.filter((i) => i.vragen);
+    lijst.replaceChildren(
+      ...metVraag.map((i) => {
+        const div = document.createElement("article");
+        div.className = "vraag";
+        const p = document.createElement("p");
+        p.textContent = i.vragen;
+        const f = document.createElement("footer");
+        f.textContent = `${i.email} · ${i.deelnemers.map((d) => d.naam).join(", ")} · ${datumFormaat.format(new Date(i.created_at))}`;
+        div.append(p, f);
+        return div;
+      })
+    );
+    if (!metVraag.length) lijst.innerHTML = '<p class="intro">Nog geen vragen.</p>';
+  }
+
+  async function verwijder(d) {
+    const i = inschrijvingen.find((x) => x.user_id === d.user_id);
+    const namen = i.deelnemers.map((x) => x.naam).join(", ");
+    if (!confirm(`De volledige inschrijving van ${i.email} verwijderen?\n\nDeelnemers: ${namen}`)) return;
+    const { error } = await db.from("inschrijvingen").delete().eq("user_id", d.user_id);
+    if (error) {
+      console.error(error);
+      return alert("Verwijderen mislukt.");
+    }
+    await laad();
+  }
+
+  zoek.addEventListener("input", toonTabel);
+  document.getElementById("vernieuw-knop").addEventListener("click", laad);
+
+  // CSV (één rij per deelnemer) met ; en BOM zodat Excel met Belgische instellingen het meteen goed opent
   document.getElementById("csv-knop").addEventListener("click", () => {
-    const kolommen = ["voornaam", "achternaam", "deelname", "rondjes_doel", "email", "telefoon", "opmerking", "created_at"];
-    const cel = (w) => `"${String(w ?? "").replace(/"/g, '""')}"`;
-    const csv = [kolommen.join(";"), ...rijen.map((r) => kolommen.map((k) => cel(r[k])).join(";"))].join("\r\n");
+    const kop = ["naam", "loopt", "wandelt", "ingeschreven door", "vragen", "datum"];
+    const veilig = (w) => `"${String(w ?? "").replace(/"/g, '""')}"`;
+    const regels = deelnemers.map((d) =>
+      [d.naam, d.loopt ? "ja" : "nee", d.wandelt ? "ja" : "nee", d.email, d.vragen, new Date(d.created_at).toLocaleString("nl-BE")].map(veilig).join(";")
+    );
+    const csv = [kop.join(";"), ...regels].join("\r\n");
     const url = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" }));
-    const a = Object.assign(document.createElement("a"), { href: url, download: "inschrijvingen-running-for-pauline.csv" });
+    const a = Object.assign(document.createElement("a"), { href: url, download: "deelnemers-running-for-pauline.csv" });
     a.click();
     URL.revokeObjectURL(url);
   });

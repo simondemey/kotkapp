@@ -9,6 +9,7 @@ import argparse
 import functools
 import http.server
 import shutil
+import time
 from pathlib import Path
 
 import markdown
@@ -58,6 +59,8 @@ def build() -> None:
         "praktisch": load_yaml("praktisch.yaml"),
         "fotomuur": load_yaml("fotomuur.yaml"),
         "nav": [(out, label) for out, _, label in PAGES],
+        # Versienummer achter CSS/JS-links, zodat gsm's na elke publicatie de nieuwe opmaak laden
+        "versie": str(int(time.time())),
     }
 
     # Overschrijven i.p.v. dist/ te verwijderen: OneDrive houdt mappen soms vergrendeld.

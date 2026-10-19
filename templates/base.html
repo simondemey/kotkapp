@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Great+Vibes&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="stylesheet" href="static/css/style.css?v={{ versie }}">
 </head>
 <body>
   <header class="site-header">
@@ -56,7 +56,7 @@
     </a>
   </footer>
 
-  <script src="static/js/main.js" defer></script>
+  <script src="static/js/main.js?v={{ versie }}" defer></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

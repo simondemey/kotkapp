@@ -22,7 +22,7 @@ TEMPLATES = ROOT / "templates"
 STATIC = ROOT / "static"
 DIST = ROOT / "dist"
 
-# (bestandsnaam in dist, template, menulabel)
+# (bestandsnaam in dist, template, menulabel – None = niet in het menu)
 PAGES = [
     ("index.html", "index.html", "Home"),
     ("over.html", "over.html", "Over"),
@@ -31,6 +31,8 @@ PAGES = [
     ("food-drinks.html", "menu.html", "Food & Drinks"),
     ("praktisch.html", "praktisch.html", "Praktische info"),
     ("fotomuur.html", "fotomuur.html", "Fotomuur"),
+    ("inschrijven.html", "inschrijven.html", "Inschrijven"),
+    ("admin.html", "admin.html", None),
 ]
 
 
@@ -58,7 +60,9 @@ def build() -> None:
         "menu": load_yaml("menu.yaml"),
         "praktisch": load_yaml("praktisch.yaml"),
         "fotomuur": load_yaml("fotomuur.yaml"),
-        "nav": [(out, label) for out, _, label in PAGES],
+        "inschrijven": load_yaml("inschrijven.yaml"),
+        "supabase": load_yaml("supabase.yaml"),
+        "nav": [(out, label) for out, _, label in PAGES if label],
         # Versienummer achter CSS/JS-links, zodat gsm's na elke publicatie de nieuwe opmaak laden
         "versie": str(int(time.time())),
     }

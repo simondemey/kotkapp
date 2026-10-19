@@ -1,11 +1,13 @@
 // Fotomuur: posts insturen en zichtbare posts (goedgekeurd = true) tonen via Supabase.
+// Ingelogde beheerders krijgen bij elke post een verwijderknop.
 (function () {
   const muur = document.getElementById("muur");
   const form = document.getElementById("post-form");
-  if (!muur || !form || !window.supabase) return;
+  if (!muur || !form || !window.sb) return;
 
   const cfg = muur.dataset;
-  const db = window.supabase.createClient(cfg.url, cfg.key);
+  const db = window.sb;
+  let isAdmin = false;
   const melding = form.querySelector(".form-melding");
   const knop = form.querySelector("button[type=submit]");
   const fotoInputs = [form.elements.camera, form.elements.foto];
@@ -69,7 +71,34 @@
     meta.append(naam, " · " + datumFormaat.format(new Date(post.created_at)));
     tekst.append(meta);
     kaart.append(tekst);
+    if (isAdmin) kaart.append(verwijderKnop(post, kaart));
     return kaart;
+  }
+
+  // ---------- Beheer: post (en foto) verwijderen ----------
+  function verwijderKnop(post, kaart) {
+    const knop = document.createElement("button");
+    knop.type = "button";
+    knop.className = "post-verwijder";
+    knop.textContent = "🗑️ Verwijderen";
+    knop.addEventListener("click", async () => {
+      if (!confirm(`Post van ${post.naam} verwijderen?`)) return;
+      knop.disabled = true;
+      const { error } = await db.from("posts").delete().eq("id", post.id);
+      if (error) {
+        console.error(error);
+        alert("Verwijderen mislukt. Ben je nog ingelogd als beheerder?");
+        knop.disabled = false;
+        return;
+      }
+      if (post.foto_pad) {
+        const { error: fotoFout } = await db.storage.from(cfg.bucket).remove([post.foto_pad]);
+        if (fotoFout) console.error(fotoFout); // post is weg; foto blijft enkel in de opslag
+      }
+      kaart.remove();
+      if (!muur.querySelector(".post")) muur.append(statusTekst(cfg.leeg));
+    });
+    return knop;
   }
 
   // ---------- Foto verkleinen voor upload ----------
@@ -160,5 +189,9 @@
     }
   });
 
-  laadMuur();
+  window.sbIsAdmin().then((admin) => {
+    isAdmin = admin;
+    if (isAdmin) document.body.classList.add("is-admin");
+    laadMuur();
+  });
 })();

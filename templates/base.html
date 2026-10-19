@@ -14,6 +14,7 @@
   <title>{% block title %}{{ event.naam }} – {{ event.ondertitel }}{% endblock %}</title>
   <meta name="description" content="{{ event.naam }} {{ event.ondertitel }} – {{ event.editie }}. {{ event.datum_label }}, {{ event.locatie.adres }}, {{ event.locatie.gemeente }}.">
   <meta name="theme-color" content="#E0611F">
+  {% if current == "admin.html" %}<meta name="robots" content="noindex">{% endif %}
   <meta property="og:title" content="{{ event.naam }} – {{ event.ondertitel }}">
   <meta property="og:description" content="{{ event.datum_label }} · {{ event.uren_label }} · {{ event.locatie.gemeente }}">
   <meta property="og:image" content="static/img/banner.jpg">
@@ -22,7 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Great+Vibes&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/style.css?v={{ versie }}">
 </head>
-<body>
+<body data-sb-url="{{ supabase.url }}" data-sb-key="{{ supabase.key }}">
   <header class="site-header">
     <a class="logo" href="index.html">
       <span class="oranje">Sponsor</span><span class="geel">loop</span>
@@ -32,7 +33,7 @@
     </button>
     <nav id="hoofdmenu" class="hoofdmenu">
       {% for href, label in nav %}
-      <a href="{{ href }}"{% if href == current %} aria-current="page"{% endif %}>{{ label }}</a>
+      <a href="{{ href }}"{% if href == "inschrijven.html" %} class="nav-cta"{% endif %}{% if href == current %} aria-current="page"{% endif %}>{{ label }}</a>
       {% endfor %}
     </nav>
   </header>
@@ -57,6 +58,10 @@
   </footer>
 
   <script src="static/js/main.js?v={{ versie }}" defer></script>
+  {% if gebruikt_supabase %}
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js" defer></script>
+  <script src="static/js/sb.js?v={{ versie }}" defer></script>
+  {% endif %}
   {% block scripts %}{% endblock %}
 </body>
 </html>

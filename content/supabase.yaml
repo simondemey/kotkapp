@@ -1,0 +1,5 @@
+# Verbinding met Supabase (fotomuur, accounts, inschrijvingen)
+# De publishable key mag publiek staan; de beveiligingsregels (supabase/*.sql) bepalen wat bezoekers mogen.
+# Zet hier NOOIT de secret/service_role key.
+url: https://bulyalhdjcwvbjicgoqz.supabase.co
+key: sb_publishable_qifEhl2cBYVjf94L6w1tKA_sZu8o4U3

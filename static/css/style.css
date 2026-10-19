@@ -482,7 +482,7 @@ a { color: var(--oranje); }
 .veld { display: grid; gap: .35rem; font-weight: 800; color: var(--oranje); min-width: 0; }
 .veld input, .veld textarea { width: 100%; max-width: 100%; }
 .veld small { color: var(--zalm); font-weight: 600; }
-.veld input[type=text], .veld textarea {
+.veld input:not([type=file]):not([type=radio]):not([type=checkbox]), .veld textarea {
   font: inherit;
   font-weight: 400;
   color: var(--tekst);
@@ -546,6 +546,71 @@ a { color: var(--oranje); }
 .post-tekst p { margin: 0 0 .5rem; white-space: pre-line; }
 .post-tekst footer { font-size: .85rem; color: var(--zalm); }
 .post-tekst strong { color: var(--oranje); }
+
+/* Inschrijven / account */
+.klein { margin: 0; font-size: .85rem; color: var(--zalm); }
+.veld-rij { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 1rem; }
+.keuze { border: 0; margin: 0; padding: 0; gap: .5rem; }
+.keuze legend { padding: 0; margin-bottom: .35rem; }
+.keuze label {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .7rem .9rem;
+  border: 2px solid var(--kaart);
+  border-radius: 12px;
+  background: var(--creme);
+  color: var(--tekst);
+  font-weight: 600;
+  cursor: pointer;
+}
+.keuze label:has(input:checked) { border-color: var(--oranje); background: #fff3ea; }
+.keuze input { accent-color: var(--oranje); width: 18px; height: 18px; }
+.account-balk {
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem;
+  padding-bottom: .75rem; border-bottom: 2px dotted var(--kaart); font-size: .9rem;
+  overflow-wrap: anywhere;
+}
+.link-knop {
+  background: none; border: 0; padding: 0; font: inherit; font-weight: 600;
+  color: var(--oranje); text-decoration: underline; cursor: pointer;
+}
+.link-knop.gevaar { color: #b3261e; }
+.account-acties { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; font-size: .9rem; }
+.account-acties :only-child { margin-left: auto; }
+.status-badge {
+  margin: 0; justify-self: start;
+  padding: .35rem .9rem; border-radius: 999px;
+  background: #e5f4e3; color: #2f6b2a; font-weight: 800; font-size: .9rem;
+}
+
+/* Menu: Inschrijven uitlichten */
+.hoofdmenu a.nav-cta { background: var(--geel); color: var(--tekst); }
+.hoofdmenu a.nav-cta[aria-current="page"] { background: var(--oranje); color: #fff; }
+
+/* Beheer */
+.admin-balk { display: none; }
+.is-admin .admin-balk {
+  display: block; text-align: center; font-weight: 600;
+  background: var(--lint); border-radius: var(--radius); padding: .6rem 1rem; margin: 0 0 1rem;
+}
+.post-verwijder {
+  display: block; width: 100%;
+  border: 0; border-top: 2px solid var(--lint);
+  background: #fff5f4; color: #b3261e;
+  font: inherit; font-weight: 800; padding: .6rem; cursor: pointer;
+}
+.post-verwijder:disabled { opacity: .5; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .75rem; margin: 1rem 0 1.5rem; }
+.stat {
+  background: #fff; border: 3px solid var(--lint); border-radius: var(--radius);
+  padding: 1rem; text-align: center; display: grid;
+}
+.stat-getal { font-family: var(--font-titel); font-size: 3rem; line-height: 1; color: var(--oranje); }
+.stat-label { font-weight: 800; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--zalm); }
+.tabel-wrap { overflow-x: auto; margin-top: 1.5rem; background: #fff; border: 3px solid var(--lint); border-radius: var(--radius); }
+.admin-tabel { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.admin-tabel th, .admin-tabel td { padding: .6rem .8rem; text-align: left; border-bottom: 1px solid var(--lint); vertical-align: top; }
+.admin-tabel th { background: var(--creme); color: var(--oranje); font-weight: 800; white-space: nowrap; }
+.admin-tabel td:first-child { font-weight: 600; white-space: nowrap; }
 
 /* ---------- Footer ---------- */
 .site-footer {

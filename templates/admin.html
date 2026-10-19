@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% set gebruikt_supabase = true %}
+{% block title %}Beheer – {{ super() }}{% endblock %}
+
+{% block content %}
+<section class="pagina">
+  <h1 class="pagina-titel">Be<span class="geel">heer</span></h1>
+  <p class="intro" id="admin-status">Laden…</p>
+
+  <div id="admin-inhoud" hidden>
+    <div class="stats">
+      <div class="stat"><span class="stat-getal" id="stat-totaal">0</span><span class="stat-label">inschrijvingen</span></div>
+      <div class="stat"><span class="stat-getal" id="stat-lopers">0</span><span class="stat-label">lopers</span></div>
+      <div class="stat"><span class="stat-getal" id="stat-wandelaars">0</span><span class="stat-label">wandelaars</span></div>
+      <div class="stat"><span class="stat-getal" id="stat-km">0</span><span class="stat-label">km gepland</span></div>
+    </div>
+
+    <div class="knoppen">
+      <button class="knop" type="button" id="csv-knop">⬇️ Download Excel (CSV)</button>
+      <a class="knop knop-licht" href="fotomuur.html">Fotomuur beheren</a>
+    </div>
+
+    <div class="tabel-wrap">
+      <table class="admin-tabel">
+        <thead>
+          <tr><th>Naam</th><th>Deelname</th><th>Rondjes</th><th>E-mail</th><th>Gsm</th><th>Opmerking</th><th>Ingeschreven</th></tr>
+        </thead>
+        <tbody id="admin-rijen"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="static/js/admin.js?v={{ versie }}" defer></script>
+{% endblock %}

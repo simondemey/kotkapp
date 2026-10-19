@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% set gebruikt_supabase = true %}
+{% block title %}Inschrijven – {{ super() }}{% endblock %}
+
+{% block content %}
+<section class="pagina">
+  <h1 class="pagina-titel">Inschrij<span class="geel">ven</span></h1>
+  <p class="intro" id="account-intro">{{ inschrijven.intro }}</p>
+  <p class="intro" id="account-laden">Laden…</p>
+
+  <!-- Stap 1: inloggen met e-mail -->
+  <form class="post-form" id="login-form" hidden novalidate data-bedankt="{{ inschrijven.login_bedankt }}">
+    <label class="veld">
+      <span>Je e-mailadres</span>
+      <input type="email" name="email" required autocomplete="email" inputmode="email">
+    </label>
+    <button class="knop" type="submit">Stuur mij een inloglink</button>
+    <p class="form-melding" role="status" hidden></p>
+    <p class="klein">Al ingeschreven? Vul hetzelfde e-mailadres in om je inschrijving te bekijken of aan te passen.</p>
+  </form>
+
+  <!-- Stap 2: inschrijving invullen / aanpassen -->
+  <form class="post-form" id="inschrijf-form" hidden novalidate
+        data-opgeslagen="{{ inschrijven.opgeslagen }}">
+    <div class="account-balk">
+      <span>Ingelogd als <strong id="account-email"></strong></span>
+      <button type="button" class="link-knop" id="uitloggen">Uitloggen</button>
+    </div>
+
+    <p class="status-badge" id="status-badge" hidden>✓ Je bent ingeschreven</p>
+
+    <div class="veld-rij">
+      <label class="veld">
+        <span>Voornaam</span>
+        <input type="text" name="voornaam" maxlength="60" required autocomplete="given-name">
+      </label>
+      <label class="veld">
+        <span>Achternaam</span>
+        <input type="text" name="achternaam" maxlength="60" required autocomplete="family-name">
+      </label>
+    </div>
+
+    <label class="veld">
+      <span>Gsm-nummer <small>(optioneel)</small></span>
+      <input type="tel" name="telefoon" maxlength="30" autocomplete="tel">
+    </label>
+
+    <fieldset class="veld keuze">
+      <legend>Ik doe mee als</legend>
+      <label><input type="radio" name="deelname" value="lopen" required> 🏃 Loper <small>(rondjes van 1,7 km)</small></label>
+      <label><input type="radio" name="deelname" value="wandelen"> 🚶 Wandelaar <small>(rondjes van 5 km)</small></label>
+    </fieldset>
+
+    <label class="veld">
+      <span>Hoeveel rondjes wil je doen? <small>(schatting, optioneel)</small></span>
+      <input type="number" name="rondjes_doel" min="0" max="100" inputmode="numeric">
+    </label>
+
+    <label class="veld">
+      <span>Opmerking <small>(optioneel)</small></span>
+      <textarea name="opmerking" maxlength="500" rows="3"></textarea>
+    </label>
+
+    <label class="toestemming">
+      <input type="checkbox" name="privacy" required>
+      <span>{{ inschrijven.privacy }}</span>
+    </label>
+
+    <button class="knop" type="submit">Inschrijving opslaan</button>
+    <p class="form-melding" role="status" hidden></p>
+
+    <div class="account-acties">
+      <a class="link-knop" id="admin-link" href="admin.html" hidden>🛠️ Naar beheer</a>
+      <button type="button" class="link-knop gevaar" id="uitschrijven" hidden>Inschrijving verwijderen</button>
+    </div>
+  </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="static/js/inschrijven.js?v={{ versie }}" defer></script>
+{% endblock %}

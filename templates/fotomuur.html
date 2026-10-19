@@ -17,11 +17,25 @@
       <textarea name="bericht" maxlength="500" rows="3" placeholder="Een aanmoediging, een herinnering…"></textarea>
     </label>
 
-    <label class="veld foto-kiezer">
+    <div class="veld foto-kiezer">
       <span>Foto <small>(optioneel)</small></span>
-      <input type="file" name="foto" accept="image/*">
-      <img class="foto-voorbeeld" alt="" hidden>
-    </label>
+      <div class="foto-knoppen">
+        <!-- camera: opent meteen de camera op gsm -->
+        <label class="knop-klein">
+          📷 Maak een foto
+          <input type="file" name="camera" accept="image/*" capture="environment">
+        </label>
+        <!-- zonder accept-filter: de gsm laat zelf kiezen (galerij, Google Foto's, bestanden, …) -->
+        <label class="knop-klein">
+          🖼️ Kies een foto
+          <input type="file" name="foto">
+        </label>
+      </div>
+      <div class="foto-gekozen" hidden>
+        <img class="foto-voorbeeld" alt="Gekozen foto">
+        <button type="button" class="foto-wis">Foto verwijderen</button>
+      </div>
+    </div>
 
     <!-- honeypot tegen spambots: blijft leeg bij echte bezoekers -->
     <label class="hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>

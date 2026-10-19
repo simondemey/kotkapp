@@ -492,8 +492,37 @@ a { color: var(--oranje); }
   background: var(--creme);
 }
 .veld input:focus, .veld textarea:focus { outline: 3px solid var(--geel); border-color: var(--geel); }
-.veld input[type=file] { font: inherit; font-weight: 400; color: var(--tekst); }
-.foto-voorbeeld { max-height: 220px; width: auto; border-radius: 12px; }
+.foto-knoppen { display: flex; flex-wrap: wrap; gap: .5rem; }
+.knop-klein {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .6rem 1rem;
+  border-radius: 999px;
+  background: var(--lint);
+  color: var(--tekst);
+  font-weight: 800;
+  font-size: .95rem;
+  cursor: pointer;
+  position: relative;
+}
+.knop-klein:hover { background: var(--kaart); }
+.knop-klein:focus-within { outline: 3px solid var(--geel); }
+.knop-klein input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.foto-gekozen { display: grid; gap: .5rem; justify-items: start; }
+.foto-gekozen[hidden] { display: none; }
+.foto-voorbeeld { max-height: 220px; max-width: 100%; width: auto; border-radius: 12px; }
+.foto-wis {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--zalm);
+  text-decoration: underline;
+  cursor: pointer;
+}
 .toestemming { display: flex; gap: .6rem; align-items: flex-start; font-size: .9rem; }
 .toestemming input { margin-top: .3rem; accent-color: var(--oranje); width: 18px; height: 18px; flex: none; }
 .post-form .knop { border: 0; cursor: pointer; font: inherit; font-weight: 800; justify-self: start; }

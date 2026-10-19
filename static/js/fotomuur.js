@@ -8,8 +8,10 @@
   const db = window.supabase.createClient(cfg.url, cfg.key);
   const melding = form.querySelector(".form-melding");
   const knop = form.querySelector("button[type=submit]");
-  const fotoInput = form.elements.foto;
+  const fotoInputs = [form.elements.camera, form.elements.foto];
+  const gekozen = form.querySelector(".foto-gekozen");
   const voorbeeld = form.querySelector(".foto-voorbeeld");
+  let fotoBestand = null;
 
   const MAX_ZIJDE = 1600;
   const datumFormaat = new Intl.DateTimeFormat("nl-BE", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
@@ -83,12 +85,29 @@
     );
   }
 
-  fotoInput.addEventListener("change", () => {
-    const bestand = fotoInput.files[0];
+  function zetFoto(bestand) {
     if (voorbeeld.src) URL.revokeObjectURL(voorbeeld.src);
-    voorbeeld.hidden = !bestand;
+    voorbeeld.removeAttribute("src");
+    fotoBestand = bestand;
+    gekozen.hidden = !bestand;
     if (bestand) voorbeeld.src = URL.createObjectURL(bestand);
-  });
+  }
+
+  fotoInputs.forEach((input) =>
+    input.addEventListener("change", () => {
+      const bestand = input.files[0];
+      input.value = ""; // zelfde foto opnieuw kiezen moet ook werken
+      if (!bestand) return;
+      if (!bestand.type.startsWith("image/")) {
+        zetFoto(null);
+        return toon("Kies een foto (JPG, PNG of HEIC).", true);
+      }
+      melding.hidden = true;
+      zetFoto(bestand);
+    })
+  );
+
+  form.querySelector(".foto-wis").addEventListener("click", () => zetFoto(null));
 
   // ---------- Post insturen ----------
   function toon(tekst, fout = false) {
@@ -101,7 +120,7 @@
     e.preventDefault();
     const naam = form.elements.naam.value.trim();
     const bericht = form.elements.bericht.value.trim();
-    const bestand = fotoInput.files[0];
+    const bestand = fotoBestand;
 
     if (form.elements.website.value) return; // bot
     if (!naam) return toon("Vul je naam in.", true);
@@ -129,7 +148,7 @@
       if (error) throw error;
 
       form.reset();
-      voorbeeld.hidden = true;
+      zetFoto(null);
       toon(cfg.bedankt);
     } catch (err) {
       console.error(err);

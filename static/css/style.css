@@ -731,3 +731,8 @@ a { color: var(--oranje); }
 .nummer-naam { font-weight: 800; overflow-wrap: anywhere; }
 .nummer-soort { font-size: .85rem; font-weight: 600; color: var(--zalm); }
 .d-nummer { font-size: 1rem; padding: .15rem .7rem; }
+
+/* Grote inschrijfknop op de homepagina */
+.knop-groot { font-size: 1.15rem; padding: 1rem 2rem; box-shadow: 0 5px 0 #b44c15; }
+.knop-groot:hover { box-shadow: 0 7px 0 #b44c15; }
+@media (max-width: 520px) { .knoppen .knop-groot { flex-basis: 100%; } }

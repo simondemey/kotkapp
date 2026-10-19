@@ -702,3 +702,13 @@ a { color: var(--oranje); }
 .footer-socials svg .vol { fill: var(--oranje); stroke: none; }
 .footer-mail { font-weight: 600; overflow-wrap: anywhere; }
 @media (max-width: 520px) { .footer-socials { justify-content: center; } }
+
+/* Rechtstreeks steunen: rekeninggegevens */
+.overschrijving { margin-top: 1.5rem; }
+.rekening { margin: 0 auto; display: grid; gap: .6rem; max-width: 420px; text-align: left; }
+.rekening > div { background: var(--creme); border: 2px solid var(--lint); border-radius: 12px; padding: .6rem .9rem; }
+.rekening dt { font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--zalm); }
+.rekening dd { margin: .15rem 0 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; font-weight: 600; }
+.rekening .iban { font-size: 1.15rem; font-weight: 800; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.rekening .kopieer { border: 0; font: inherit; font-size: .85rem; font-weight: 800; padding: .35rem .8rem; }
+.overschrijving .klein { margin-top: 1rem; }

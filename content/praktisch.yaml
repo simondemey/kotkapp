@@ -11,9 +11,9 @@ blokken:
   - titel: Inschrijven
     icoon: nummer
     tekst: >-
-      **Nog niet ingeschreven?** Geen probleem! Je kan je ter plaatse nog inschrijven.
-      Wie deelneemt, meldt zich eerst aan bij de **administratiepost** om zich in te schrijven.
-    link_label: Of schrijf je nu al online in
+      Schrijf je **vooraf online** in.
+      Op de dag zelf meld je je eerst aan bij de **administratiepost**.
+    link_label: Schrijf je nu in
     link: inschrijven.html
   - titel: Parkeren
     icoon: auto

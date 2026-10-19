@@ -44,5 +44,6 @@
     <p>Doneer rechtstreeks aan ons team via de pagina van {{ event.goed_doel.naam }}.</p>
     <a class="knop" href="{{ event.goed_doel.steun_url }}" target="_blank" rel="noopener">{{ event.goed_doel.steun_label }} ♡</a>
   </div>
+  {% include "_overschrijving.html" %}
 </section>
 {% endblock %}

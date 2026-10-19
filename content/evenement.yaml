@@ -25,6 +25,13 @@ socials:
   instagram: https://www.instagram.com/sponsorloop_runningforpauline/
   facebook: ""
 
+# Rechtstreeks steunen via overschrijving
+overschrijving:
+  iban: BE56 7360 3575 6688
+  begunstigde: ""          # naam van de rekeninghouder (leeg = niet tonen)
+  mededeling: Steun Pauline + je naam
+  tekst: Wil je Pauline rechtstreeks steunen? Doe een bijdrage via overschrijving. Vermeld gerust je naam in de mededeling.
+
 goed_doel:
   naam: Kom op tegen Kanker
   url: https://www.komoptegenkanker.be

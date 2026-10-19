@@ -1,0 +1,28 @@
+{# Blok "Rechtstreeks steunen" met rekeningnummer – gebruikt op Home, Over en Sponsors #}
+{% set o = event.overschrijving %}
+<div class="steun-blok overschrijving">
+  <h2>Rechtstreeks steunen</h2>
+  <p>{{ o.tekst }}</p>
+  <dl class="rekening">
+    <div>
+      <dt>Rekeningnummer</dt>
+      <dd>
+        <span class="iban">{{ o.iban }}</span>
+        <button type="button" class="knop-klein kopieer" data-kopieer="{{ o.iban | replace(' ', '') }}">📋 Kopieer</button>
+      </dd>
+    </div>
+    {% if o.begunstigde %}
+    <div>
+      <dt>Op naam van</dt>
+      <dd>{{ o.begunstigde }}</dd>
+    </div>
+    {% endif %}
+    <div>
+      <dt>Mededeling</dt>
+      <dd>{{ o.mededeling }}</dd>
+    </div>
+  </dl>
+  {% if toon_kotk_link %}
+  <p class="klein">Of steun ons team via <a href="{{ event.goed_doel.steun_url }}" target="_blank" rel="noopener">de pagina van {{ event.goed_doel.naam }}</a>.</p>
+  {% endif %}
+</div>

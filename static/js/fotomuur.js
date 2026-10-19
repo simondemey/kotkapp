@@ -1,4 +1,4 @@
-// Fotomuur: posts insturen (ter goedkeuring) en goedgekeurde posts tonen via Supabase.
+// Fotomuur: posts insturen en zichtbare posts (goedgekeurd = true) tonen via Supabase.
 (function () {
   const muur = document.getElementById("muur");
   const form = document.getElementById("post-form");
@@ -150,6 +150,8 @@
       form.reset();
       zetFoto(null);
       toon(cfg.bedankt);
+      await laadMuur();
+      muur.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (err) {
       console.error(err);
       toon(err.message?.startsWith("Deze foto") ? err.message : "Er ging iets mis bij het plaatsen. Probeer het opnieuw.", true);

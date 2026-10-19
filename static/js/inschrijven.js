@@ -161,6 +161,14 @@
 
     const knop = form.querySelector("button[type=submit]");
     knop.disabled = true;
+
+    // Login nog geldig? getSession vernieuwt een verlopen login automatisch
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) {
+      knop.disabled = false;
+      return sessieVerlopen();
+    }
+
     const { error } = await db.from("inschrijvingen").upsert(
       { user_id: gebruiker.id, deelnemers, vragen: form.elements.vragen.value.trim() || null },
       { onConflict: "user_id" }
@@ -168,6 +176,7 @@
     knop.disabled = false;
     if (error) {
       console.error(error);
+      if (error.code === "42501" || error.status === 401 || /jwt/i.test(error.message)) return sessieVerlopen();
       return melding(form, "Opslaan mislukt. Probeer het opnieuw.", true);
     }
     // Opnieuw laden zodat de nummers zichtbaar worden
@@ -186,6 +195,13 @@
     await toonInschrijving();
     melding(form, "Je inschrijving is verwijderd.");
   });
+
+  // Login verlopen: terug naar het inlogformulier met uitleg
+  async function sessieVerlopen() {
+    await render(null);
+    melding(loginForm, "Je bent niet meer ingelogd. Vraag hieronder een nieuwe inloglink aan en sla daarna opnieuw op.", true);
+    loginForm.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 
   // ---------- Juiste stap tonen ----------
   async function render(session) {

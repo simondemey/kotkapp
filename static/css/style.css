@@ -22,6 +22,7 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
+  overflow-x: clip; /* nooit zijwaarts scrollen op gsm */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -155,8 +156,12 @@ a { color: var(--oranje); }
   font-family: var(--font-script);
   color: var(--oranje);
   font-size: clamp(2rem, 7vw, 3.6rem);
-  transform: rotate(-8deg) translateX(clamp(1rem, 12vw, 9rem));
-  margin-top: -.2em;
+  transform: rotate(-6deg) translateX(clamp(1rem, 10vw, 8rem));
+  margin-top: .05em;
+}
+
+@media (max-width: 600px) {
+  .script { transform: rotate(-5deg); margin-top: .2em; }
 }
 
 /* Countdown */
@@ -471,9 +476,11 @@ a { color: var(--oranje); }
   border: 3px solid var(--lint);
   border-radius: var(--radius);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
-.veld { display: grid; gap: .35rem; font-weight: 800; color: var(--oranje); }
+.veld { display: grid; gap: .35rem; font-weight: 800; color: var(--oranje); min-width: 0; }
+.veld input, .veld textarea { width: 100%; max-width: 100%; }
 .veld small { color: var(--zalm); font-weight: 600; }
 .veld input[type=text], .veld textarea {
   font: inherit;

@@ -46,6 +46,13 @@ blokken:
     link_label: Food & drinks
     link: food-drinks.html
 
+  - titel: Contact & socials
+    icoon: info
+    tekst: >-
+      Vragen? Mail ons op [sponserloopkotk@gmail.com](mailto:sponserloopkotk@gmail.com)
+      of volg ons op [Instagram](https://www.instagram.com/sponsorloop_runningforpauline/)
+      voor het laatste nieuws.
+
 faq:
   - vraag: Moet ik een minimumbedrag inzamelen?
     antwoord: Nee, meedoen kan vanaf elk bedrag.

@@ -14,6 +14,14 @@ locatie:
   gemeente: 8310 Assebroek
   kaart_url: https://www.google.com/maps/search/?api=1&query=Daverlostraat+164+8310+Assebroek
 
+contact:
+  email: sponserloopkotk@gmail.com
+
+# Leeg laten = niet tonen
+socials:
+  instagram: https://www.instagram.com/sponsorloop_runningforpauline/
+  facebook: ""
+
 goed_doel:
   naam: Kom op tegen Kanker
   url: https://www.komoptegenkanker.be

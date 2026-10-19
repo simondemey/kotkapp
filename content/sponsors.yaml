@@ -27,10 +27,10 @@ pakketten:
       - Logo van uw bedrijf op de loopnummers van de lopers
       - Pakket volgens uw voorkeuren in onderling overleg
 
-# Contact om sponsor te worden – VUL AAN
+# Contact om sponsor te worden
 contact:
   tekst: Interesse om sponsor te worden? Neem contact met ons op.
-  email: ""
+  email: sponserloopkotk@gmail.com
 
 # Bevestigde sponsors – logo's in static/img/sponsors/
 # Voorbeeld:

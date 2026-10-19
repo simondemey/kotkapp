@@ -17,3 +17,6 @@ locatie:
 goed_doel:
   naam: Kom op tegen Kanker
   url: https://www.komoptegenkanker.be
+  # Teampagina bij de 100 km run waar mensen online kunnen doneren
+  steun_url: https://www.komoptegenkanker.be/de-100km-run/steun-een-team/05275b58-30d4-46a8-b8bc-8c741227fa4f
+  steun_label: Steun ons team

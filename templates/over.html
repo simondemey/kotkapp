@@ -7,6 +7,11 @@
   <div class="tekst">
     {{ over_html | safe }}
   </div>
+  <div class="steun-blok">
+    <h2>Hoe kun jij helpen?</h2>
+    <p>Loop of wandel mee, of steun ons team rechtstreeks via de pagina van {{ event.goed_doel.naam }}.</p>
+    <a class="knop" href="{{ event.goed_doel.steun_url }}" target="_blank" rel="noopener">{{ event.goed_doel.steun_label }} ♡</a>
+  </div>
 </section>
 
 <section class="pagina">

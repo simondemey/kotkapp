@@ -44,7 +44,8 @@
   <footer class="site-footer">
     <div class="footer-info">
       <strong>{{ event.datum_label }}</strong><br>
-      {{ event.uren_label }} · {{ event.locatie.adres }}, {{ event.locatie.gemeente }}
+      {{ event.uren_label }} · {{ event.locatie.adres }}, {{ event.locatie.gemeente }}<br>
+      <a href="{{ event.goed_doel.steun_url }}" target="_blank" rel="noopener">{{ event.goed_doel.steun_label }} bij {{ event.goed_doel.naam }} →</a>
     </div>
     <a class="kotk" href="{{ event.goed_doel.url }}" target="_blank" rel="noopener">
       <span class="kotk-tekst">

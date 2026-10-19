@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Fotomuur – {{ super() }}{% endblock %}
+
+{% block content %}
+<section class="pagina">
+  <h1 class="pagina-titel">Foto<span class="geel">muur</span></h1>
+  <p class="intro">{{ fotomuur.intro }}</p>
+
+  <form class="post-form" id="post-form" novalidate>
+    <label class="veld">
+      <span>Je naam</span>
+      <input type="text" name="naam" maxlength="60" required autocomplete="name">
+    </label>
+
+    <label class="veld">
+      <span>Bericht <small>(optioneel)</small></span>
+      <textarea name="bericht" maxlength="500" rows="3" placeholder="Een aanmoediging, een herinnering…"></textarea>
+    </label>
+
+    <label class="veld foto-kiezer">
+      <span>Foto <small>(optioneel)</small></span>
+      <input type="file" name="foto" accept="image/*">
+      <img class="foto-voorbeeld" alt="" hidden>
+    </label>
+
+    <!-- honeypot tegen spambots: blijft leeg bij echte bezoekers -->
+    <label class="hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+
+    <label class="toestemming">
+      <input type="checkbox" name="toestemming" required>
+      <span>Ik heb toestemming van iedereen die herkenbaar op de foto staat, en ik ga akkoord dat mijn post op deze website verschijnt.</span>
+    </label>
+
+    <button class="knop" type="submit">Plaatsen ♡</button>
+    <p class="form-melding" role="status" hidden></p>
+  </form>
+</section>
+
+<section class="pagina">
+  <div class="muur" id="muur"
+       data-url="{{ fotomuur.supabase_url }}"
+       data-key="{{ fotomuur.supabase_key }}"
+       data-bucket="{{ fotomuur.bucket }}"
+       data-bedankt="{{ fotomuur.bedankt }}"
+       data-leeg="{{ fotomuur.leeg }}">
+    <p class="intro muur-status">Laden…</p>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js" defer></script>
+<script src="static/js/fotomuur.js" defer></script>
+{% endblock %}

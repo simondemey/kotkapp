@@ -29,6 +29,7 @@ PAGES = [
     ("sponsors.html", "sponsors.html", "Sponsors"),
     ("food-drinks.html", "menu.html", "Food & Drinks"),
     ("praktisch.html", "praktisch.html", "Praktische info"),
+    ("fotomuur.html", "fotomuur.html", "Fotomuur"),
 ]
 
 
@@ -55,6 +56,7 @@ def build() -> None:
         "sponsors": load_yaml("sponsors.yaml"),
         "menu": load_yaml("menu.yaml"),
         "praktisch": load_yaml("praktisch.yaml"),
+        "fotomuur": load_yaml("fotomuur.yaml"),
         "nav": [(out, label) for out, _, label in PAGES],
     }
 

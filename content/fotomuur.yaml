@@ -1,0 +1,10 @@
+# Fotomuur – verbinding met Supabase
+# De publishable key mag publiek staan; de beveiligingsregels (supabase/schema.sql) bepalen wat bezoekers mogen.
+# Zet hier NOOIT de secret/service_role key.
+supabase_url: https://bulyalhdjcwvbjicgoqz.supabase.co
+supabase_key: sb_publishable_qifEhl2cBYVjf94L6w1tKA_sZu8o4U3
+bucket: fotomuur
+
+intro: Deel je mooiste foto's en aanmoedigingen voor Pauline en alle lopers!
+bedankt: Bedankt! Je post verschijnt op de muur zodra hij is goedgekeurd.
+leeg: Nog geen posts. Wees de eerste!

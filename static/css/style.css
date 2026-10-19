@@ -678,3 +678,5 @@ a { color: var(--oranje); }
   .timeline li { grid-template-columns: 3.4rem 1fr; gap: 1.4rem; }
   .tl-uur { font-size: 1.4rem; }
 }
+
+.vraag-antwoord { margin-top: .75rem; text-decoration: none; }

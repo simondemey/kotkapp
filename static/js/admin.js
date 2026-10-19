@@ -54,6 +54,14 @@
     zet("stat-week", inschrijvingen.filter((i) => new Date(i.created_at) > weekGeleden).reduce((som, i) => som + i.deelnemers.length, 0));
   }
 
+  // mailto-link met onderwerp en (optioneel) tekst, opent het mailprogramma van de beheerder
+  function mailLink(email, tekst, onderwerp = "Running for Pauline", body = "") {
+    const a = document.createElement("a");
+    a.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(onderwerp)}` + (body ? `&body=${encodeURIComponent(body)}` : "");
+    a.textContent = tekst;
+    return a;
+  }
+
   function cel(tr, waarde, klasse) {
     const td = document.createElement("td");
     td.textContent = waarde;
@@ -74,7 +82,8 @@
         cel(tr, d.loopt ? "✓" : "", "ja");
         cel(tr, d.wandelt ? "✓" : "", "ja");
         cel(tr, d.supporter ? "✓" : "", "ja");
-        cel(tr, d.email ?? "");
+        const mailCel = cel(tr, "");
+        if (d.email) mailCel.append(mailLink(d.email, d.email));
         cel(tr, datumFormaat.format(new Date(d.created_at)));
         const td = cel(tr, "");
         const weg = document.createElement("button");
@@ -105,7 +114,11 @@
         p.textContent = i.vragen;
         const f = document.createElement("footer");
         f.textContent = `${i.email} · ${i.deelnemers.map((d) => d.naam).join(", ")} · ${datumFormaat.format(new Date(i.created_at))}`;
-        div.append(p, f);
+        const citaat = i.vragen.split("\n").map((r) => "> " + r).join("\n");
+        const body = `Hallo,\n\n\n\nSportieve groeten,\nRunning for Pauline\n\n${citaat}`;
+        const antwoord = mailLink(i.email, "✉️ Beantwoorden", "Re: je vraag – Running for Pauline", body);
+        antwoord.className = "knop-klein vraag-antwoord";
+        div.append(p, f, antwoord);
         return div;
       })
     );

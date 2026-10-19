@@ -1,0 +1,59 @@
+<!-- Inlogmail – plak dit in Supabase > Authentication > Emails, bij "Magic Link" én bij "Confirm signup".
+     Onderwerp: Je inloglink voor Running for Pauline -->
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Je inloglink voor Running for Pauline</title>
+</head>
+<body style="margin:0;padding:0;background:#FDF8EC;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FDF8EC;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:3px solid #FBE3B0;border-radius:18px;">
+          <tr>
+            <td align="center" style="padding:32px 28px 8px;">
+              <img src="https://simondemey.github.io/kotkapp/static/img/lopers.png" width="160" alt="" style="display:block;width:160px;max-width:60%;height:auto;border:0;">
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:8px 28px 0;font-family:Impact,'Arial Narrow Bold','Arial Black',Arial,sans-serif;font-size:44px;line-height:1;letter-spacing:1px;">
+              <span style="color:#E0611F;">SPONSOR</span><span style="color:#F6B21C;">LOOP</span>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:6px 28px 0;font-family:Impact,'Arial Narrow Bold','Arial Black',Arial,sans-serif;font-size:22px;line-height:1.1;color:#E0611F;">
+              RUNNING FOR <span style="color:#F6B21C;">PAULINE</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 32px 0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#3A2A20;">
+              <p style="margin:0 0 16px;">Hallo!</p>
+              <p style="margin:0 0 24px;">Klik op de knop hieronder om in te loggen en je inschrijving voor de sponsorloop van <strong>zondag 14 februari 2027</strong> in te vullen of aan te passen.</p>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:0 32px 24px;">
+              <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#E0611F;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;text-decoration:none;padding:14px 30px;border-radius:999px;">Inloggen &#9825;</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 32px 28px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#9a7a63;">
+              <p style="margin:0 0 8px;">Werkt de knop niet? Kopieer dan deze link in je browser:<br>
+                <a href="{{ .ConfirmationURL }}" style="color:#E0611F;word-break:break-all;">{{ .ConfirmationURL }}</a></p>
+              <p style="margin:0;">De link is één uur geldig. Heb je niets aangevraagd? Dan mag je deze mail gewoon negeren.</p>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:18px 28px;border-top:2px solid #FBE3B0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#E08A5A;">
+              Zondag 14 februari 2027 &middot; 12u tot 18u &middot; Daverlostraat 164, Assebroek<br>
+              <span style="color:#F6B21C;">Een actie voor</span> <strong style="color:#E0611F;">Kom op</strong> <strong style="color:#F6B21C;">tegen Kanker</strong>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

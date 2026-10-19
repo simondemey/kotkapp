@@ -49,6 +49,7 @@
     zet("stat-deelnemers", deelnemers.length);
     zet("stat-lopers", deelnemers.filter((d) => d.loopt).length);
     zet("stat-wandelaars", deelnemers.filter((d) => d.wandelt).length);
+    zet("stat-supporters", deelnemers.filter((d) => d.supporter).length);
     zet("stat-inschrijvingen", inschrijvingen.length);
     zet("stat-week", inschrijvingen.filter((i) => new Date(i.created_at) > weekGeleden).reduce((som, i) => som + i.deelnemers.length, 0));
   }
@@ -72,6 +73,7 @@
         cel(tr, d.naam);
         cel(tr, d.loopt ? "✓" : "", "ja");
         cel(tr, d.wandelt ? "✓" : "", "ja");
+        cel(tr, d.supporter ? "✓" : "", "ja");
         cel(tr, d.email ?? "");
         cel(tr, datumFormaat.format(new Date(d.created_at)));
         const td = cel(tr, "");
@@ -87,7 +89,7 @@
     );
     if (!zichtbaar.length) {
       const tr = document.createElement("tr");
-      cel(tr, term ? "Geen deelnemers gevonden." : "Nog geen inschrijvingen.").colSpan = 7;
+      cel(tr, term ? "Geen deelnemers gevonden." : "Nog geen inschrijvingen.").colSpan = 8;
       tbody.append(tr);
     }
   }
@@ -127,10 +129,10 @@
 
   // CSV (één rij per deelnemer) met ; en BOM zodat Excel met Belgische instellingen het meteen goed opent
   document.getElementById("csv-knop").addEventListener("click", () => {
-    const kop = ["naam", "loopt", "wandelt", "ingeschreven door", "vragen", "datum"];
+    const kop = ["naam", "loopt", "wandelt", "supporter", "ingeschreven door", "vragen", "datum"];
     const veilig = (w) => `"${String(w ?? "").replace(/"/g, '""')}"`;
     const regels = deelnemers.map((d) =>
-      [d.naam, d.loopt ? "ja" : "nee", d.wandelt ? "ja" : "nee", d.email, d.vragen, new Date(d.created_at).toLocaleString("nl-BE")].map(veilig).join(";")
+      [d.naam, d.loopt ? "ja" : "nee", d.wandelt ? "ja" : "nee", d.supporter ? "ja" : "nee", d.email, d.vragen, new Date(d.created_at).toLocaleString("nl-BE")].map(veilig).join(";")
     );
     const csv = [kop.join(";"), ...regels].join("\r\n");
     const url = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" }));

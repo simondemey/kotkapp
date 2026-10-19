@@ -1,4 +1,5 @@
 // Inschrijven: inloggen met een e-mail-inloglink, daarna de eigen inschrijving (1–10 deelnemers) invullen of aanpassen.
+// Een deelnemer loopt en/of wandelt, of komt als supporter.
 (function () {
   const db = window.sb;
   const laden = document.getElementById("account-laden");
@@ -56,12 +57,23 @@
     toevoegen.hidden = kaarten.length >= MAX;
   }
 
-  function voegDeelnemerToe(d = { naam: "", loopt: false, wandelt: false }) {
+  function voegDeelnemerToe(d = { naam: "", loopt: false, wandelt: false, supporter: false }) {
     if (lijst.children.length >= MAX) return null;
     const kaart = sjabloon.content.firstElementChild.cloneNode(true);
     kaart.querySelector(".d-naam").value = d.naam;
     kaart.querySelector(".d-loopt").checked = d.loopt;
     kaart.querySelector(".d-wandelt").checked = d.wandelt;
+    kaart.querySelector(".d-supporter").checked = !!d.supporter;
+    // Supporter sluit lopen/wandelen uit en omgekeerd
+    const [loopt, wandelt, supporter] = [".d-loopt", ".d-wandelt", ".d-supporter"].map((c) => kaart.querySelector(c));
+    supporter.addEventListener("change", () => {
+      if (supporter.checked) loopt.checked = wandelt.checked = false;
+    });
+    [loopt, wandelt].forEach((cb) =>
+      cb.addEventListener("change", () => {
+        if (cb.checked) supporter.checked = false;
+      })
+    );
     kaart.querySelector(".d-weg").addEventListener("click", () => {
       kaart.remove();
       hernummer();
@@ -78,6 +90,7 @@
       naam: k.querySelector(".d-naam").value.trim(),
       loopt: k.querySelector(".d-loopt").checked,
       wandelt: k.querySelector(".d-wandelt").checked,
+      supporter: k.querySelector(".d-supporter").checked,
     }));
   }
 
@@ -103,8 +116,8 @@
     const deelnemers = leesDeelnemers();
     const zonderNaam = deelnemers.findIndex((d) => !d.naam);
     if (zonderNaam >= 0) return melding(form, `Vul de naam van deelnemer ${zonderNaam + 1} in.`, true);
-    const zonderKeuze = deelnemers.findIndex((d) => !d.loopt && !d.wandelt);
-    if (zonderKeuze >= 0) return melding(form, `Kies of deelnemer ${zonderKeuze + 1} loopt, wandelt of allebei.`, true);
+    const zonderKeuze = deelnemers.findIndex((d) => !d.loopt && !d.wandelt && !d.supporter);
+    if (zonderKeuze >= 0) return melding(form, `Kies of deelnemer ${zonderKeuze + 1} loopt, wandelt of komt supporteren.`, true);
     if (!form.elements.privacy.checked) return melding(form, "Vink het privacyvakje aan.", true);
 
     const knop = form.querySelector("button[type=submit]");

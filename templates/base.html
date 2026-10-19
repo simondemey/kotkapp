@@ -19,9 +19,20 @@
   <link rel="icon" type="image/png" sizes="192x192" href="static/img/icon-192.png">
   <link rel="apple-touch-icon" href="static/img/apple-touch-icon.png">
   {% if current == "admin.html" %}<meta name="robots" content="noindex">{% endif %}
-  <meta property="og:title" content="{{ event.naam }} – {{ event.ondertitel }}">
-  <meta property="og:description" content="{{ event.datum_label }} · {{ event.uren_label }} · {{ event.locatie.gemeente }}">
-  <meta property="og:image" content="static/img/banner.jpg">
+  {# Voorbeeld bij het delen (WhatsApp, Facebook, Instagram, …): adressen moeten volledig zijn #}
+  {% set pagina_url = event.site_url ~ "/" ~ ("" if current == "index.html" else current) %}
+  <link rel="canonical" href="{{ pagina_url }}">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="nl_BE">
+  <meta property="og:site_name" content="{{ event.naam }} – {{ event.ondertitel }}">
+  <meta property="og:url" content="{{ pagina_url }}">
+  <meta property="og:title" content="{{ event.naam }} – {{ event.ondertitel }} ({{ event.editie }})">
+  <meta property="og:description" content="{{ event.datum_label | capitalize }} · {{ event.uren_label }} · {{ event.locatie.adres }}, {{ event.locatie.gemeente }}. Loop, wandel of supporter mee voor Pauline en {{ event.goed_doel.naam }}!">
+  <meta property="og:image" content="{{ event.site_url }}/static/img/banner.jpg">
+  <meta property="og:image:width" content="1600">
+  <meta property="og:image:height" content="838">
+  <meta property="og:image:alt" content="Affiche Sponsorloop Running for Pauline – {{ event.datum_label }}">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Great+Vibes&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">

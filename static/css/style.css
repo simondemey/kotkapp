@@ -18,6 +18,9 @@
 
 * { box-sizing: border-box; }
 
+/* hidden-attribuut moet altijd winnen van display-regels (bv. .post-form { display: grid }) */
+[hidden] { display: none !important; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -680,3 +683,8 @@ a { color: var(--oranje); }
 }
 
 .vraag-antwoord { margin-top: .75rem; text-decoration: none; }
+
+/* Keuzevakjes deelnemer: titel met uitleg eronder */
+.keuze-tekst { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.keuze-tekst small { white-space: nowrap; font-size: .8rem; font-weight: 600; color: var(--zalm); }
+.keuze label input { flex: none; }

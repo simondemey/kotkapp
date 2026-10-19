@@ -64,9 +64,10 @@
         <input type="text" class="d-naam" maxlength="100" autocomplete="off">
       </label>
       <div class="keuze keuze-rij">
-        <label><input type="checkbox" class="d-loopt"> 🏃 Loopt <small>(1,7 km/rondje)</small></label>
-        <label><input type="checkbox" class="d-wandelt"> 🚶 Wandelt <small>(5 km/rondje)</small></label>
-        <label><input type="checkbox" class="d-supporter"> 📣 Supporter <small>(komt aanmoedigen)</small></label>
+        <!-- name wordt per deelnemer uniek gemaakt in inschrijven.js -->
+        <label><input type="radio" class="d-keuze" value="loopt"><span class="keuze-tekst">🏃 Loopt<small>1,7 km/rondje</small></span></label>
+        <label><input type="radio" class="d-keuze" value="wandelt"><span class="keuze-tekst">🚶 Wandelt<small>5 km/rondje</small></span></label>
+        <label><input type="radio" class="d-keuze" value="supporter"><span class="keuze-tekst">📣 Supporter<small>aanmoedigen</small></span></label>
       </div>
       <button type="button" class="link-knop gevaar d-weg">Verwijder deelnemer</button>
     </fieldset>

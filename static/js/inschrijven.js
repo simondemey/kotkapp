@@ -1,5 +1,5 @@
 // Inschrijven: inloggen met een e-mail-inloglink, daarna de eigen inschrijving (1–10 deelnemers) invullen of aanpassen.
-// Een deelnemer loopt en/of wandelt, of komt als supporter.
+// Elke deelnemer kiest precies één: loopt, wandelt of supporter.
 (function () {
   const db = window.sb;
   const laden = document.getElementById("account-laden");
@@ -57,23 +57,25 @@
     toevoegen.hidden = kaarten.length >= MAX;
   }
 
+  let volgnummer = 0; // maakt de name van de keuzerondjes per deelnemer uniek
+
+  // Een deelnemer kiest precies één: loopt, wandelt of supporter
+  function keuzeVan(d) {
+    if (d.loopt) return "loopt";
+    if (d.wandelt) return "wandelt";
+    if (d.supporter) return "supporter";
+    return "";
+  }
+
   function voegDeelnemerToe(d = { naam: "", loopt: false, wandelt: false, supporter: false }) {
     if (lijst.children.length >= MAX) return null;
     const kaart = sjabloon.content.firstElementChild.cloneNode(true);
+    const naam = `keuze-${++volgnummer}`;
     kaart.querySelector(".d-naam").value = d.naam;
-    kaart.querySelector(".d-loopt").checked = d.loopt;
-    kaart.querySelector(".d-wandelt").checked = d.wandelt;
-    kaart.querySelector(".d-supporter").checked = !!d.supporter;
-    // Supporter sluit lopen/wandelen uit en omgekeerd
-    const [loopt, wandelt, supporter] = [".d-loopt", ".d-wandelt", ".d-supporter"].map((c) => kaart.querySelector(c));
-    supporter.addEventListener("change", () => {
-      if (supporter.checked) loopt.checked = wandelt.checked = false;
+    kaart.querySelectorAll(".d-keuze").forEach((r) => {
+      r.name = naam;
+      r.checked = r.value === keuzeVan(d);
     });
-    [loopt, wandelt].forEach((cb) =>
-      cb.addEventListener("change", () => {
-        if (cb.checked) supporter.checked = false;
-      })
-    );
     kaart.querySelector(".d-weg").addEventListener("click", () => {
       kaart.remove();
       hernummer();
@@ -86,12 +88,15 @@
   toevoegen.addEventListener("click", () => voegDeelnemerToe()?.querySelector(".d-naam").focus());
 
   function leesDeelnemers() {
-    return [...lijst.children].map((k) => ({
-      naam: k.querySelector(".d-naam").value.trim(),
-      loopt: k.querySelector(".d-loopt").checked,
-      wandelt: k.querySelector(".d-wandelt").checked,
-      supporter: k.querySelector(".d-supporter").checked,
-    }));
+    return [...lijst.children].map((k) => {
+      const keuze = k.querySelector(".d-keuze:checked")?.value;
+      return {
+        naam: k.querySelector(".d-naam").value.trim(),
+        loopt: keuze === "loopt",
+        wandelt: keuze === "wandelt",
+        supporter: keuze === "supporter",
+      };
+    });
   }
 
   // ---------- Inschrijving laden / opslaan ----------

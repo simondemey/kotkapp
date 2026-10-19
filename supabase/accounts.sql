@@ -34,7 +34,7 @@ grant execute on function public.is_admin() to anon, authenticated;
 
 -- ---------- Inschrijvingen ----------
 -- Eén inschrijving per account met 1 tot 10 deelnemers.
--- Elke deelnemer: {"naam": "...", "loopt": bool, "wandelt": bool, "supporter": bool}, minstens één ervan true.
+-- Elke deelnemer: {"naam": "...", "loopt": bool, "wandelt": bool, "supporter": bool}, precies één ervan true.
 create or replace function public.deelnemers_geldig(d jsonb)
 returns boolean
 language sql
@@ -49,10 +49,10 @@ as $$
           or char_length(btrim(e ->> 'naam')) not between 1 and 100
           or jsonb_typeof(e -> 'loopt') is distinct from 'boolean'
           or jsonb_typeof(e -> 'wandelt') is distinct from 'boolean'
-          or (e ? 'supporter' and jsonb_typeof(e -> 'supporter') is distinct from 'boolean')
-          or not ((e ->> 'loopt')::boolean
-                  or (e ->> 'wandelt')::boolean
-                  or coalesce((e ->> 'supporter')::boolean, false))
+          or jsonb_typeof(e -> 'supporter') is distinct from 'boolean'
+          or ((e ->> 'loopt')::boolean::int
+              + (e ->> 'wandelt')::boolean::int
+              + (e ->> 'supporter')::boolean::int) <> 1
      );
 $$;
 

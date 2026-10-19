@@ -1,3 +1,4 @@
+# Zet "verborgen: true" bij een item om het (tijdelijk) niet op de site te tonen.
 items:
   - uur: "11u30"
     titel: Deuren open & bar open
@@ -8,9 +9,11 @@ items:
   - uur: "15u00"
     titel: Frietjes
     tekst: Tijd om bij te tanken.
+    verborgen: true
   - uur: "15u00"
     titel: Live band
     tekst: Muziek om de lopers aan te moedigen.
+    verborgen: true
   - uur: "17u30"
     titel: Prijsuitreiking
   - uur: "18u00"

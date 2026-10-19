@@ -7,7 +7,7 @@
   <p class="intro">{{ event.datum_label }} · {{ event.uren_label }}</p>
 
   <ol class="timeline">
-    {% for item in timeline["items"] %}
+    {% for item in timeline["items"] if not item.verborgen %}
     <li>
       <span class="tl-uur">{{ item.uur }}</span>
       <div class="tl-kaart">

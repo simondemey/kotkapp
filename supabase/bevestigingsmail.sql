@@ -51,17 +51,17 @@ begin
   select string_agg(
            format(
              '<tr>'
-             '<td style="padding:10px 12px;border-bottom:1px solid #FBE3B0;font-family:Impact,''Arial Narrow Bold'',Arial,sans-serif;font-size:30px;line-height:1;color:#E0611F;white-space:nowrap;">nr. %s</td>'
+             '<td style="padding:10px 12px;border-bottom:1px solid #FBE3B0;font-family:Impact,''Arial Narrow Bold'',Arial,sans-serif;font-size:30px;line-height:1;color:#E0611F;white-space:nowrap;">%s</td>'
              '<td style="padding:10px 12px;border-bottom:1px solid #FBE3B0;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:#3A2A20;"><strong>%s</strong><br><span style="color:#E08A5A;font-size:14px;">%s</span></td>'
              '</tr>',
-             e ->> 'nr',
+             case when e ? 'nr' then 'nr. ' || (e ->> 'nr') else '' end,
              public.html_tekst(e ->> 'naam'),
              case
                when (e ->> 'loopt')::boolean then '🏃 Loopt (rondjes van 1,7 km)'
                when (e ->> 'wandelt')::boolean then '🚶 Wandelt (rondjes van 5 km)'
                else '📣 Supporter'
              end),
-           '' order by (e ->> 'nr')::bigint)
+           '' order by (e ->> 'nr')::bigint nulls last)
     into rijen
     from jsonb_array_elements(new.deelnemers) e;
 
@@ -75,7 +75,7 @@ begin
     '<tr><td align="center" style="padding:4px 28px 0;font-family:Impact,''Arial Narrow Bold'',Arial,sans-serif;font-size:20px;color:#E0611F;">RUNNING FOR <span style="color:#F6B21C;">PAULINE</span></td></tr>'
     '<tr><td style="padding:24px 28px 8px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#3A2A20;">'
     '<p style="margin:0 0 12px;">Hallo!</p>'
-    '<p style="margin:0;">Bedankt voor je inschrijving voor de sponsorloop op <strong>zondag 14 februari 2027</strong>. Dit zijn jullie deelnemers en nummers:</p>'
+    '<p style="margin:0;">Bedankt voor je inschrijving voor de sponsorloop op <strong>zondag 14 februari 2027</strong>. Dit zijn jullie deelnemers. Lopers krijgen een nummer.</p>'
     '</td></tr>'
     '<tr><td style="padding:8px 16px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FDF8EC;border-radius:12px;">'
     || coalesce(rijen, '') ||
@@ -86,8 +86,8 @@ begin
     '</td></tr>'
     '<tr><td style="padding:4px 16px 8px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FBE3B0;border-radius:12px;"><tr>'
     '<td style="padding:14px 16px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.5;color:#3A2A20;">'
-    '📌 <strong>Belangrijk:</strong> meld je op de dag zelf eerst aan bij de <strong>administratiepost</strong> '
-    'en geef daar <strong>je nummer</strong> door. Bewaar deze mail dus goed!'
+    '📌 <strong>Belangrijk:</strong> meld je op de dag zelf eerst aan bij de <strong>administratiepost</strong>. '
+    '<strong>Lopers</strong> geven daar hun <strong>nummer</strong> door. Bewaar deze mail dus goed!'
     '</td></tr></table></td></tr>'
     '<tr><td align="center" style="padding:12px 28px 24px;">'
     '<a href="https://runningforpauline.be/inschrijven.html" style="display:inline-block;background:#E0611F;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;text-decoration:none;padding:12px 26px;border-radius:999px;">Mijn inschrijving bekijken</a>'

@@ -143,11 +143,12 @@ begin
     into oud, oud_nrs
     from public.inschrijvingen i, jsonb_array_elements(i.deelnemers) x
    where i.user_id = new.user_id
-     and jsonb_typeof(x -> 'nr') = 'number';
+     and jsonb_typeof(x -> 'nr') = 'number'
+     and coalesce((x ->> 'loopt')::boolean, false);
 
-  -- 1. meegestuurde, geldige nummers behouden (elk nummer maar één keer)
+  -- 1. meegestuurde, geldige nummers behouden (elk nummer maar één keer; enkel lopers)
   for e, pos in select value, ordinality from jsonb_array_elements(new.deelnemers) with ordinality loop
-    if jsonb_typeof(e -> 'nr') = 'number' then
+    if jsonb_typeof(e -> 'nr') = 'number' and coalesce((e ->> 'loopt')::boolean, false) then
       nr := (e ->> 'nr')::bigint;
       if nr = any (oud_nrs) and not nr = any (gebruikt) then
         gebruikt := gebruikt || nr;
@@ -160,6 +161,12 @@ begin
   for e, pos in select value, ordinality from jsonb_array_elements(new.deelnemers) with ordinality loop
     if pos = any (gekozen) then
       resultaat := resultaat || jsonb_build_array(e);
+      continue;
+    end if;
+
+    -- Wandelaars en supporters krijgen geen nummer
+    if not coalesce((e ->> 'loopt')::boolean, false) then
+      resultaat := resultaat || jsonb_build_array(e - 'nr');
       continue;
     end if;
 

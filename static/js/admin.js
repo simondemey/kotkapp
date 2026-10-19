@@ -122,7 +122,7 @@
         return div;
       })
     );
-    if (!metVraag.length) lijst.innerHTML = '<p class="intro">Nog geen vragen.</p>';
+    if (!metVraag.length) lijst.innerHTML = '<p class="intro">Nog geen vragen of opmerkingen.</p>';
   }
 
   async function verwijder(d) {

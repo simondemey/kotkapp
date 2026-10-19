@@ -712,3 +712,10 @@ a { color: var(--oranje); }
 .rekening .iban { font-size: 1.15rem; font-weight: 800; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
 .rekening .kopieer { border: 0; font: inherit; font-size: .85rem; font-weight: 800; padding: .35rem .8rem; }
 .overschrijving .klein { margin-top: 1rem; }
+
+/* Nummer van een deelnemer */
+.d-nummer {
+  display: inline-block; margin-left: .25rem;
+  background: var(--oranje); color: #fff;
+  font-size: .8rem; font-weight: 800; padding: .1rem .55rem; border-radius: 999px;
+}

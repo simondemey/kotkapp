@@ -72,6 +72,13 @@
     const kaart = sjabloon.content.firstElementChild.cloneNode(true);
     const naam = `keuze-${++volgnummer}`;
     kaart.querySelector(".d-naam").value = d.naam;
+    // Vast nummer (uitgedeeld door de database na het opslaan)
+    if (d.nr) {
+      kaart.dataset.nr = d.nr;
+      const badge = kaart.querySelector(".d-nummer");
+      badge.textContent = `nr. ${d.nr}`;
+      badge.hidden = false;
+    }
     kaart.querySelectorAll(".d-keuze").forEach((r) => {
       r.name = naam;
       r.checked = r.value === keuzeVan(d);
@@ -91,6 +98,7 @@
     return [...lijst.children].map((k) => {
       const keuze = k.querySelector(".d-keuze:checked")?.value;
       return {
+        ...(k.dataset.nr ? { nr: Number(k.dataset.nr) } : {}), // bestaand nummer behouden
         naam: k.querySelector(".d-naam").value.trim(),
         loopt: keuze === "loopt",
         wandelt: keuze === "wandelt",
@@ -114,6 +122,7 @@
     uitschrijven.hidden = !data;
     melding(form, "");
     adminLink.hidden = !(await window.sbIsAdmin());
+    return (data?.deelnemers ?? []).filter((d) => d.nr);
   }
 
   form.addEventListener("submit", async (e) => {
@@ -136,9 +145,10 @@
       console.error(error);
       return melding(form, "Opslaan mislukt. Probeer het opnieuw.", true);
     }
-    badge.hidden = false;
-    uitschrijven.hidden = false;
-    melding(form, form.dataset.opgeslagen);
+    // Opnieuw laden zodat de nummers zichtbaar worden
+    const nummers = await toonInschrijving();
+    const lijstTekst = nummers.map((d) => `${d.naam}: nr. ${d.nr}`).join(" · ");
+    melding(form, `${form.dataset.opgeslagen}${lijstTekst ? " Jullie nummers: " + lijstTekst + "." : ""}`);
   });
 
   uitschrijven.addEventListener("click", async () => {

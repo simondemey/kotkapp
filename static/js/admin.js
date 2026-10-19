@@ -35,7 +35,7 @@
     inschrijvingen = data;
     deelnemers = data.flatMap((i) =>
       i.deelnemers.map((d) => ({ ...d, email: i.email, created_at: i.created_at, vragen: i.vragen, user_id: i.user_id }))
-    );
+    ).sort((a, b) => (a.nr ?? Infinity) - (b.nr ?? Infinity));
     status.hidden = true;
     inhoud.hidden = false;
     toonStats();
@@ -72,12 +72,12 @@
 
   function toonTabel() {
     const term = zoek.value.trim().toLowerCase();
-    const zichtbaar = deelnemers.filter((d) => !term || d.naam.toLowerCase().includes(term) || (d.email || "").toLowerCase().includes(term));
+    const zichtbaar = deelnemers.filter((d) => !term || d.naam.toLowerCase().includes(term) || (d.email || "").toLowerCase().includes(term) || String(d.nr ?? "") === term);
     const tbody = document.getElementById("admin-rijen");
     tbody.replaceChildren(
-      ...zichtbaar.map((d, i) => {
+      ...zichtbaar.map((d) => {
         const tr = document.createElement("tr");
-        cel(tr, i + 1);
+        cel(tr, d.nr ?? "–");
         cel(tr, d.naam);
         cel(tr, d.loopt ? "✓" : "", "ja");
         cel(tr, d.wandelt ? "✓" : "", "ja");
@@ -142,10 +142,10 @@
 
   // CSV (één rij per deelnemer) met ; en BOM zodat Excel met Belgische instellingen het meteen goed opent
   document.getElementById("csv-knop").addEventListener("click", () => {
-    const kop = ["naam", "loopt", "wandelt", "supporter", "ingeschreven door", "vragen", "datum"];
+    const kop = ["nr", "naam", "loopt", "wandelt", "supporter", "ingeschreven door", "vragen", "datum"];
     const veilig = (w) => `"${String(w ?? "").replace(/"/g, '""')}"`;
     const regels = deelnemers.map((d) =>
-      [d.naam, d.loopt ? "ja" : "nee", d.wandelt ? "ja" : "nee", d.supporter ? "ja" : "nee", d.email, d.vragen, new Date(d.created_at).toLocaleString("nl-BE")].map(veilig).join(";")
+      [d.nr ?? "", d.naam, d.loopt ? "ja" : "nee", d.wandelt ? "ja" : "nee", d.supporter ? "ja" : "nee", d.email, d.vragen, new Date(d.created_at).toLocaleString("nl-BE")].map(veilig).join(";")
     );
     const csv = [kop.join(";"), ...regels].join("\r\n");
     const url = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" }));

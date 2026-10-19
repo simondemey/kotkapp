@@ -113,6 +113,52 @@ create policy "eigen inschrijving of admin verwijderen"
   to authenticated
   using (user_id = auth.uid() or public.is_admin());
 
+
+-- ---------- Vast nummer per deelnemer (zie ook nummers.sql) ----------
+create sequence if not exists public.deelnemer_nr;
+
+create or replace function public.deelnemer_nummers()
+returns trigger
+language plpgsql
+security definer          -- mag de teller gebruiken zonder extra rechten voor bezoekers
+set search_path = ''
+as $$
+declare
+  oude_nrs bigint[] := '{}';
+begin
+  -- Nummers die deze inschrijving al had, mogen blijven
+  if tg_op = 'UPDATE' then
+    select coalesce(array_agg((e ->> 'nr')::bigint), '{}')
+      into oude_nrs
+      from jsonb_array_elements(old.deelnemers) e
+     where jsonb_typeof(e -> 'nr') = 'number';
+  end if;
+
+  select jsonb_agg(
+           case
+             when t.nr_ok then t.e
+             else (t.e - 'nr') || jsonb_build_object('nr', nextval('public.deelnemer_nr'))
+           end
+           order by t.volgorde)
+    into new.deelnemers
+    from (
+      select e, volgorde,
+             jsonb_typeof(e -> 'nr') = 'number'
+             and (e ->> 'nr')::bigint = any (oude_nrs)
+             -- hetzelfde nummer maar één keer in deze inschrijving
+             and row_number() over (partition by e ->> 'nr' order by volgorde) = 1 as nr_ok
+        from jsonb_array_elements(new.deelnemers) with ordinality as x(e, volgorde)
+    ) t;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists deelnemer_nummers on public.inschrijvingen;
+create trigger deelnemer_nummers
+  before insert or update on public.inschrijvingen
+  for each row execute function public.deelnemer_nummers();
+
 -- ---------- Fotomuur: beheerders mogen posts verbergen en verwijderen ----------
 grant update, delete on public.posts to authenticated;
 

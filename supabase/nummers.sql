@@ -12,19 +12,25 @@ create sequence if not exists public.deelnemer_nr;
 create or replace function public.deelnemer_nummers()
 returns trigger
 language plpgsql
-security definer          -- mag de teller gebruiken zonder extra rechten voor bezoekers
+security definer
 set search_path = ''
 as $$
 declare
   oude_nrs bigint[] := '{}';
 begin
-  -- Nummers die deze inschrijving al had, mogen blijven
-  if tg_op = 'UPDATE' then
-    select coalesce(array_agg((e ->> 'nr')::bigint), '{}')
-      into oude_nrs
-      from jsonb_array_elements(old.deelnemers) e
-     where jsonb_typeof(e -> 'nr') = 'number';
+  -- Upsert op een bestaande inschrijving: de UPDATE-trigger die hierna volgt deelt de nummers uit
+  -- (anders zou elk nieuw nummer twee keer getrokken worden en ontstaan er gaten).
+  if tg_op = 'INSERT' and exists (select 1 from public.inschrijvingen where user_id = new.user_id) then
+    return new;
   end if;
+
+  -- Nummers die deze gebruiker al had
+  select coalesce(array_agg((e ->> 'nr')::bigint), '{}')
+    into oude_nrs
+    from public.inschrijvingen i,
+         jsonb_array_elements(i.deelnemers) e
+   where i.user_id = new.user_id
+     and jsonb_typeof(e -> 'nr') = 'number';
 
   select jsonb_agg(
            case
@@ -37,7 +43,6 @@ begin
       select e, volgorde,
              jsonb_typeof(e -> 'nr') = 'number'
              and (e ->> 'nr')::bigint = any (oude_nrs)
-             -- hetzelfde nummer maar één keer in deze inschrijving
              and row_number() over (partition by e ->> 'nr' order by volgorde) = 1 as nr_ok
         from jsonb_array_elements(new.deelnemers) with ordinality as x(e, volgorde)
     ) t;

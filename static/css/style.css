@@ -719,3 +719,15 @@ a { color: var(--oranje); }
   background: var(--oranje); color: #fff;
   font-size: .8rem; font-weight: 800; padding: .1rem .55rem; border-radius: 999px;
 }
+
+/* Grote nummers bovenaan de inschrijving */
+.nummers { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: .75rem; }
+.nummer-kaart {
+  display: grid; justify-items: center; text-align: center; gap: .15rem;
+  padding: 1rem .75rem; border-radius: var(--radius);
+  background: var(--creme); border: 3px solid var(--lint); box-shadow: 0 5px 0 var(--lint);
+}
+.nummer-groot { font-family: var(--font-titel); font-size: 4rem; line-height: 1; color: var(--oranje); }
+.nummer-naam { font-weight: 800; overflow-wrap: anywhere; }
+.nummer-soort { font-size: .85rem; font-weight: 600; color: var(--zalm); }
+.d-nummer { font-size: 1rem; padding: .15rem .7rem; }

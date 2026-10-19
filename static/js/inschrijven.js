@@ -122,7 +122,32 @@
     uitschrijven.hidden = !data;
     melding(form, "");
     adminLink.hidden = !(await window.sbIsAdmin());
-    return (data?.deelnemers ?? []).filter((d) => d.nr);
+    const metNummer = (data?.deelnemers ?? []).filter((d) => d.nr);
+    toonNummers(metNummer);
+    return metNummer;
+  }
+
+  // Overzicht met grote nummers bovenaan
+  function toonNummers(deelnemers) {
+    const overzicht = document.getElementById("nummers-overzicht");
+    overzicht.hidden = !deelnemers.length;
+    overzicht.replaceChildren(
+      ...deelnemers.map((d) => {
+        const kaart = document.createElement("div");
+        kaart.className = "nummer-kaart";
+        const nr = document.createElement("span");
+        nr.className = "nummer-groot";
+        nr.textContent = d.nr;
+        const naam = document.createElement("span");
+        naam.className = "nummer-naam";
+        naam.textContent = d.naam;
+        const soort = document.createElement("span");
+        soort.className = "nummer-soort";
+        soort.textContent = d.loopt ? "🏃 Loopt" : d.wandelt ? "🚶 Wandelt" : "📣 Supporter";
+        kaart.append(nr, naam, soort);
+        return kaart;
+      })
+    );
   }
 
   form.addEventListener("submit", async (e) => {

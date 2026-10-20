@@ -25,6 +25,7 @@
       return;
     }
     await laad();
+    laadPartners();
   }
 
   async function laad() {
@@ -257,6 +258,221 @@
     }
     await laad();
   }
+
+  // ---------- Bedrijfssponsors (tabel partners + logo's in bucket partners) ----------
+  const P = window.partners;
+  const partnerLijst = document.getElementById("partners-lijst");
+  const pForm = document.getElementById("partner-form");
+  const pMelding = pForm.querySelector(".form-melding");
+  const pKnop = pForm.querySelector("button[type=submit]");
+  const pAnnuleer = document.getElementById("partner-annuleer");
+  const pGekozen = pForm.querySelector(".foto-gekozen");
+  const pVoorbeeld = pForm.querySelector(".partner-voorbeeld");
+  const LOGO_TYPES = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp" };
+  const LOGO_MAX = 2 * 1024 * 1024;
+  let partnerRijen = [];
+  let bewerkt = null;   // partner die bewerkt wordt (null = nieuwe)
+  let logoBestand = null;
+
+  function pToon(tekst, fout = false) {
+    pMelding.hidden = !tekst;
+    pMelding.textContent = tekst || "";
+    pMelding.classList.toggle("fout", fout);
+  }
+
+  async function laadPartners() {
+    const { data, error } = await db.from("partners").select("*");
+    if (error) {
+      console.error(error);
+      partnerLijst.innerHTML = '<p class="intro">De bedrijfssponsors konden niet geladen worden. Is <code>supabase/partners.sql</code> al uitgevoerd?</p>';
+      return;
+    }
+    partnerRijen = P.sorteer(data);
+    toonPartners();
+  }
+
+  function toonPartners() {
+    partnerLijst.replaceChildren();
+    if (!partnerRijen.length) {
+      partnerLijst.innerHTML = '<p class="intro">Nog geen bedrijfssponsors. Voeg er hieronder een toe.</p>';
+      return;
+    }
+    P.NIVEAUS.forEach((n) => {
+      const groep = partnerRijen.filter((p) => p.niveau === n.key);
+      if (!groep.length) return;
+      const kop = document.createElement("h3");
+      kop.textContent = n.meervoud;
+      partnerLijst.append(kop);
+      groep.forEach((p, i) => partnerLijst.append(partnerRij(p, groep, i)));
+    });
+  }
+
+  function knopje(tekst, titel, actie, klasse = "knop-klein") {
+    const b = Object.assign(document.createElement("button"), { type: "button", className: klasse, textContent: tekst, title: titel });
+    b.addEventListener("click", actie);
+    return b;
+  }
+
+  function partnerRij(p, groep, i) {
+    const rij = document.createElement("article");
+    rij.className = "partner-rij" + (p.zichtbaar ? "" : " verborgen");
+    const img = Object.assign(document.createElement("img"), { src: P.logoUrl(p), alt: "", loading: "lazy" });
+    const info = document.createElement("div");
+    const naam = document.createElement("strong");
+    naam.textContent = p.naam + (p.zichtbaar ? "" : " (verborgen)");
+    info.append(naam);
+    if (p.tekst) {
+      const t = document.createElement("small");
+      t.textContent = p.tekst;
+      info.append(t);
+    }
+    const acties = document.createElement("div");
+    acties.className = "partner-acties";
+    const omhoog = knopje("▲", "Hoger in de lijst", () => verschuif(groep, i, -1));
+    const omlaag = knopje("▼", "Lager in de lijst", () => verschuif(groep, i, 1));
+    omhoog.disabled = i === 0;
+    omlaag.disabled = i === groep.length - 1;
+    acties.append(
+      omhoog, omlaag,
+      knopje(p.zichtbaar ? "🙈 Verbergen" : "👁️ Tonen", p.zichtbaar ? "Niet meer tonen aan bezoekers" : "Terug tonen", () => zetZichtbaar(p)),
+      knopje("✏️ Bewerken", "Gegevens of logo aanpassen", () => bewerk(p)),
+      knopje("Verwijderen", `${p.naam} definitief verwijderen`, () => verwijderPartner(p), "link-knop gevaar")
+    );
+    rij.append(img, info, acties);
+    return rij;
+  }
+
+  async function bijwerken(id, velden) {
+    const { error } = await db.from("partners").update(velden).eq("id", id);
+    if (error) {
+      console.error(error);
+      alert("Opslaan mislukt. Ben je nog ingelogd als beheerder?");
+      return false;
+    }
+    return true;
+  }
+
+  // Volgorde binnen een niveau: hernummer de groep en wissel twee buren
+  async function verschuif(groep, i, stap) {
+    const nieuw = [...groep];
+    [nieuw[i], nieuw[i + stap]] = [nieuw[i + stap], nieuw[i]];
+    const wijzigingen = nieuw.map((p, volgorde) => (p.volgorde === volgorde ? null : bijwerken(p.id, { volgorde }))).filter(Boolean);
+    await Promise.all(wijzigingen);
+    laadPartners();
+  }
+
+  async function zetZichtbaar(p) {
+    if (await bijwerken(p.id, { zichtbaar: !p.zichtbaar })) laadPartners();
+  }
+
+  async function verwijderPartner(p) {
+    if (!confirm(`${p.naam} definitief verwijderen? Het logo wordt ook verwijderd.\n\nTip: met "Verbergen" kan je hem later terug tonen.`)) return;
+    const { error } = await db.from("partners").delete().eq("id", p.id);
+    if (error) {
+      console.error(error);
+      return alert("Verwijderen mislukt. Ben je nog ingelogd als beheerder?");
+    }
+    const { error: logoFout } = await db.storage.from(P.BUCKET).remove([p.logo_pad]);
+    if (logoFout) console.error(logoFout); // sponsor is weg; logo blijft enkel in de opslag
+    if (bewerkt?.id === p.id) resetPartnerForm();
+    laadPartners();
+  }
+
+  function zetLogo(bestand, url) {
+    if (pVoorbeeld.src.startsWith("blob:")) URL.revokeObjectURL(pVoorbeeld.src);
+    logoBestand = bestand;
+    pGekozen.hidden = !(bestand || url);
+    if (bestand) pVoorbeeld.src = URL.createObjectURL(bestand);
+    else if (url) pVoorbeeld.src = url;
+    else pVoorbeeld.removeAttribute("src");
+  }
+
+  function bewerk(p) {
+    bewerkt = p;
+    const f = pForm.elements;
+    f.naam.value = p.naam;
+    f.niveau.value = p.niveau;
+    f.tekst.value = p.tekst || "";
+    f.url.value = p.url || "";
+    zetLogo(null, P.logoUrl(p));
+    document.getElementById("partner-form-titel").textContent = `${p.naam} bewerken`;
+    pAnnuleer.hidden = false;
+    pToon("");
+    pForm.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function resetPartnerForm() {
+    bewerkt = null;
+    pForm.reset();
+    zetLogo(null);
+    document.getElementById("partner-form-titel").textContent = "Sponsor toevoegen";
+    pAnnuleer.hidden = true;
+  }
+
+  pAnnuleer.addEventListener("click", () => {
+    resetPartnerForm();
+    pToon("");
+  });
+
+  pForm.elements.logo.addEventListener("change", (e) => {
+    const bestand = e.target.files[0];
+    e.target.value = ""; // zelfde bestand opnieuw kiezen moet ook werken
+    if (!bestand) return;
+    if (!LOGO_TYPES[bestand.type]) return pToon("Kies een PNG-, JPG- of WebP-afbeelding (geen SVG of PDF).", true);
+    if (bestand.size > LOGO_MAX) return pToon(`Dit logo is ${(bestand.size / 1048576).toFixed(1)} MB; het mag maximaal 2 MB zijn.`, true);
+    pToon("");
+    zetLogo(bestand);
+  });
+
+  pForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const f = pForm.elements;
+    const naam = f.naam.value.trim();
+    const tekst = f.tekst.value.trim() || null;
+    let url = f.url.value.trim() || null;
+    if (url && !/^https?:\/\//i.test(url)) url = "https://" + url;
+    if (url) url = url.replace(/^http:\/\//i, "https://");
+    if (!naam) return pToon("Vul de naam van het bedrijf in.", true);
+    if (url && !P.veiligeUrl(url)) return pToon("Dat is geen geldig webadres.", true);
+    if (!bewerkt && !logoBestand) return pToon("Kies een logo.", true);
+
+    pKnop.disabled = true;
+    pToon("Bezig met opslaan…");
+    let nieuwPad = null;
+    try {
+      if (logoBestand) {
+        nieuwPad = `${crypto.randomUUID()}.${LOGO_TYPES[logoBestand.type]}`;
+        const { error } = await db.storage.from(P.BUCKET).upload(nieuwPad, logoBestand, { contentType: logoBestand.type });
+        if (error) throw error;
+      }
+      const velden = { naam, niveau: f.niveau.value, tekst, url };
+      if (nieuwPad) velden.logo_pad = nieuwPad;
+
+      if (bewerkt) {
+        if (bewerkt.niveau !== velden.niveau) velden.volgorde = 999; // achteraan in het nieuwe niveau
+        const { error } = await db.from("partners").update(velden).eq("id", bewerkt.id);
+        if (error) throw error;
+        if (nieuwPad) {
+          const { error: oudFout } = await db.storage.from(P.BUCKET).remove([bewerkt.logo_pad]);
+          if (oudFout) console.error(oudFout);
+        }
+      } else {
+        velden.volgorde = 999; // nieuwe sponsors achteraan in hun niveau
+        const { error } = await db.from("partners").insert(velden);
+        if (error) throw error;
+      }
+      const melding = bewerkt ? `${naam} is bijgewerkt.` : `${naam} staat nu op de sponsorpagina.`;
+      resetPartnerForm();
+      pToon(melding);
+      laadPartners();
+    } catch (err) {
+      console.error(err);
+      if (nieuwPad) db.storage.from(P.BUCKET).remove([nieuwPad]); // geen wees-logo achterlaten
+      pToon("Opslaan mislukt. Ben je nog ingelogd als beheerder?", true);
+    } finally {
+      pKnop.disabled = false;
+    }
+  });
 
   zoek.addEventListener("input", toonTabel);
   document.getElementById("vernieuw-knop").addEventListener("click", laad);

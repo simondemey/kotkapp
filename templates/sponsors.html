@@ -4,46 +4,35 @@
 {% block content %}
 <section class="pagina">
   <h1 class="pagina-titel">Onze <span class="geel">sponsors</span></h1>
+  <p class="intro">{{ sponsors.intro }}</p>
 
-  {% if sponsors.lijst %}
-  <div class="sponsor-logos">
-    {% for s in sponsors.lijst %}
-    <a class="sponsor-logo" href="{{ s.url or '#' }}" target="_blank" rel="noopener">
-      {% if s.logo %}<img src="static/img/sponsors/{{ s.logo }}" alt="{{ s.naam }}">{% else %}<span>{{ s.naam }}</span>{% endif %}
-      {% if s.niveau %}<small>{{ s.niveau }}</small>{% endif %}
-    </a>
-    {% endfor %}
+  {# sponsormuur.js vult de muur per niveau (hoofdsponsor → goud → zilver → brons) #}
+  <div class="sponsormuur" id="sponsormuur" data-leeg="{{ sponsors.leeg }}">
+    <p class="intro muur-status">Laden…</p>
   </div>
-  {% else %}
-  <p class="intro">De eerste sponsors worden binnenkort bekendgemaakt.</p>
-  {% endif %}
 </section>
 
 <section class="pagina">
-  <h2 class="sectie-titel">Word jij onze sponsor?</h2>
-  <div class="pakketten">
-    {% for p in sponsors.pakketten %}
-    <article class="pakket{% if p.uitgelicht %} uitgelicht{% endif %}">
-      <h3>{{ p.naam }}</h3>
-      <p class="prijs">€{{ p.prijs }}</p>
-      <ul>
-        {% for v in p.voordelen %}<li>{{ v }}</li>{% endfor %}
-      </ul>
-    </article>
-    {% endfor %}
+  <div class="steun-blok word-sponsor">
+    <h2>Word jij onze sponsor?</h2>
+    <p>{{ sponsors.contact.tekst }}</p>
+    <div class="knoppen">
+      {% if sponsors.boekje_beschikbaar %}
+      <a class="knop" href="{{ sponsors.boekje }}" download="Sponsorboekje Running for Pauline.pdf" type="application/pdf">⬇️ Download het sponsorboekje</a>
+      {% endif %}
+      {% if sponsors.contact.email %}
+      <a class="knop knop-licht" href="mailto:{{ sponsors.contact.email }}?subject={{ 'Sponsor worden – Running for Pauline' | urlencode }}">✉️ Contacteer ons</a>
+      {% endif %}
+    </div>
+    {% if sponsors.contact.email %}<p class="klein word-sponsor-mail">{{ sponsors.contact.email }}</p>{% endif %}
   </div>
-  <p class="intro">
-    {{ sponsors.contact.tekst }}
-    {% if sponsors.contact.email %}<a href="mailto:{{ sponsors.contact.email }}">{{ sponsors.contact.email }}</a>{% endif %}
-  </p>
 </section>
 
 <section class="pagina">
-  <div class="steun-blok">
-    <h2>Liever als particulier steunen?</h2>
-    <p>Doneer rechtstreeks aan ons team via de pagina van {{ event.goed_doel.naam }}.</p>
-    <a class="knop" href="{{ event.goed_doel.steun_url }}" target="_blank" rel="noopener">{{ event.goed_doel.steun_label }} ♡</a>
-  </div>
   {% include "_overschrijving.html" %}
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script src="static/js/sponsormuur.js?v={{ versie }}" defer></script>
 {% endblock %}

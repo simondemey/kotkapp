@@ -345,53 +345,59 @@ a { color: var(--oranje); }
 .tl-kaart h3 { margin: 0; font-size: 1.1rem; }
 .tl-kaart p { margin: .25rem 0 0; }
 
-/* Sponsors */
-.sponsor-logos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-top: 1.5rem;
+/* Sponsormuur: bedrijfssponsors per niveau. De grootte per niveau zit in de variabelen hieronder. */
+.sponsormuur { display: grid; gap: 2.5rem; margin-top: 2rem; }
+.sponsor-niveau { --kolom: 180px; --logo-h: 64px; --naam: 1rem; }
+.sponsor-niveau.niveau-goud { --kolom: 320px; --logo-h: 120px; --naam: 1.4rem; }
+.sponsor-niveau.niveau-zilver { --kolom: 240px; --logo-h: 88px; --naam: 1.15rem; }
+.sponsor-niveau-titel {
+  margin: 0 0 1rem; text-align: center;
+  font-family: var(--font-titel); font-weight: normal; font-size: 2rem; line-height: 1; color: var(--zalm); letter-spacing: .03em;
 }
-.sponsor-logo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: .5rem;
-  min-height: 140px;
-  padding: 1rem;
-  background: #fff;
-  border-radius: var(--radius);
-  text-decoration: none;
-  color: var(--tekst);
-  font-weight: 800;
+.sponsor-niveau.niveau-goud .sponsor-niveau-titel { color: var(--geel); font-size: 2.4rem; }
+.sponsor-rooster {
+  display: grid; gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--kolom)), 1fr));
 }
-.sponsor-logo img { max-height: 80px; object-fit: contain; }
-.sponsor-logo small { color: var(--zalm); font-weight: 600; }
+.sponsor-post {
+  position: relative; display: flex; flex-direction: column;
+  background: #fff; border: 3px solid var(--lint); border-radius: var(--radius); overflow: hidden;
+}
+.sponsor-post-logo { display: grid; place-items: center; padding: 1.25rem; border-bottom: 2px solid var(--lint); }
+.sponsor-post-logo a { display: contents; }
+.sponsor-post-logo img { height: var(--logo-h); width: auto; max-width: 100%; object-fit: contain; }
+.sponsor-post-tekst { padding: .9rem 1.1rem 1.1rem; }
+.sponsor-post-tekst h3 { margin: 0 0 .3rem; font-size: var(--naam); font-weight: 800; color: var(--oranje); line-height: 1.25; }
+.sponsor-post-tekst p { margin: 0 0 .5rem; white-space: pre-line; }
+.sponsor-post-link { font-size: .85rem; font-weight: 600; overflow-wrap: anywhere; }
+.niveau-brons .sponsor-post-tekst { font-size: .9rem; }
 
-.pakketten {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+/* Hoofdsponsor: één brede, opvallende kaart bovenaan */
+.sponsor-niveau.niveau-hoofd { --kolom: 100%; --logo-h: 200px; --naam: clamp(1.8rem, 6vw, 2.6rem); }
+.sponsor-post.niveau-hoofd {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: center;
+  background: var(--oranje); border: 0; color: #fff;
+  box-shadow: 0 10px 0 #b44c15;
 }
-.pakket {
-  background: var(--kaart);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
+.sponsor-post.niveau-hoofd .sponsor-post-logo { background: #fff; margin: 1.25rem; border: 0; border-radius: calc(var(--radius) - 4px); padding: 1.75rem; }
+.sponsor-post.niveau-hoofd .sponsor-post-tekst { padding: 3rem 1.75rem 1.75rem .5rem; font-size: 1.1rem; }
+.sponsor-post.niveau-hoofd h3 { font-family: var(--font-titel); font-weight: normal; color: #fff; letter-spacing: .02em; }
+.sponsor-post.niveau-hoofd .sponsor-post-link { color: #fff; font-size: 1rem; }
+.sponsor-label {
+  position: absolute; top: 1.25rem; right: 1.25rem;
+  background: var(--geel); color: var(--tekst); border-radius: 999px; padding: .3rem .9rem;
+  font-weight: 800; font-size: .8rem; text-transform: uppercase; letter-spacing: .1em;
 }
-.pakket.uitgelicht { background: var(--oranje); color: #fff; }
-.pakket h3 { margin: 0; font-weight: 800; font-size: 1.25rem; }
-.pakket .prijs {
-  font-family: var(--font-titel);
-  font-size: 3rem;
-  line-height: 1;
-  margin: .25rem 0 1rem;
+@media (max-width: 700px) {
+  .sponsor-niveau.niveau-hoofd { --logo-h: 140px; }
+  .sponsor-post.niveau-hoofd { grid-template-columns: 1fr; }
+  .sponsor-post.niveau-hoofd .sponsor-post-logo { margin: 3.25rem 1rem 0; }
+  .sponsor-post.niveau-hoofd .sponsor-post-tekst { padding: 1.25rem 1.25rem 1.5rem; text-align: center; }
+  .sponsor-label { left: 50%; right: auto; transform: translateX(-50%); white-space: nowrap; }
 }
-.pakket ul { margin: 0; padding-left: 1.1rem; }
-.pakket li { margin-bottom: .4rem; }
+
+.word-sponsor .knoppen { margin-top: 0; }
+.word-sponsor-mail { margin-top: .75rem; overflow-wrap: anywhere; }
 
 /* Food & drinks */
 .menu {
@@ -485,7 +491,7 @@ a { color: var(--oranje); }
 .veld { display: grid; gap: .35rem; font-weight: 800; color: var(--oranje); min-width: 0; }
 .veld input, .veld textarea { width: 100%; max-width: 100%; }
 .veld small { color: var(--zalm); font-weight: 600; }
-.veld input:not([type=file]):not([type=radio]):not([type=checkbox]), .veld textarea {
+.veld input:not([type=file]):not([type=radio]):not([type=checkbox]), .veld textarea, .veld select {
   font: inherit;
   font-weight: 400;
   color: var(--tekst);
@@ -494,7 +500,7 @@ a { color: var(--oranje); }
   border-radius: 12px;
   background: var(--creme);
 }
-.veld input:focus, .veld textarea:focus { outline: 3px solid var(--geel); border-color: var(--geel); }
+.veld input:focus, .veld textarea:focus, .veld select:focus { outline: 3px solid var(--geel); border-color: var(--geel); }
 .foto-knoppen { display: flex; flex-wrap: wrap; gap: .5rem; }
 .knop-klein {
   display: inline-flex;
@@ -648,6 +654,24 @@ a { color: var(--oranje); }
 .tba-sub { font-weight: 800; color: var(--zalm); margin-bottom: .5rem; }
 .tba-lijst { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
 .tba-lijst li { background: var(--lint); border-radius: 999px; padding: .4rem 1rem; font-weight: 600; }
+
+/* ---------- "Met dank aan": logo's van de bedrijfssponsors boven de footer ---------- */
+.dank-strook {
+  margin: 3rem auto 0; padding: 1.75rem 1rem 0; max-width: var(--breedte); width: 100%;
+  border-top: 2px solid var(--lint); text-align: center;
+}
+.dank-strook h2 {
+  margin: 0 0 1.25rem; font-size: .85rem; font-weight: 800; color: var(--zalm);
+  text-transform: uppercase; letter-spacing: .15em;
+}
+.dank-logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem 1.75rem; }
+.dank-logo { --logo-h: 34px; display: block; transition: transform .15s; }
+.dank-logo.niveau-goud { --logo-h: 60px; }
+.dank-logo.niveau-zilver { --logo-h: 46px; }
+.dank-logo.niveau-hoofd { --logo-h: 96px; flex-basis: 100%; display: flex; justify-content: center; }
+.dank-logo img { height: var(--logo-h); width: auto; max-width: min(100%, calc(var(--logo-h) * 3.5)); object-fit: contain; }
+a.dank-logo:hover { transform: translateY(-2px); }
+.dank-strook + .site-footer { margin-top: 1.5rem; }
 
 /* ---------- Footer ---------- */
 .site-footer {
@@ -842,3 +866,26 @@ a { color: var(--oranje); }
 
 /* Fotomuur: meer laden */
 .meer-laden { display: block; margin: 1rem auto 0; border: 0; cursor: pointer; font: inherit; font-weight: 800; }
+
+/* Beheer: bedrijfssponsors */
+.partners-beheer { display: grid; gap: .6rem; margin-top: 1rem; }
+.partners-beheer h3 { margin: 1rem 0 0; color: var(--zalm); font-size: 1rem; text-transform: uppercase; letter-spacing: .08em; }
+.partner-rij {
+  display: grid; grid-template-columns: 110px minmax(0, 1fr) auto; align-items: center; gap: 1rem;
+  background: #fff; border: 3px solid var(--lint); border-radius: var(--radius); padding: .75rem 1rem;
+}
+.partner-rij img { width: 110px; height: 60px; object-fit: contain; }
+.partner-rij strong { display: block; color: var(--oranje); }
+.partner-rij small { display: block; color: var(--zalm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.partner-rij.verborgen { opacity: .55; border-style: dashed; }
+.partner-acties { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; justify-content: flex-end; }
+.partner-acties .knop-klein:disabled { opacity: .35; cursor: default; }
+.partner-form { margin-top: 1.5rem; }
+.partner-form h3 { margin: 0; color: var(--oranje); }
+.partner-knoppen { justify-content: flex-start; margin-top: 0; }
+.partner-voorbeeld { max-height: 120px; background: repeating-conic-gradient(#eee 0 25%, #fff 0 50%) 0 0 / 16px 16px; padding: .5rem; }
+@media (max-width: 600px) {
+  .partner-rij { grid-template-columns: 80px minmax(0, 1fr); }
+  .partner-rij img { width: 80px; }
+  .partner-acties { grid-column: 1 / -1; justify-content: flex-start; }
+}

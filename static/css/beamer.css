@@ -61,6 +61,24 @@ body.beamer.loopt { cursor: none; }
 .bm-tegel.groot { grid-column: span 3; background: var(--oranje); border-color: var(--oranje); }
 .bm-tegel.groot b, .bm-tegel.groot span { color: #fff; }
 
+/* Sponsordia: één sponsor onder "Met dank aan". Hoe hoger het niveau, hoe groter het logo. */
+.bm-sponsor { --logo-h: 16vh; display: grid; justify-items: center; gap: 2vh; text-align: center; max-width: 80vw; }
+.bm-sponsor.niveau-zilver { --logo-h: 21vh; }
+.bm-sponsor.niveau-goud { --logo-h: 26vh; }
+.bm-sponsor.niveau-hoofd { --logo-h: 32vh; }
+.bm-sponsor h2 { margin: 0; font-family: var(--font-titel); font-weight: normal; font-size: 8vh; line-height: 1; color: var(--oranje); }
+.bm-sp-logo { background: #fff; border: .5vh solid var(--lint); border-radius: 3vh; padding: 3vh 4vh; }
+.bm-sponsor.niveau-hoofd .bm-sp-logo { border: .8vh solid var(--oranje); box-shadow: 0 1.5vh 0 #b44c15; }
+.bm-sp-logo img { height: var(--logo-h); width: auto; max-width: 70vw; object-fit: contain; }
+.bm-sponsor strong { font-family: var(--font-titel); font-weight: normal; font-size: 6vh; line-height: 1; color: var(--tekst); }
+.bm-sponsor.niveau-hoofd strong { font-size: 8vh; color: var(--oranje); }
+.bm-sp-label {
+  background: var(--lint); color: var(--tekst); border-radius: 999px; padding: .6vh 2vh;
+  font-weight: 800; font-size: 2.2vh; text-transform: uppercase; letter-spacing: .15em;
+}
+.bm-sponsor.niveau-hoofd .bm-sp-label { background: var(--geel); font-size: 2.6vh; }
+.bm-sponsor p { margin: 0; font-size: 3vh; max-width: 70vw; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
 /* QR in de hoek */
 .bm-qr {
   position: fixed; right: 2vw; bottom: 3vh; z-index: 2;

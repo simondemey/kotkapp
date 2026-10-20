@@ -1,8 +1,8 @@
 # Supabase – database van runningforpauline.be
 
 De scripts in deze map beschrijven de volledige Supabase-database: fotomuur, accounts,
-inschrijvingen, deelnemersnummers, sponsors, starts, rondjes, tellers, beamer en de
-automatische mails.
+inschrijvingen, deelnemersnummers, sponsors, starts, rondjes, tellers, beamer,
+bedrijfssponsors en de automatische mails.
 
 > ⚠️ **Nooit iets uit [`archief/`](archief/) uitvoeren.** Dat zijn eenmalige patches die al
 > op de live database zijn toegepast. Sommige wissen alle inschrijvingen of hernummeren
@@ -40,6 +40,7 @@ Voer de scripts uit in de **SQL Editor** van het project, in deze volgorde:
 | 6 | `wandelen.sql`          | Wandelaars: enkel vaste bedragen, sponsormail met "wandeltocht" |
 | 7 | `tellers.sql`           | Live teller op de homepagina (enkel aantallen) |
 | 8 | `beamer.sql`            | Rankings en totalen voor de beamer (enkel beheerders) |
+| 9 | `partners.sql`          | Bedrijfssponsors: tabel `partners` en logo-bucket `partners` (sponsormuur, footerstrook, beamer; enkel beheerders schrijven) |
 
 ### Handmatige stappen (niet in SQL)
 

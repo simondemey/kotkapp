@@ -1,41 +1,13 @@
-# Sponsorpakketten (uit het sponsorboekje)
-pakketten:
-  - naam: Bronzen sponsor
-    prijs: 100
-    voordelen:
-      - Vermelding van uw bedrijf op sociale media
-      - Banner met uw logo tijdens het evenement
-      - Logo op affiche
-  - naam: Zilveren sponsor
-    prijs: 250
-    voordelen:
-      - Persoonlijke vermelding van uw bedrijf op sociale media
-      - Banner met uw logo tijdens het evenement
-      - Logo op affiche én op reclameflyer
-  - naam: Gouden sponsor
-    prijs: 500
-    voordelen:
-      - Persoonlijke vermelding van uw bedrijf op sociale media
-      - Banner met uw logo tijdens het evenement
-      - Logo op affiche én op reclameflyer
-      - Logo van uw bedrijf op de t-shirt van de lopers op de officiële run
-  - naam: Hoofdsponsor
-    prijs: 750
-    uitgelicht: true
-    voordelen:
-      - Gouden sponsorpakket
-      - Logo van uw bedrijf op de loopnummers van de lopers
-      - Pakket volgens uw voorkeuren in onderling overleg
+# Sponsorpagina – teksten
+# De bedrijfssponsors zelf beheer je via Beheer (admin.html) > Bedrijfssponsors (Supabase-tabel partners).
+
+intro: Zonder deze bedrijven geen sponsorloop. Bedankt om mee te lopen voor Pauline!
+leeg: De eerste sponsors worden binnenkort bekendgemaakt.
 
 # Contact om sponsor te worden
 contact:
-  tekst: Interesse om sponsor te worden? Neem contact met ons op.
+  tekst: Interesse om sponsor te worden? Bekijk de pakketten in ons sponsorboekje en neem contact met ons op.
   email: sponserloopkotk@gmail.com
 
-# Bevestigde sponsors – logo's in static/img/sponsors/
-# Voorbeeld:
-#   - naam: Bakkerij De Zon
-#     niveau: Gouden sponsor
-#     logo: bakkerij-de-zon.png
-#     url: https://www.voorbeeld.be
-lijst: []
+# Sponsorboekje (PDF). Zolang het bestand ontbreekt, verschijnt er geen downloadknop.
+boekje: static/docs/sponsorboekje.pdf

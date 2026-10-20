@@ -44,6 +44,54 @@
       </table>
     </div>
 
+    <h2 class="sectie-titel" style="margin-top:2.5rem" id="bedrijfssponsors">Bedrijfssponsors</h2>
+    <p class="intro klein">De bedrijven op de <a href="sponsors.html">sponsorpagina</a>, in de "Met dank aan"-strook en op de beamer. Hoe hoger het niveau, hoe groter ze in beeld komen.</p>
+    <div class="partners-beheer" id="partners-lijst"></div>
+
+    <form class="post-form partner-form" id="partner-form" novalidate>
+      <h3 id="partner-form-titel">Sponsor toevoegen</h3>
+      <div class="veld-rij">
+        <label class="veld">
+          <span>Naam van het bedrijf</span>
+          <input type="text" name="naam" maxlength="100" required>
+        </label>
+        <label class="veld">
+          <span>Niveau</span>
+          <select name="niveau" required>
+            <option value="hoofd">Hoofdsponsor</option>
+            <option value="goud">Gouden sponsor</option>
+            <option value="zilver">Zilveren sponsor</option>
+            <option value="brons" selected>Bronzen sponsor</option>
+          </select>
+        </label>
+      </div>
+      <label class="veld">
+        <span>Tekstje <small>(optioneel)</small></span>
+        <textarea name="tekst" maxlength="500" rows="3" placeholder="Een korte boodschap van of over de sponsor"></textarea>
+      </label>
+      <label class="veld">
+        <span>Website <small>(optioneel, begint met https://)</small></span>
+        <input type="url" name="url" maxlength="300" placeholder="https://www.voorbeeld.be" inputmode="url">
+      </label>
+      <div class="veld foto-kiezer">
+        <span>Logo <small>(PNG, JPG of WebP, max. 2 MB – liefst met transparante achtergrond)</small></span>
+        <div class="foto-knoppen">
+          <label class="knop-klein">
+            🖼️ Kies een logo
+            <input type="file" name="logo" accept="image/png,image/jpeg,image/webp">
+          </label>
+        </div>
+        <div class="foto-gekozen" hidden>
+          <img class="foto-voorbeeld partner-voorbeeld" alt="Gekozen logo">
+        </div>
+      </div>
+      <div class="knoppen partner-knoppen">
+        <button class="knop" type="submit">Sponsor opslaan</button>
+        <button class="knop knop-licht" type="button" id="partner-annuleer" hidden>Annuleren</button>
+      </div>
+      <p class="form-melding" role="status" hidden></p>
+    </form>
+
     <h2 class="sectie-titel" style="margin-top:2.5rem">Vragen &amp; opmerkingen</h2>
     <div class="vragen-lijst" id="vragen-lijst"></div>
   </div>

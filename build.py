@@ -85,7 +85,8 @@ def agenda(event: dict) -> dict:
     return {"google_url": google, "outlook_url": outlook, "ics": "running-for-pauline.ics", "ics_inhoud": ics}
 
 
-def build() -> None:
+def build(dev: bool = False) -> None:
+    """dev=True (bij --serve): ook de testgegevens uit static/mock/ meenemen."""
     env = Environment(
         loader=FileSystemLoader(TEMPLATES),
         autoescape=select_autoescape(["html"]),
@@ -93,12 +94,15 @@ def build() -> None:
     env.filters["md"] = md_inline
 
     event = load_yaml("evenement.yaml")
+    sponsors = load_yaml("sponsors.yaml")
+    # Downloadknop voor het sponsorboekje enkel tonen als de PDF er echt staat
+    sponsors["boekje_beschikbaar"] = bool(sponsors.get("boekje")) and (ROOT / sponsors["boekje"]).is_file()
     context = {
         "event": event,
         "agenda": agenda(event),
         "over_html": load_markdown("over.md"),
         "timeline": load_yaml("timeline.yaml"),
-        "sponsors": load_yaml("sponsors.yaml"),
+        "sponsors": sponsors,
         "menu": load_yaml("menu.yaml"),
         "praktisch": load_yaml("praktisch.yaml"),
         "fotomuur": load_yaml("fotomuur.yaml"),
@@ -112,6 +116,8 @@ def build() -> None:
     # Overschrijven i.p.v. dist/ te verwijderen: OneDrive houdt mappen soms vergrendeld.
     DIST.mkdir(exist_ok=True)
     shutil.copytree(STATIC, DIST / "static", dirs_exist_ok=True)
+    if not dev:  # testgegevens nooit publiceren
+        shutil.rmtree(DIST / "static" / "mock", ignore_errors=True)
 
     (DIST / context["agenda"]["ics"]).write_text(context["agenda"]["ics_inhoud"], encoding="utf-8", newline="")
 
@@ -136,6 +142,6 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
 
-    build()
+    build(dev=args.serve)
     if args.serve:
         serve(args.port)

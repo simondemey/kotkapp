@@ -1,0 +1,42 @@
+[
+  {
+    "id": "mock-1", "naam": "Bouwonderneming Vermeulen", "niveau": "hoofd", "volgorde": 0,
+    "tekst": "Wij bouwen al drie generaties mee aan onze gemeente, en nu ook aan een kankervrije toekomst. Hup Pauline, hup lopers!",
+    "url": "https://www.example.com/vermeulen", "logo": "static/mock/logos/bouw-vermeulen.svg"
+  },
+  {
+    "id": "mock-2", "naam": "Apotheek Linde", "niveau": "goud", "volgorde": 0,
+    "tekst": "Gezondheid staat bij ons centraal. Trots dat we deze sponsorloop mogen steunen!",
+    "url": "https://www.example.com/linde", "logo": "static/mock/logos/apotheek-linde.svg"
+  },
+  {
+    "id": "mock-3", "naam": "Garage Peeters", "niveau": "goud", "volgorde": 1,
+    "tekst": "Wij houden uw auto op de baan, jullie houden de benen in beweging.",
+    "url": "https://www.example.com/peeters", "logo": "static/mock/logos/garage-peeters.svg"
+  },
+  {
+    "id": "mock-4", "naam": "Bakkerij De Zon", "niveau": "zilver", "volgorde": 0,
+    "tekst": "Na het lopen een lekkere koffiekoek? Kom gerust langs!",
+    "url": "https://www.example.com/dezon", "logo": "static/mock/logos/bakkerij-zon.svg"
+  },
+  {
+    "id": "mock-5", "naam": "Kinepraktijk Beweeg", "niveau": "zilver", "volgorde": 1,
+    "tekst": "Spierpijn na al die rondjes? Je weet ons te vinden.",
+    "url": null, "logo": "static/mock/logos/kine-beweeg.svg"
+  },
+  {
+    "id": "mock-6", "naam": "Frituur 't Fritkot", "niveau": "brons", "volgorde": 0,
+    "tekst": "Elke calorie die je verbrandt, vullen wij graag terug aan.",
+    "url": "https://www.example.com/fritkot", "logo": "static/mock/logos/frituur-fritkot.svg"
+  },
+  {
+    "id": "mock-7", "naam": "Drukkerij Pixel", "niveau": "brons", "volgorde": 1,
+    "tekst": null,
+    "url": "https://www.example.com/pixel", "logo": "static/mock/logos/drukkerij-pixel.svg"
+  },
+  {
+    "id": "mock-8", "naam": "Boekhouding Claes", "niveau": "brons", "volgorde": 2,
+    "tekst": "Wij tellen de euro's, jullie de rondjes.",
+    "url": null, "logo": "static/mock/logos/boekhouder-claes.svg"
+  }
+]

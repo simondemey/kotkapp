@@ -1,5 +1,5 @@
-// Beamer: diavoorstelling met foto's van de fotomuur en af en toe een ranking of totalen.
-// Foto's zijn publiek; rankings enkel als deze browser ingelogd is als beheerder (beamer_data()).
+// Beamer: diavoorstelling met foto's van de fotomuur en af en toe een ranking, totalen of de sponsors.
+// Foto's en sponsors zijn publiek; rankings enkel als deze browser ingelogd is als beheerder (beamer_data()).
 (function () {
   const db = window.sb;
   const podium = document.getElementById("bm-podium");
@@ -11,7 +11,9 @@
   const FOTO_TIJD = 7000;      // ms per foto
   const RANKING_TIJD = 12000;  // ms per ranking-dia
   const ELKE_N_FOTOS = 5;      // na zoveel foto's een ranking
-  const VERVERS = 60000;       // nieuwe posts en cijfers ophalen
+  const SPONSOR_TIJD = 10000;  // ms per sponsordia
+  const ELKE_N_SPONSOR = 4;    // na zoveel dia's een sponsordia (telkens één sponsor)
+  const VERVERS = 60000;       // nieuwe posts, cijfers en sponsors ophalen
 
   // € 412 of € 5.234,50 (centen enkel als het geen rond bedrag is)
   const euro = (b) => {
@@ -28,6 +30,8 @@
   let timer = null;
   let gepauzeerd = false;
   let rankingSoort = 0;
+  let partners = [];
+  let sponsorBeurt = 0;        // welke sponsor de volgende sponsordia krijgt
 
   // ---------- Gegevens ----------
   async function laadPosts() {
@@ -44,21 +48,35 @@
     cijfers = error ? null : data;
   }
 
-  async function ververs() {
-    await Promise.all([laadPosts(), laadCijfers()]);
-    bouwReeks();
+  async function laadPartners() {
+    try {
+      partners = await window.partners.ververs();
+    } catch {} // vorige lijst behouden
   }
 
-  // Volgorde: foto's (nieuwste eerst), na elke N foto's een ranking-dia
+  async function ververs() {
+    await Promise.all([laadPosts(), laadCijfers(), laadPartners()]);
+    bouwReeks();
+    voorlaadLogos();
+  }
+
+  // Volgorde: foto's (nieuwste eerst), na elke N foto's een ranking-dia, en regelmatig een sponsordia
   function bouwReeks() {
     const huidig = reeks[positie];
     const soorten = rankingSoorten();
-    reeks = [];
+    const basis = [];
     posts.forEach((p, i) => {
-      reeks.push({ soort: "post", post: p });
-      if (soorten.length && (i + 1) % ELKE_N_FOTOS === 0) reeks.push({ soort: "ranking" });
+      basis.push({ soort: "post", post: p });
+      if (soorten.length && (i + 1) % ELKE_N_FOTOS === 0) basis.push({ soort: "ranking" });
     });
-    if (soorten.length && (!posts.length || posts.length % ELKE_N_FOTOS)) reeks.push({ soort: "ranking" });
+    if (soorten.length && (!posts.length || posts.length % ELKE_N_FOTOS)) basis.push({ soort: "ranking" });
+    reeks = [];
+    basis.forEach((d, i) => {
+      reeks.push(d);
+      if (partners.length && (i + 1) % ELKE_N_SPONSOR === 0) reeks.push({ soort: "sponsor" });
+    });
+    // altijd minstens één sponsordia per ronde (ook zonder posts)
+    if (partners.length && (!basis.length || basis.length % ELKE_N_SPONSOR)) reeks.push({ soort: "sponsor" });
     if (!reeks.length) reeks.push({ soort: "leeg" });
     // probeer op dezelfde post verder te gaan
     if (huidig?.post) {
@@ -155,6 +173,30 @@
     return li;
   }
 
+  // Volgorde van de sponsordia's: elke sponsor apart, de hoofdsponsor om de andere beurt (komt dus vaker)
+  function sponsorBeurten() {
+    const hoofden = partners.filter((p) => p.niveau === "hoofd");
+    const anderen = partners.filter((p) => p.niveau !== "hoofd");
+    if (!hoofden.length || !anderen.length) return [...hoofden, ...anderen];
+    return anderen.flatMap((p, i) => [hoofden[i % hoofden.length], p]);
+  }
+
+  // Sponsordia: één sponsor op het scherm onder "Met dank aan"; hoe hoger het niveau, hoe groter het logo
+  function sponsorDia() {
+    const { NIVEAUS, logoUrl } = window.partners;
+    const beurten = sponsorBeurten();
+    const p = beurten[sponsorBeurt++ % beurten.length];
+    const niveau = NIVEAUS.find((n) => n.key === p.niveau);
+    const dia = el("section", "bm-dia");
+    const box = el("div", `bm-sponsor niveau-${p.niveau}`);
+    const logo = el("div", "bm-sp-logo");
+    logo.append(Object.assign(el("img"), { src: logoUrl(p), alt: p.naam }));
+    box.append(el("h2", null, "Met dank aan"), logo, el("strong", null, p.naam), el("span", "bm-sp-label", niveau.label));
+    if (p.tekst) box.append(el("p", null, p.tekst));
+    dia.append(box);
+    return dia;
+  }
+
   function leegDia() {
     const dia = el("section", "bm-dia");
     const c = el("div", "bm-citaat");
@@ -168,12 +210,13 @@
     clearTimeout(timer);
     positie = (positie + stap + reeks.length) % reeks.length;
     const d = reeks[positie];
-    const dia = d.soort === "post" ? postDia(d.post) : d.soort === "ranking" ? rankingDia() : leegDia();
+    const dia = d.soort === "post" ? postDia(d.post) : d.soort === "ranking" ? rankingDia() : d.soort === "sponsor" ? sponsorDia() : leegDia();
     podium.replaceChildren(dia);
-    document.body.classList.toggle("ranking-dia", d.soort === "ranking"); // QR verbergen bij rankings
+    // QR verbergen bij rankings en sponsors (anders valt hij over de lijst of de logo's)
+    document.body.classList.toggle("ranking-dia", d.soort === "ranking" || d.soort === "sponsor");
     voorladen();
 
-    const duur = d.soort === "ranking" ? RANKING_TIJD : FOTO_TIJD;
+    const duur = d.soort === "ranking" ? RANKING_TIJD : d.soort === "sponsor" ? SPONSOR_TIJD : FOTO_TIJD;
     balk.style.transition = "none";
     balk.style.width = "0";
     requestAnimationFrame(() => {
@@ -187,6 +230,18 @@
   function voorladen() {
     const volgende = reeks.slice(positie + 1).find((d) => d.post?.foto_pad);
     if (volgende) new Image().src = db.storage.from(bucket).getPublicUrl(volgende.post.foto_pad).data.publicUrl;
+  }
+
+  // Sponsorlogo's één keer voorladen (de browser houdt ze daarna in de cache)
+  const voorgeladen = new Set();
+  function voorlaadLogos() {
+    partners.forEach((p) => {
+      const url = window.partners.logoUrl(p);
+      if (!voorgeladen.has(url)) {
+        voorgeladen.add(url);
+        new Image().src = url;
+      }
+    });
   }
 
   function klok() {
@@ -224,7 +279,7 @@
     setInterval(ververs, VERVERS);
     const fotos = posts.filter((p) => p.foto_pad).length;
     startInfo.textContent =
-      `${fotos} foto's en ${posts.length - fotos} berichten geladen. ` +
+      `${fotos} foto's, ${posts.length - fotos} berichten en ${partners.length} sponsors geladen. ` +
       (cijfers ? "Rankings staan aan (ingelogd als beheerder)." : "Rankings staan uit: log in als beheerder om ze te tonen.");
   })();
 })();

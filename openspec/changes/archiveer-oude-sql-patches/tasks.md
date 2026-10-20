@@ -23,7 +23,7 @@
 
 ## 5. Afronden
 
-- [ ] 5.1 Wijzigingen committen en pushen; verifiëren dat de GitHub-workflow "Publiceer site" slaagt en dat https://runningforpauline.be ongewijzigd werkt (inschrijven, Mijn deelname en Beheer laden zonder fouten)
+- [x] 5.1 Wijzigingen committen en pushen; verifiëren dat de GitHub-workflow "Publiceer site" slaagt en dat https://runningforpauline.be ongewijzigd werkt (inschrijven, Mijn deelname en Beheer laden zonder fouten)
 
 ## Workflow follow-up
 

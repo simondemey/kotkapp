@@ -35,7 +35,7 @@
 
 ## 7. Integratie
 
-- [ ] 7.1 Volledige doorloop in de preview met een hoofdsponsor en sponsors van elk niveau: sponsorpagina, footerstrook op drie pagina's, beamer en het verbergen/verwijderen via Beheer. Neem een screenshot van de sponsorpagina op desktop en op gsm. Ruim daarna de testsponsors op.
+- [x] 7.1 Volledige doorloop in de preview met een hoofdsponsor en sponsors van elk niveau: sponsorpagina, footerstrook op drie pagina's, beamer en het verbergen/verwijderen via Beheer. Neem een screenshot van de sponsorpagina op desktop en op gsm. Ruim daarna de testsponsors op.
 - [x] 7.2 Voer `openspec validate sponsormuur --strict` uit en los eventuele meldingen op.
 
 ## Workflow follow-up

@@ -42,7 +42,7 @@ De repository MUST documenteren in welke volgorde de scripts uit `supabase/` uit
 
 #### Scenario: Leeg project opzetten
 - **WHEN** een beheerder de gedocumenteerde scripts in de beschreven volgorde uitvoert op een leeg Supabase-project
-- **THEN** bestaat de volledige database: inschrijvingen, sponsors, rondjes, starts, fotomuur, beheerders, tellers, beamergegevens, bevestigings- en sponsormails
+- **THEN** bestaat de volledige database: inschrijvingen, sponsors, rondjes, starts, fotomuur, beheerders, tellers, beamergegevens, bedrijfssponsors met hun logo-opslag, bevestigings- en sponsormails
 - **AND** is geen enkel script uit `supabase/archief/` nodig
 
 #### Scenario: Handmatige stappen zijn vermeld

@@ -31,7 +31,11 @@
   <h2>Rechtstreeks steunen</h2>
   <p>{{ o.tekst }}</p>
   <div class="rekening-opties">
-    {{ rekening(o.kotk, event.goed_doel.steun_url) }}
+    <div class="rekening-optie">
+      <h3>{{ o.kotk.titel }}</h3>
+      <p class="klein">{{ o.kotk.uitleg }}</p>
+      <a class="knop" href="{{ event.goed_doel.steun_url }}" target="_blank" rel="noopener">{{ o.kotk.knop }} ♡</a>
+    </div>
     {{ rekening(o.pauline) }}
   </div>
 </div>

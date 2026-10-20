@@ -43,8 +43,7 @@
     regels.push(
       "",
       "Betalen kan op twee manieren:",
-      `1. Via Kom op tegen Kanker (komt op onze teampagina): online via ${betaal.kotk_url}`,
-      `   of overschrijving naar ${betaal.kotk_iban} met mededeling "${betaal.kotk_mededeling}" (belangrijk!)`,
+      `1. Via Kom op tegen Kanker: doneer online via onze teampagina ${betaal.kotk_url}`,
       `2. Rechtstreeks voor Pauline's behandeling: overschrijving naar ${betaal.pauline_iban} met mededeling "Sponsorloop ${d.naam}"`,
       "",
       "Heel erg bedankt voor je steun! 💛",

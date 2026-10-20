@@ -31,11 +31,9 @@ socials:
 overschrijving:
   tekst: Wil je rechtstreeks steunen? Kies een van deze twee manieren.
   kotk:
-    titel: Via Kom op tegen Kanker (op onze teampagina)
-    iban: BE56 7360 3575 6688
-    begunstigde: Kom op tegen Kanker
-    mededeling: GIFT 340194808
-    uitleg: Vermeld zeker "GIFT" en onze teamcode 340194808, anders komt je gift niet bij ons team terecht. Online doneren kan ook via onze teampagina.
+    titel: Via Kom op tegen Kanker
+    uitleg: Doneer online via onze teampagina bij Kom op tegen Kanker. Zo komt je gift meteen bij ons team terecht.
+    knop: Doneer via onze teampagina
   pauline:
     titel: Rechtstreeks voor Pauline's behandeling
     iban: BE32 8937 5011 4102

@@ -13,12 +13,16 @@
       <div class="stat"><span class="stat-getal" id="stat-lopers">0</span><span class="stat-label">lopers</span></div>
       <div class="stat"><span class="stat-getal" id="stat-wandelaars">0</span><span class="stat-label">wandelaars</span></div>
       <div class="stat"><span class="stat-getal" id="stat-supporters">0</span><span class="stat-label">supporters</span></div>
+      <div class="stat"><span class="stat-getal" id="stat-klaar">0</span><span class="stat-label">klaar met lopen</span></div>
+      <div class="stat"><span class="stat-getal" id="stat-rondjes">0</span><span class="stat-label">rondjes</span></div>
+      <div class="stat stat-breed"><span class="stat-getal" id="stat-opgehaald">€ 0</span><span class="stat-label">opgehaald (na lopen)</span></div>
       <div class="stat"><span class="stat-getal" id="stat-inschrijvingen">0</span><span class="stat-label">inschrijvingen</span></div>
       <div class="stat"><span class="stat-getal" id="stat-week">0</span><span class="stat-label">nieuw (7 dagen)</span></div>
     </div>
 
     <div class="knoppen">
-      <button class="knop" type="button" id="csv-knop">⬇️ Download Excel (CSV)</button>
+      <button class="knop" type="button" id="csv-knop">⬇️ Deelnemers (Excel)</button>
+      <button class="knop" type="button" id="csv-sponsors-knop">⬇️ Sponsors (Excel)</button>
       <button class="knop knop-licht" type="button" id="vernieuw-knop">↻ Vernieuwen</button>
       <a class="knop knop-licht" href="fotomuur.html">Fotomuur beheren</a>
     </div>
@@ -31,7 +35,7 @@
     <div class="tabel-wrap">
       <table class="admin-tabel">
         <thead>
-          <tr><th>Nr</th><th>Naam</th><th>Loopt</th><th>Wandelt</th><th>Supporter</th><th>Ingeschreven door</th><th>Datum</th><th></th></tr>
+          <tr><th>Nr</th><th>Naam</th><th>Loopt</th><th>Wandelt</th><th>Supporter</th><th>Rondjes</th><th>Sponsors</th><th>Opgehaald</th><th>Ingeschreven door</th><th>Datum</th><th></th></tr>
         </thead>
         <tbody id="admin-rijen"></tbody>
       </table>

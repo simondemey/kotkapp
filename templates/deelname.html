@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% set gebruikt_supabase = true %}
+{% block title %}Mijn deelname – {{ super() }}{% endblock %}
+
+{% block content %}
+<section class="pagina">
+  <h1 class="pagina-titel">Mijn <span class="geel">deelname</span></h1>
+  <p class="intro" id="dn-status">Laden…</p>
+
+  <div id="dn-inhoud" hidden>
+    <p class="welkom" id="dn-welkom" hidden>🎉 Je inschrijving is opgeslagen! Voeg hieronder je sponsors toe.</p>
+
+    <div class="account-balk dn-balk">
+      <span>Ingelogd als <strong id="dn-email"></strong></span>
+      <span class="dn-acties">
+        <a class="knop-klein" href="inschrijven.html">✏️ Inschrijving aanpassen</a>
+        <button type="button" class="link-knop" id="dn-uitloggen">Uitloggen</button>
+      </span>
+    </div>
+
+    <div class="uitleg">
+      <h2>Zo werkt het</h2>
+      <ol>
+        <li><strong>Voeg je sponsors toe</strong>: per rondje of een vast bedrag. Zoveel je wilt.</li>
+        <li>Geef je een e-mailadres op, dan kan de site na het lopen <strong>automatisch een mail</strong> sturen met het bedrag en de betaalgegevens. Of je <strong>communiceert zelf</strong> en kopieert de tekst met de betaalmogelijkheden.</li>
+        <li>Na het lopen klik je op <strong>Klaar met lopen</strong> en geef je je aantal rondjes in. De site rekent alles uit.</li>
+      </ol>
+    </div>
+
+    <div id="dn-deelnemers" class="dn-deelnemers"></div>
+  </div>
+</section>
+
+{# Betaalgegevens voor de kopieertekst (uit content/evenement.yaml) #}
+<script id="betaal-info" type="application/json">{{ {
+  "kotk_iban": event.overschrijving.kotk.iban,
+  "kotk_mededeling": event.overschrijving.kotk.mededeling,
+  "kotk_url": event.goed_doel.steun_url,
+  "pauline_iban": event.overschrijving.pauline.iban,
+  "site": event.site_url
+} | tojson }}</script>
+
+<template id="dn-deelnemer-sjabloon">
+  <article class="dn-kaart">
+    <header class="dn-kop">
+      <span class="dn-nummer" hidden></span>
+      <div>
+        <h2 class="dn-naam"></h2>
+        <span class="dn-soort"></span>
+      </div>
+    </header>
+
+    <div class="dn-sponsors">
+      <h3>Sponsors</h3>
+      <p class="klein dn-geen">Nog geen sponsors. Voeg er hieronder een toe!</p>
+      <ul class="dn-sponsorlijst"></ul>
+      <p class="dn-totaal" hidden></p>
+    </div>
+
+    <details class="dn-toevoegen">
+      <summary class="knop-klein">＋ Sponsor toevoegen</summary>
+      <form class="dn-form" novalidate>
+        <label class="veld">
+          <span>Naam van de sponsor</span>
+          <input type="text" name="naam" maxlength="100" required>
+        </label>
+        <fieldset class="veld keuze keuze-rij">
+          <legend>Soort sponsoring</legend>
+          <label><input type="radio" name="soort" value="per_rondje" checked><span class="keuze-tekst">Per rondje<small>bedrag × rondjes</small></span></label>
+          <label><input type="radio" name="soort" value="vast"><span class="keuze-tekst">Vast bedrag<small>los van de rondjes</small></span></label>
+        </fieldset>
+        <label class="veld">
+          <span>Bedrag (€)</span>
+          <input type="number" name="bedrag" min="0.5" max="10000" step="0.5" inputmode="decimal" required>
+        </label>
+        <fieldset class="veld keuze">
+          <legend>Hoe laat je de sponsor weten wat hij moet betalen?</legend>
+          <label><input type="radio" name="communicatie" value="mail" checked><span class="keuze-tekst">De site mailt de sponsor na het lopen<small>e-mailadres nodig</small></span></label>
+          <label><input type="radio" name="communicatie" value="zelf"><span class="keuze-tekst">Ik laat het zelf weten<small>je kan de tekst met betaalgegevens kopiëren</small></span></label>
+        </fieldset>
+        <label class="veld dn-email-veld">
+          <span>E-mailadres van de sponsor</span>
+          <input type="email" name="email" inputmode="email" autocomplete="off">
+        </label>
+        <button class="knop" type="submit">Sponsor opslaan</button>
+        <p class="form-melding" role="status" hidden></p>
+      </form>
+    </details>
+
+    <div class="dn-klaar">
+      <div class="dn-klaar-vraag">
+        <h3>Klaar met lopen?</h3>
+        <form class="dn-rondjes-form" novalidate>
+          <label class="veld">
+            <span>Aantal rondjes</span>
+            <input type="number" name="aantal" min="0" max="200" step="1" inputmode="numeric" required>
+          </label>
+          <button class="knop" type="submit">🏁 Klaar met lopen</button>
+          <p class="form-melding" role="status" hidden></p>
+        </form>
+      </div>
+      <div class="dn-klaar-resultaat" hidden>
+        <p class="dn-resultaat-tekst"></p>
+        <button type="button" class="link-knop dn-rondjes-wijzig">Aantal rondjes aanpassen</button>
+      </div>
+    </div>
+  </article>
+</template>
+{% endblock %}
+
+{% block scripts %}
+<script src="static/js/deelname.js?v={{ versie }}" defer></script>
+{% endblock %}

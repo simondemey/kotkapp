@@ -73,6 +73,7 @@
     const naam = `keuze-${++volgnummer}`;
     kaart.querySelector(".d-naam").value = d.naam;
     // Vast nummer (uitgedeeld door de database na het opslaan)
+    if (d.id) kaart.dataset.id = d.id; // vaste id (voor sponsors en rondjes)
     if (d.nr) {
       kaart.dataset.nr = d.nr;
       const badge = kaart.querySelector(".d-nummer");
@@ -98,6 +99,7 @@
     return [...lijst.children].map((k) => {
       const keuze = k.querySelector(".d-keuze:checked")?.value;
       return {
+        ...(k.dataset.id ? { id: k.dataset.id } : {}), // bestaande deelnemer behouden
         ...(k.dataset.nr ? { nr: Number(k.dataset.nr) } : {}), // bestaand nummer behouden
         naam: k.querySelector(".d-naam").value.trim(),
         loopt: keuze === "loopt",
@@ -179,10 +181,9 @@
       if (error.code === "42501" || error.status === 401 || /jwt/i.test(error.message)) return sessieVerlopen();
       return melding(form, "Opslaan mislukt. Probeer het opnieuw.", true);
     }
-    // Opnieuw laden zodat de nummers zichtbaar worden
-    const nummers = await toonInschrijving();
-    const lijstTekst = nummers.map((d) => `${d.naam}: nr. ${d.nr}`).join(" · ");
-    melding(form, `${form.dataset.opgeslagen}${lijstTekst ? " Jullie nummers: " + lijstTekst + "." : ""}`);
+    // Naar "Mijn deelname": nummers, sponsors en later de rondjes
+    melding(form, form.dataset.opgeslagen);
+    location.href = "deelname.html?nieuw=1";
   });
 
   uitschrijven.addEventListener("click", async () => {

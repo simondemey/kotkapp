@@ -759,3 +759,63 @@ a { color: var(--oranje); }
   font-weight: 600; color: var(--tekst);
 }
 .teller strong { color: var(--oranje); font-family: var(--font-titel); font-size: 1.5rem; font-weight: normal; vertical-align: -2px; }
+
+/* Twee betaalmogelijkheden naast elkaar */
+.rekening-opties { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem; text-align: left; }
+.rekening-optie { background: #fff; border: 2px solid var(--lint); border-radius: 14px; padding: 1rem; }
+.rekening-optie h3 { margin: 0 0 .6rem; font-size: 1rem; color: var(--oranje); }
+.rekening-optie .rekening { max-width: none; }
+.rekening-optie .klein { margin-top: .6rem; text-align: left; }
+.overschrijving { max-width: 820px; }
+
+/* ---------- Mijn deelname ---------- */
+.welkom { text-align: center; font-weight: 800; color: #2f6b2a; background: #e5f4e3; border-radius: var(--radius); padding: .75rem 1rem; }
+.dn-balk { max-width: 720px; margin: 1rem auto; }
+.dn-acties { display: inline-flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.dn-acties .knop-klein { text-decoration: none; }
+.uitleg { max-width: 720px; margin: 0 auto 1.5rem; background: #fff; border: 3px solid var(--lint); border-radius: var(--radius); padding: 1rem 1.25rem; }
+.uitleg h2 { margin: 0 0 .25rem; font-size: 1.1rem; color: var(--oranje); }
+.uitleg ol { margin: 0; padding-left: 1.2rem; }
+.uitleg li { margin: .3rem 0; }
+.dn-deelnemers { display: grid; gap: 1.25rem; max-width: 720px; margin: 0 auto; }
+.dn-kaart { background: #fff; border: 3px solid var(--lint); border-radius: var(--radius); padding: 1.25rem; display: grid; gap: 1rem; min-width: 0; }
+.dn-kop { display: flex; align-items: center; gap: 1rem; }
+.dn-nummer {
+  flex: none; display: grid; place-items: center; min-width: 4.5rem; height: 4.5rem; padding: 0 .5rem;
+  border-radius: 16px; background: var(--oranje); color: #fff;
+  font-family: var(--font-titel); font-size: 3rem; line-height: 1;
+}
+.dn-naam { margin: 0; font-size: 1.3rem; overflow-wrap: anywhere; }
+.dn-soort { color: var(--zalm); font-weight: 600; font-size: .9rem; }
+.dn-sponsors h3, .dn-klaar h3 { margin: 0 0 .5rem; font-size: 1rem; color: var(--oranje); }
+.dn-sponsorlijst { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+.dn-sponsor {
+  display: flex; justify-content: space-between; align-items: center; gap: .75rem; flex-wrap: wrap;
+  background: var(--creme); border: 2px solid var(--lint); border-radius: 12px; padding: .6rem .8rem;
+}
+.dn-sponsor > div:first-child { display: grid; min-width: 0; }
+.dn-sponsor .klein { overflow-wrap: anywhere; }
+.dn-sponsor-rechts { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.dn-sponsor-rechts .knop-klein { border: 0; font: inherit; font-size: .85rem; font-weight: 800; padding: .35rem .8rem; }
+.dn-bedrag { font-family: var(--font-titel); font-size: 1.6rem; color: var(--oranje); }
+.dn-gemaild { font-size: .8rem; font-weight: 800; color: #2f6b2a; background: #e5f4e3; border-radius: 999px; padding: .15rem .6rem; }
+.dn-totaal { margin: .75rem 0 0; font-weight: 600; }
+.dn-totaal strong { color: var(--oranje); }
+.dn-toevoegen summary { list-style: none; cursor: pointer; display: inline-flex; }
+.dn-toevoegen summary::-webkit-details-marker { display: none; }
+.dn-toevoegen[open] summary { margin-bottom: .75rem; }
+.dn-form { display: grid; gap: .9rem; grid-template-columns: minmax(0, 1fr); background: var(--creme); border-radius: 14px; padding: 1rem; }
+.dn-form .knop, .dn-rondjes-form .knop { border: 0; cursor: pointer; font: inherit; font-weight: 800; justify-self: start; }
+.dn-klaar { border-top: 2px dotted var(--kaart); padding-top: 1rem; }
+.dn-rondjes-form { display: grid; gap: .75rem; grid-template-columns: minmax(0, 1fr); max-width: 320px; }
+.dn-resultaat-tekst { margin: 0 0 .25rem; font-size: 1.1rem; }
+.dn-resultaat-tekst strong { color: var(--oranje); }
+
+/* Beheer: rondjes ingeven */
+.rondjes-invoer { display: flex; gap: .3rem; align-items: center; }
+.rondjes-invoer input { width: 4.2rem; font: inherit; padding: .3rem .4rem; border: 2px solid var(--kaart); border-radius: 8px; background: var(--creme); }
+.rondjes-invoer .knop-klein { border: 0; font: inherit; font-weight: 800; padding: .3rem .65rem; }
+.stat-breed .stat-getal { font-size: 2.4rem; }
+
+/* Menu: Beheer (enkel voor beheerders) */
+.hoofdmenu a.nav-admin { border: 2px dashed var(--kaart); }

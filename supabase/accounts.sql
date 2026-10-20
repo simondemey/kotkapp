@@ -124,65 +124,58 @@ security definer
 set search_path = ''
 as $$
 declare
-  oud      jsonb;
-  oud_nrs  bigint[];
-  gebruikt bigint[] := '{}';
-  gekozen  int[]    := '{}';   -- posities die stap 1 hun eigen nummer laat houden
-  resultaat jsonb   := '[]';
-  e        jsonb;
-  pos      int;
-  nr       bigint;
+  oud        jsonb;
+  gebruikt   bigint[] := '{}';   -- posities van oude deelnemers die al gekoppeld zijn
+  resultaat  jsonb    := '[]';
+  e          jsonb;
+  m          jsonb;
+  mpos       bigint;
+  loper      boolean;
+  nr         bigint;
 begin
-  -- Upsert op een bestaande inschrijving: de UPDATE-trigger die hierna volgt deelt de nummers uit
+  -- Upsert op een bestaande inschrijving: de UPDATE-trigger die hierna volgt doet het werk
   if tg_op = 'INSERT' and exists (select 1 from public.inschrijvingen where user_id = new.user_id) then
     return new;
   end if;
 
-  -- Deelnemers (met nummer) die deze gebruiker nu heeft
-  select coalesce(jsonb_agg(x), '[]'), coalesce(array_agg((x ->> 'nr')::bigint), '{}')
-    into oud, oud_nrs
-    from public.inschrijvingen i, jsonb_array_elements(i.deelnemers) x
-   where i.user_id = new.user_id
-     and jsonb_typeof(x -> 'nr') = 'number'
-     and coalesce((x ->> 'loopt')::boolean, false);
+  select i.deelnemers into oud from public.inschrijvingen i where i.user_id = new.user_id;
+  oud := coalesce(oud, '[]');
 
-  -- 1. meegestuurde, geldige nummers behouden (elk nummer maar één keer; enkel lopers)
-  for e, pos in select value, ordinality from jsonb_array_elements(new.deelnemers) with ordinality loop
-    if jsonb_typeof(e -> 'nr') = 'number' and coalesce((e ->> 'loopt')::boolean, false) then
-      nr := (e ->> 'nr')::bigint;
-      if nr = any (oud_nrs) and not nr = any (gebruikt) then
-        gebruikt := gebruikt || nr;
-        gekozen  := gekozen || pos;
+  for e in select value from jsonb_array_elements(new.deelnemers) with ordinality order by ordinality loop
+    m := null; mpos := null;
+
+    -- a. op id
+    if jsonb_typeof(e -> 'id') = 'string' then
+      select x.o, x.pos into m, mpos
+        from jsonb_array_elements(oud) with ordinality as x(o, pos)
+       where x.o ->> 'id' = e ->> 'id' and not x.pos = any (gebruikt)
+       order by x.pos limit 1;
+    end if;
+    -- b. op naam
+    if m is null then
+      select x.o, x.pos into m, mpos
+        from jsonb_array_elements(oud) with ordinality as x(o, pos)
+       where lower(btrim(x.o ->> 'naam')) = lower(btrim(e ->> 'naam')) and not x.pos = any (gebruikt)
+       order by x.pos limit 1;
+    end if;
+
+    loper := coalesce((e ->> 'loopt')::boolean, false);
+    e := e - 'id' - 'nr';
+    if m is not null then
+      gebruikt := gebruikt || mpos;
+    end if;
+    e := e || jsonb_build_object('id', coalesce(m ->> 'id', gen_random_uuid()::text));
+
+    if loper then
+      if m is not null and jsonb_typeof(m -> 'nr') = 'number' and coalesce((m ->> 'loopt')::boolean, false) then
+        nr := (m ->> 'nr')::bigint;
+      else
+        nr := nextval('public.deelnemer_nr');
       end if;
-    end if;
-  end loop;
-
-  -- 2 en 3. de rest: nummer terugvinden op naam, anders een nieuw nummer
-  for e, pos in select value, ordinality from jsonb_array_elements(new.deelnemers) with ordinality loop
-    if pos = any (gekozen) then
-      resultaat := resultaat || jsonb_build_array(e);
-      continue;
+      e := e || jsonb_build_object('nr', nr);
     end if;
 
-    -- Wandelaars en supporters krijgen geen nummer
-    if not coalesce((e ->> 'loopt')::boolean, false) then
-      resultaat := resultaat || jsonb_build_array(e - 'nr');
-      continue;
-    end if;
-
-    nr := null;
-    select (o ->> 'nr')::bigint into nr
-      from jsonb_array_elements(oud) o
-     where lower(btrim(o ->> 'naam')) = lower(btrim(e ->> 'naam'))
-       and not (o ->> 'nr')::bigint = any (gebruikt)
-     order by (o ->> 'nr')::bigint
-     limit 1;
-
-    if nr is null then
-      nr := nextval('public.deelnemer_nr');
-    end if;
-    gebruikt  := gebruikt || nr;
-    resultaat := resultaat || jsonb_build_array((e - 'nr') || jsonb_build_object('nr', nr));
+    resultaat := resultaat || jsonb_build_array(e);
   end loop;
 
   new.deelnemers := resultaat;

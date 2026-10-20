@@ -27,12 +27,20 @@ socials:
   instagram: https://www.instagram.com/sponsorloop_runningforpauline/
   facebook: https://www.facebook.com/share/19aUQHqxgp/
 
-# Rechtstreeks steunen via overschrijving
+# Betaalmogelijkheden (site, sponsorpagina en sponsormails – de mails staan ook in supabase/sponsors.sql)
 overschrijving:
-  iban: BE56 7360 3575 6688
-  begunstigde: ""          # naam van de rekeninghouder (leeg = niet tonen)
-  mededeling: Steun Pauline + je naam
-  tekst: Wil je Pauline rechtstreeks steunen? Doe een bijdrage via overschrijving. Vermeld gerust je naam in de mededeling.
+  tekst: Wil je rechtstreeks steunen? Kies een van deze twee manieren.
+  kotk:
+    titel: Via Kom op tegen Kanker (op onze teampagina)
+    iban: BE56 7360 3575 6688
+    begunstigde: Kom op tegen Kanker
+    mededeling: GIFT 340194808
+    uitleg: Vermeld zeker "GIFT" en onze teamcode 340194808, anders komt je gift niet bij ons team terecht. Online doneren kan ook via onze teampagina.
+  pauline:
+    titel: Rechtstreeks voor Pauline's behandeling
+    iban: BE32 8937 5011 4102
+    begunstigde: ""          # naam van de rekeninghouder (leeg = niet tonen)
+    mededeling: Steun Pauline + je naam
 
 goed_doel:
   naam: Kom op tegen Kanker

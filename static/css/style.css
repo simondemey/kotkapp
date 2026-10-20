@@ -736,3 +736,6 @@ a { color: var(--oranje); }
 .knop-groot { font-size: 1.15rem; padding: 1rem 2rem; box-shadow: 0 5px 0 #b44c15; }
 .knop-groot:hover { box-shadow: 0 7px 0 #b44c15; }
 @media (max-width: 520px) { .knoppen .knop-groot { flex-basis: 100%; } }
+
+/* Footer: zin over het zelfgemaakte projectje (onderaan, volle breedte) */
+.footer-vibe { order: 3; flex-basis: 100%; margin: 0; font-size: .8rem; color: var(--zalm); text-align: center; overflow-wrap: anywhere; }

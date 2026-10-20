@@ -81,6 +81,9 @@
         {% endif %}
       </div>
     </div>
+    {% if event.contact.technisch %}
+    <p class="footer-vibe">Deze site is een zelfgemaakt, vibecoded projectje. Loopt er iets mis? Mail gerust naar <a href="mailto:{{ event.contact.technisch }}">{{ event.contact.technisch }}</a>.</p>
+    {% endif %}
     <a class="kotk" href="{{ event.goed_doel.url }}" target="_blank" rel="noopener">
       <span class="kotk-tekst">
         <small>Een actie voor</small>

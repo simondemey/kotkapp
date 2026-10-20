@@ -95,6 +95,7 @@ begin
     '<tr><td align="center" style="padding:16px 28px;border-top:2px solid #FBE3B0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#E08A5A;">'
     'Vragen? Mail naar <a href="mailto:sponserloopkotk@gmail.com" style="color:#E0611F;">sponserloopkotk@gmail.com</a><br>'
     '<span style="color:#F6B21C;">Een actie voor</span> <strong style="color:#E0611F;">Kom op</strong> <strong style="color:#F6B21C;">tegen Kanker</strong>'
+    '<p style="margin:12px 0 0;font-size:12px;color:#9a7a63;">Deze site is een zelfgemaakt, vibecoded projectje. Loopt er iets mis? Mail gerust naar <a href="mailto:demeysimon@outlook.com" style="color:#E0611F;">demeysimon@outlook.com</a>.</p>'
     '</td></tr></table></td></tr></table></body></html>';
 
   perform net.http_post(

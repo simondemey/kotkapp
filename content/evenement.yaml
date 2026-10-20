@@ -19,6 +19,8 @@ locatie:
 
 contact:
   email: sponserloopkotk@gmail.com
+  # Technische problemen met de site
+  technisch: demeysimon@outlook.com
 
 # Leeg laten = niet tonen
 socials:

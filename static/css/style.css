@@ -839,3 +839,6 @@ a { color: var(--oranje); }
 
 /* Beheer: wandelaar klaar */
 .knop-klein.klaar-ok { background: #e5f4e3; color: #2f6b2a; }
+
+/* Fotomuur: meer laden */
+.meer-laden { display: block; margin: 1rem auto 0; border: 0; cursor: pointer; font: inherit; font-weight: 800; }

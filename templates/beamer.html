@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Beamer – {{ event.naam }} {{ event.ondertitel }}</title>
+  <link rel="icon" href="static/img/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Great+Vibes&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css?v={{ versie }}">
+  <link rel="stylesheet" href="static/css/beamer.css?v={{ versie }}">
+</head>
+<body class="beamer" data-sb-url="{{ supabase.url }}" data-sb-key="{{ supabase.key }}">
+  <header class="bm-kop">
+    <span class="bm-logo"><span class="oranje">Sponsor</span><span class="geel">loop</span> <small>Running for <span class="geel">Pauline</span></small></span>
+    <span class="bm-klok" id="bm-klok"></span>
+  </header>
+
+  <main class="bm-podium" id="bm-podium" aria-live="polite"></main>
+
+  <aside class="bm-qr">
+    <img src="static/img/qr-fotomuur.png" alt="">
+    <span>Post jouw foto!<br><small>runningforpauline.be</small></span>
+  </aside>
+
+  <div class="bm-voortgang"><span id="bm-balk"></span></div>
+
+  <!-- Startscherm: volledig scherm vraagt een klik -->
+  <div class="bm-start" id="bm-start">
+    <h1><span class="oranje">Beamer</span> <span class="geel">modus</span></h1>
+    <p id="bm-start-info">Laden…</p>
+    <button class="knop knop-groot" id="bm-start-knop" type="button">▶ Start (volledig scherm)</button>
+    <p class="klein">Tijdens de voorstelling: <kbd>spatie</kbd> pauze · <kbd>→</kbd> volgende · <kbd>←</kbd> vorige · <kbd>Esc</kbd> stoppen</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js" defer></script>
+  <script src="static/js/sb.js?v={{ versie }}" defer></script>
+  <script src="static/js/beamer.js?v={{ versie }}" defer></script>
+</body>
+</html>

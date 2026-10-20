@@ -37,6 +37,7 @@ PAGES = [
     ("inschrijven.html", "inschrijven.html", "Inschrijven"),
     ("deelname.html", "deelname.html", None),
     ("admin.html", "admin.html", None),
+    ("beamer.html", "beamer.html", None),
 ]
 
 

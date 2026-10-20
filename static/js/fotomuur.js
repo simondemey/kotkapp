@@ -19,24 +19,40 @@
   const datumFormaat = new Intl.DateTimeFormat("nl-BE", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
 
   // ---------- Muur tonen ----------
-  async function laadMuur() {
+  // Per 60 posts laden (spaart dataverkeer); "Meer laden" haalt de volgende 60
+  const PER_KEER = 60;
+  let geladen = 0;
+  const meerKnop = Object.assign(document.createElement("button"), {
+    type: "button",
+    className: "knop knop-licht meer-laden",
+    textContent: "Meer laden",
+  });
+  meerKnop.addEventListener("click", () => laadMuur(true));
+
+  async function laadMuur(meer = false) {
+    if (!meer) geladen = 0;
+    meerKnop.disabled = true;
     const { data, error } = await db
       .from("posts")
       .select("id, created_at, naam, bericht, foto_pad")
       .order("created_at", { ascending: false })
-      .limit(200);
+      .range(geladen, geladen + PER_KEER - 1);
+    meerKnop.disabled = false;
 
-    muur.replaceChildren();
+    if (!meer) muur.replaceChildren();
+    meerKnop.remove();
     if (error) {
       muur.append(statusTekst("De fotomuur kon niet geladen worden. Probeer later opnieuw."));
       console.error(error);
       return;
     }
-    if (!data.length) {
+    if (!geladen && !data.length) {
       muur.append(statusTekst(cfg.leeg));
       return;
     }
     data.forEach((post) => muur.append(postKaart(post)));
+    geladen += data.length;
+    if (data.length === PER_KEER) muur.after(meerKnop);
   }
 
   function statusTekst(tekst) {

@@ -1,0 +1,89 @@
+/* Beamer: schermvullende diavoorstelling met foto's en rankings */
+body.beamer {
+  margin: 0; height: 100vh; overflow: hidden; display: block;
+  background: var(--creme); cursor: default;
+}
+body.beamer.loopt { cursor: none; }
+
+.bm-kop {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 2;
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 1.5vh 2.5vw;
+}
+.bm-logo { font-family: var(--font-titel); font-size: 5vh; line-height: 1; }
+.bm-logo small { font-size: 3vh; color: var(--oranje); margin-left: .6vw; }
+.bm-klok { font-family: var(--font-titel); font-size: 5vh; color: var(--zalm); }
+
+.bm-podium { position: absolute; inset: 9vh 2.5vw 6vh; display: grid; place-items: center; }
+.bm-dia { width: 100%; height: 100%; display: grid; place-items: center; animation: bm-in .7s ease; }
+@keyframes bm-in { from { opacity: 0; transform: scale(.98); } to { opacity: 1; transform: none; } }
+
+/* Foto-dia */
+.bm-foto { display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 2vh; height: 100%; width: 100%; justify-items: center; }
+.bm-foto img {
+  max-width: 100%; max-height: 100%; object-fit: contain; align-self: center;
+  border-radius: 2vh; box-shadow: 0 1.5vh 4vh rgba(58, 42, 32, .25); background: #fff;
+}
+.bm-onderschrift { text-align: center; max-width: 70vw; }
+.bm-onderschrift strong { display: block; font-family: var(--font-titel); font-size: 5vh; color: var(--oranje); line-height: 1.1; }
+.bm-onderschrift span { font-size: 3vh; color: var(--tekst); }
+
+/* Tekst-post zonder foto */
+.bm-citaat { max-width: 70vw; text-align: center; }
+.bm-citaat p { font-size: 6vh; line-height: 1.3; margin: 0 0 3vh; }
+.bm-citaat p::before { content: "“"; color: var(--geel); }
+.bm-citaat p::after { content: "”"; color: var(--geel); }
+.bm-citaat strong { font-family: var(--font-titel); font-size: 5vh; color: var(--oranje); }
+
+/* Ranking-dia */
+.bm-ranking { width: min(75vw, 140vh); }
+.bm-ranking h2 { margin: 0 0 2vh; text-align: center; font-family: var(--font-titel); font-weight: normal; font-size: 8vh; line-height: 1; color: var(--oranje); }
+.bm-ranking ol { list-style: none; margin: 0; padding: 0; display: grid; gap: .9vh; }
+.bm-ranking li {
+  display: grid; grid-template-columns: 7vh 1fr auto; align-items: center; gap: 2vw;
+  background: #fff; border: .4vh solid var(--lint); border-radius: 1.4vh; padding: .4vh 2vw;
+  font-size: 3vh; line-height: 1.3; font-weight: 600;
+  animation: bm-in .5s ease backwards;
+}
+.bm-ranking li:nth-child(1) { background: #fff6dc; border-color: var(--geel); font-size: 3.6vh; }
+.bm-plaats { font-family: var(--font-titel); font-size: 1.4em; line-height: 1; color: var(--zalm); text-align: center; }
+.bm-ranking li:nth-child(1) .bm-plaats { color: var(--geel); }
+.bm-waarde { font-family: var(--font-titel); font-size: 1.4em; line-height: 1; color: var(--oranje); }
+.bm-nr { color: var(--zalm); font-weight: 800; margin-right: .6vw; }
+
+/* Totalen-dia */
+.bm-totalen { width: min(85vw, 160vh); text-align: center; }
+.bm-totalen h2 { margin: 0 0 4vh; font-family: var(--font-titel); font-weight: normal; font-size: 10vh; color: var(--oranje); line-height: 1; }
+.bm-tegels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5vh; }
+.bm-tegel { background: #fff; border: .5vh solid var(--lint); border-radius: 2vh; padding: 3vh 1vw; display: grid; }
+.bm-tegel b { font-family: var(--font-titel); font-weight: normal; font-size: 12vh; line-height: 1; color: var(--oranje); }
+.bm-tegel span { font-size: 2.6vh; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--zalm); }
+.bm-tegel.groot { grid-column: span 3; background: var(--oranje); border-color: var(--oranje); }
+.bm-tegel.groot b, .bm-tegel.groot span { color: #fff; }
+
+/* QR in de hoek */
+.bm-qr {
+  position: fixed; right: 2vw; bottom: 3vh; z-index: 2;
+  display: flex; align-items: center; gap: 1vw;
+  background: #fff; border: .4vh solid var(--lint); border-radius: 2vh; padding: 1vh 1.2vw;
+  font-weight: 800; font-size: 2.2vh; color: var(--oranje); line-height: 1.2;
+}
+.bm-qr img { width: 13vh; height: 13vh; }
+.bm-qr small { color: var(--zalm); font-weight: 600; }
+
+/* Voortgangsbalk */
+.bm-voortgang { position: fixed; left: 0; right: 0; bottom: 0; height: .8vh; background: var(--lint); }
+.bm-voortgang span { display: block; height: 100%; width: 0; background: var(--oranje); }
+
+/* Startscherm */
+.bm-start {
+  position: fixed; inset: 0; z-index: 5; background: var(--creme);
+  display: grid; place-content: center; justify-items: center; gap: 1.5rem; text-align: center; padding: 2rem;
+}
+.bm-start h1 { margin: 0; font-family: var(--font-titel); font-weight: normal; font-size: clamp(3rem, 10vw, 7rem); line-height: 1; }
+.bm-start .knop { border: 0; cursor: pointer; font: inherit; font-weight: 800; }
+.bm-start kbd { background: #fff; border: 1px solid var(--kaart); border-radius: 4px; padding: 0 .35rem; }
+
+/* Bij ranking-dia's de QR-code verbergen (anders valt hij over de lijst) */
+body.ranking-dia .bm-qr { opacity: 0; transition: opacity .4s; }
+.bm-qr { transition: opacity .4s; }

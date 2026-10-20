@@ -104,7 +104,7 @@ begin
                  'Content-Type', 'application/json',
                  'accept', 'application/json'),
     body    := jsonb_build_object(
-                 'sender',  jsonb_build_object('name', 'Running for Pauline', 'email', 'demeysimon@outlook.com'),
+                 'sender',  jsonb_build_object('name', 'Running for Pauline', 'email', 'noreply@runningforpauline.be'),
                  'replyTo', jsonb_build_object('name', 'Running for Pauline', 'email', 'sponserloopkotk@gmail.com'),
                  'to',      jsonb_build_array(jsonb_build_object('email', new.email)),
                  'subject', case when tg_op = 'INSERT'

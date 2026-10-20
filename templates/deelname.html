@@ -21,10 +21,10 @@
     <div class="uitleg">
       <h2>Zo werkt het</h2>
       <ol>
-        <li><strong>Voeg je sponsors toe</strong>: per rondje of een vast bedrag. Zoveel je wilt.</li>
+        <li><strong>Voeg je sponsors toe</strong>: per rondje of een vast bedrag (wandelaars: vast bedrag, want de wandeltocht ligt vast). Zoveel je wilt.</li>
         <li>Geef je een e-mailadres op, dan kan de site na het lopen <strong>automatisch een mail</strong> sturen met het bedrag en de betaalgegevens. Of je <strong>communiceert zelf</strong> en kopieert de tekst met de betaalmogelijkheden.</li>
         <li>Op de dag zelf meld je je aan bij de <strong>administratiepost</strong>: daar word je gestart.</li>
-        <li>Na het lopen klik je op <strong>Klaar met lopen</strong> en geef je je aantal rondjes in. De site rekent alles uit.</li>
+        <li>Na het lopen klik je op <strong>Klaar met lopen</strong> en geef je je aantal rondjes in (wandelaars: <strong>Klaar met wandelen</strong>). De site rekent alles uit.</li>
       </ol>
     </div>
 
@@ -65,7 +65,7 @@
           <span>Naam van de sponsor</span>
           <input type="text" name="naam" maxlength="100" required>
         </label>
-        <fieldset class="veld keuze keuze-rij">
+        <fieldset class="veld keuze keuze-rij dn-soort-keuze">
           <legend>Soort sponsoring</legend>
           <label><input type="radio" name="soort" value="per_rondje" checked><span class="keuze-tekst">Per rondje<small>bedrag × rondjes</small></span></label>
           <label><input type="radio" name="soort" value="vast"><span class="keuze-tekst">Vast bedrag<small>los van de rondjes</small></span></label>
@@ -93,7 +93,7 @@
       <div class="dn-klaar-vraag">
         <h3>Klaar met lopen?</h3>
         <form class="dn-rondjes-form" novalidate>
-          <label class="veld">
+          <label class="veld dn-aantal-veld">
             <span>Aantal rondjes</span>
             <input type="number" name="aantal" min="0" max="200" step="1" inputmode="numeric" required>
           </label>

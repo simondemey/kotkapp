@@ -50,7 +50,8 @@
       {% for href, label in nav %}
       <a href="{{ href }}"{% if href == "inschrijven.html" %} class="nav-cta"{% endif %}{% if href == current %} aria-current="page"{% endif %}>{{ label }}</a>
       {% endfor %}
-      {# Enkel zichtbaar voor beheerders (main.js controleert dat) #}
+      {# Enkel zichtbaar voor wie ingeschreven is / beheerders (main.js controleert dat) #}
+      <a href="deelname.html" class="nav-deelname"{% if current == "deelname.html" %} aria-current="page"{% else %} hidden{% endif %}>Mijn deelname</a>
       <a href="admin.html" class="nav-admin"{% if current == "admin.html" %} aria-current="page"{% else %} hidden{% endif %}>🛠️ Beheer</a>
     </nav>
   </header>

@@ -74,7 +74,7 @@
     zet("stat-inschrijvingen", inschrijvingen.length);
     zet("stat-gestart", deelnemers.filter((d) => d.gestart_op).length);
     zet("stat-klaar", deelnemers.filter((d) => d.rondjes != null).length);
-    zet("stat-rondjes", deelnemers.reduce((som, d) => som + (d.rondjes || 0), 0));
+    zet("stat-rondjes", deelnemers.filter((d) => d.loopt).reduce((som, d) => som + (d.rondjes || 0), 0));
     zet("stat-opgehaald", euro(deelnemers.filter((d) => d.rondjes != null).reduce((som, d) => som + d.opgehaald, 0)).replace(",00", ""));
     zet("stat-week", inschrijvingen.filter((i) => new Date(i.created_at) > weekGeleden).reduce((som, i) => som + i.deelnemers.length, 0));
   }
@@ -168,6 +168,7 @@
   function rondjesCel(tr, d) {
     const td = cel(tr, "");
     if (d.supporter) return;
+    if (!d.loopt) return wandelKlaarKnop(td, d); // wandelaars: vaste tocht, geen rondjes
     const wrap = document.createElement("div");
     wrap.className = "rondjes-invoer";
     const inp = Object.assign(document.createElement("input"), { type: "number", min: 0, max: 200, inputMode: "numeric", value: d.rondjes ?? "" });
@@ -198,6 +199,29 @@
     });
     wrap.append(inp, knop);
     td.append(wrap);
+  }
+
+  // Wandelaars: één knop "Klaar" (vaste tocht; bewaard als 1 = volbracht)
+  function wandelKlaarKnop(td, d) {
+    const knop = Object.assign(document.createElement("button"), { type: "button" });
+    knop.className = "knop-klein" + (d.rondjes != null ? " klaar-ok" : "");
+    knop.textContent = d.rondjes != null ? "✓ Klaar" : "Klaar";
+    knop.title = d.rondjes != null ? "Wandeltocht volbracht" : `${d.naam} heeft de wandeltocht uitgewandeld`;
+    knop.disabled = d.rondjes != null;
+    knop.addEventListener("click", async () => {
+      const nieuw = d.sponsors.filter((s) => s.communicatie === "mail" && !s.mail_verstuurd_op).length;
+      if (!confirm(`${d.naam} heeft de wandeltocht uitgewandeld?` + (nieuw ? `\n\n${nieuw} sponsor(s) krijgen een mail met het bedrag.` : ""))) return;
+      knop.disabled = true;
+      const { data, error } = await db.rpc("rondjes_opslaan", { p_deelnemer: d.id, p_aantal: 1 });
+      if (error) {
+        console.error(error);
+        knop.disabled = false;
+        return alert("Opslaan mislukt.");
+      }
+      if (data?.gemaild) alert(`${data.gemaild} sponsor(s) gemaild.`);
+      laad();
+    });
+    td.append(knop);
   }
 
   function toonVragen() {
@@ -242,7 +266,7 @@
     const kop = ["nr", "naam", "loopt", "wandelt", "supporter", "gestart om", "rondjes", "aantal sponsors", "opgehaald", "ingeschreven door", "vragen", "datum"];
     const veilig = (w) => `"${String(w ?? "").replace(/"/g, '""')}"`;
     const regels = deelnemers.map((d) =>
-      [d.nr ?? "", d.naam, d.loopt ? "ja" : "nee", d.wandelt ? "ja" : "nee", d.supporter ? "ja" : "nee", d.gestart_op ? new Date(d.gestart_op).toLocaleTimeString("nl-BE") : "", d.rondjes ?? "", d.sponsors.length, d.sponsors.length ? d.opgehaald.toFixed(2).replace(".", ",") : "", d.email, d.vragen, new Date(d.created_at).toLocaleString("nl-BE")].map(veilig).join(";")
+      [d.nr ?? "", d.naam, d.loopt ? "ja" : "nee", d.wandelt ? "ja" : "nee", d.supporter ? "ja" : "nee", d.gestart_op ? new Date(d.gestart_op).toLocaleTimeString("nl-BE") : "", d.loopt ? d.rondjes ?? "" : d.rondjes != null ? "klaar" : "", d.sponsors.length, d.sponsors.length ? d.opgehaald.toFixed(2).replace(".", ",") : "", d.email, d.vragen, new Date(d.created_at).toLocaleString("nl-BE")].map(veilig).join(";")
     );
     const csv = [kop.join(";"), ...regels].join("\r\n");
     const url = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" }));

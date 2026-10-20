@@ -64,7 +64,7 @@ begin
              public.html_tekst(e ->> 'naam'),
              case
                when (e ->> 'loopt')::boolean then '🏃 Loopt (rondjes van 1,7 km)'
-               when (e ->> 'wandelt')::boolean then '🚶 Wandelt (rondjes van 5 km)'
+               when (e ->> 'wandelt')::boolean then '🚶 Wandelt (vaste wandeltocht)'
                else '📣 Supporter'
              end),
            '' order by (e ->> 'nr')::bigint nulls last)

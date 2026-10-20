@@ -184,6 +184,7 @@ declare
   sleutel  text;
   wat      text;
   berekening text;
+  wandelaar boolean;
   html     text;
 begin
   select * into s from public.sponsors where id = p_sponsor;
@@ -198,8 +199,9 @@ begin
   select decrypted_secret into sleutel from vault.decrypted_secrets where name = 'brevo_api_key' limit 1;
   if sleutel is null then raise warning 'sponsormail: geen brevo_api_key'; return false; end if;
 
-  wat := case when (d ->> 'loopt')::boolean then 'gelopen' else 'gewandeld' end;
-  if s.soort = 'per_rondje' then
+  wandelaar := not coalesce((d ->> 'loopt')::boolean, false);
+  wat := case when wandelaar then 'de wandeltocht uitgewandeld' else aantal || ' rondjes gelopen' end;
+  if s.soort = 'per_rondje' and not wandelaar then
     totaal := s.bedrag * aantal;
     berekening := aantal || ' rondjes × ' || public.euro(s.bedrag) || ' per rondje';
   else
@@ -218,7 +220,7 @@ begin
     '<tr><td style="padding:24px 28px 8px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#3A2A20;">'
     '<p style="margin:0 0 12px;">Beste ' || public.html_tekst(s.naam) || ',</p>'
     '<p style="margin:0;"><strong>' || public.html_tekst(d ->> 'naam') || '</strong> heeft tijdens de sponsorloop <strong>'
-    || aantal || ' rondjes ' || wat || '</strong> voor Pauline en Kom op tegen Kanker. Bedankt om te sponsoren! 💛</p>'
+    || wat || '</strong> voor Pauline en Kom op tegen Kanker. Bedankt om te sponsoren! 💛</p>'
     '</td></tr>'
     '<tr><td align="center" style="padding:12px 28px;">'
     '<div style="background:#FDF8EC;border:3px solid #FBE3B0;border-radius:14px;padding:14px 18px;font-family:Arial,Helvetica,sans-serif;">'
@@ -248,7 +250,7 @@ begin
                  'sender',  jsonb_build_object('name', 'Running for Pauline', 'email', 'noreply@runningforpauline.be'),
                  'replyTo', jsonb_build_object('email', coalesce(eigenaar, 'sponserloopkotk@gmail.com')),
                  'to',      jsonb_build_array(jsonb_build_object('email', s.email, 'name', s.naam)),
-                 'subject', (d ->> 'naam') || ' heeft ' || aantal || ' rondjes ' || wat || ' – jouw sponsoring',
+                 'subject', (d ->> 'naam') || ' heeft ' || wat || ' – jouw sponsoring',
                  'htmlContent', html));
 
   update public.sponsors set mail_verstuurd_op = now() where id = s.id;

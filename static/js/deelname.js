@@ -25,7 +25,6 @@
 
   // Tekst om zelf naar een sponsor te sturen
   function kopieertekst(d, s, rondjes) {
-    const wat = d.loopt ? "gelopen" : "gewandeld";
     const bedrag = bedragVan(s, rondjes);
     const regels = [`Hallo ${s.naam}!`, ""];
     if (rondjes == null) {
@@ -34,7 +33,11 @@
       );
     } else {
       const berekening = s.soort === "vast" ? "vast bedrag" : `${rondjes} rondjes × ${euro(s.bedrag)}`;
-      regels.push(`Ik heb tijdens de sponsorloop Running for Pauline ${rondjes} rondjes ${wat}! 🎉`);
+      regels.push(
+        d.loopt
+          ? `Ik heb tijdens de sponsorloop Running for Pauline ${rondjes} rondjes gelopen! 🎉`
+          : "Ik heb tijdens de sponsorloop Running for Pauline de wandeltocht uitgewandeld! 🎉"
+      );
       regels.push(`Jouw sponsoring: ${euro(bedrag)} (${berekening}).`);
     }
     regels.push(
@@ -105,7 +108,7 @@
     kaart.querySelector(".dn-soort").textContent = d.loopt
       ? "🏃 Loopt (rondjes van 1,7 km)"
       : d.wandelt
-        ? "🚶 Wandelt (rondjes van 5 km)"
+        ? "🚶 Wandelt (vaste wandeltocht)"
         : "📣 Supporter";
 
     if (!loperOfWandelaar) {
@@ -212,6 +215,11 @@
     // Unieke namen voor de keuzerondjes per kaart
     form.querySelectorAll("input[type=radio]").forEach((r) => (r.name = `${r.name}-${d.id}`));
     const veld = (naam) => form.querySelector(`input[name="${naam}-${d.id}"]:checked`)?.value;
+    // Wandelaars doen een vaste tocht: enkel een vast bedrag
+    if (!d.loopt) {
+      form.querySelector(`input[name="soort-${d.id}"][value="vast"]`).checked = true;
+      form.querySelector(".dn-soort-keuze").hidden = true;
+    }
     const wisselEmail = () => (emailVeld.hidden = veld("communicatie") !== "mail");
     form.querySelectorAll(`input[name="communicatie-${d.id}"]`).forEach((r) => r.addEventListener("change", wisselEmail));
     wisselEmail();
@@ -231,7 +239,7 @@
       const { error } = await db.from("sponsors").insert({
         deelnemer_id: d.id,
         naam,
-        soort: veld("soort"),
+        soort: d.loopt ? veld("soort") : "vast",
         bedrag,
         communicatie,
         email: communicatie === "mail" ? email : null,
@@ -250,7 +258,8 @@
     const resultaat = kaart.querySelector(".dn-klaar-resultaat");
     const form = kaart.querySelector(".dn-rondjes-form");
     const melding = form.querySelector(".form-melding");
-    const wat = d.loopt ? "gelopen" : "gewandeld";
+    const wandelaar = !d.loopt;
+    if (wandelaar) form.querySelector(".dn-aantal-veld").hidden = true; // vaste tocht: geen rondjes
     kaart.querySelector(".dn-klaar-vraag h3").textContent = d.loopt ? "Klaar met lopen?" : "Klaar met wandelen?";
     form.querySelector("button").textContent = d.loopt ? "🏁 Klaar met lopen" : "🏁 Klaar met wandelen";
 
@@ -268,8 +277,10 @@
       resultaat.hidden = false;
       const totaal = sponsors.reduce((a, s) => a + bedragVan(s, rondjes), 0);
       resultaat.querySelector(".dn-resultaat-tekst").innerHTML =
-        `🏁 ${html(d.naam)} heeft <strong>${rondjes} rondjes</strong> ${wat}` +
+        `🏁 ${html(d.naam)} heeft ` +
+        (wandelaar ? "<strong>de wandeltocht uitgewandeld</strong>" : `<strong>${rondjes} rondjes</strong> gelopen`) +
         (sponsors.length ? ` en haalt <strong>${euro(totaal)}</strong> op!` : "!");
+      if (wandelaar) resultaat.querySelector(".dn-rondjes-wijzig").hidden = true;
       form.elements.aantal.value = rondjes;
     }
     resultaat.querySelector(".dn-rondjes-wijzig").addEventListener("click", () => {
@@ -280,7 +291,7 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const aantal = parseInt(form.elements.aantal.value, 10);
+      const aantal = wandelaar ? 1 : parseInt(form.elements.aantal.value, 10); // wandelaar: 1 = tocht volbracht
       if (!(aantal >= 0 && aantal <= 200)) {
         melding.hidden = false;
         melding.classList.add("fout");
@@ -289,7 +300,8 @@
       }
       const teMailen = sponsors.filter((s) => s.communicatie === "mail" && !s.mail_verstuurd_op).length;
       const uitleg = teMailen ? `\n\n${teMailen} sponsor(s) krijgen dan meteen een mail met het bedrag.` : "";
-      if (!confirm(`${d.naam} heeft ${aantal} rondjes ${wat}?${uitleg}`)) return;
+      const vraag = wandelaar ? `${d.naam} heeft de wandeltocht uitgewandeld?` : `${d.naam} heeft ${aantal} rondjes gelopen?`;
+      if (!confirm(vraag + uitleg)) return;
 
       const knop = form.querySelector("button");
       knop.disabled = true;

@@ -836,3 +836,6 @@ a { color: var(--oranje); }
 .start-uur { display: block; font-size: .75rem; color: #2f6b2a; font-weight: 600; margin-top: .15rem; }
 /* Mijn deelname: nog niet gestart */
 .dn-niet-gestart { margin: 0; background: var(--creme); border: 2px dashed var(--kaart); border-radius: 12px; padding: .75rem 1rem; }
+
+/* Beheer: wandelaar klaar */
+.knop-klein.klaar-ok { background: #e5f4e3; color: #2f6b2a; }

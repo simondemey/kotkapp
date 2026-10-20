@@ -24,11 +24,13 @@ document.querySelectorAll("[data-kopieer]").forEach((knop) => {
   });
 });
 
+// Menu-items "Mijn deelname" (ingeschreven) en "Beheer" (beheerders) tonen.
 // Menu-item "Beheer" tonen voor beheerders. Werkt op elke pagina, ook zonder de Supabase-bibliotheek:
 // we lezen de login uit de browser en vragen de database of dit account beheerder is.
 (function () {
   const link = document.querySelector(".nav-admin");
-  if (!link || !link.hidden) return;
+  const deelnameLink = document.querySelector(".nav-deelname");
+  if (!link) return;
   const { sbUrl, sbKey } = document.body.dataset;
 
   let token = null;
@@ -40,6 +42,17 @@ document.querySelectorAll("[data-kopieer]").forEach((knop) => {
     return;
   }
   if (!token) return;
+
+  // Mijn deelname: ingeschreven? (de database toont enkel je eigen inschrijving)
+  if (deelnameLink && deelnameLink.hidden) {
+    fetch(`${sbUrl}/rest/v1/inschrijvingen?select=user_id&limit=1`, {
+      headers: { apikey: sbKey, Authorization: `Bearer ${token}` },
+    })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rijen) => (deelnameLink.hidden = !rijen.length))
+      .catch(() => {});
+  }
+  if (!link.hidden) return;
 
   // Antwoord even onthouden zodat niet elke pagina opnieuw moet vragen
   const cache = `isAdmin:${token.slice(-16)}`;

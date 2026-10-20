@@ -9,8 +9,8 @@ Onze sponsorloop op zondag 14 februari wordt georganiseerd om geld in te zamelen
 ## Hoe werkt onze sponsorloop?
 
 - **Loop mee:** je loopt rondjes van 1,7 kilometer. Je kiest zelf hoeveel rondjes je loopt.
-- **Wandel mee:** je wandelt rondjes van 5 kilometer. Je kiest zelf hoeveel rondjes je wandelt.
+- **Wandel mee:** je wandelt een vaste wandeltocht.
 
-Je laat je sponsoren door vrienden, familie, collega’s of jezelf. Zij sponsoren je met een vast bedrag of met een bedrag per rondje, dat na afloop vermenigvuldigd wordt met het aantal rondjes dat je gelopen hebt.
+Je laat je sponsoren door vrienden, familie, collega’s of jezelf. Zij sponsoren je met een vast bedrag of (voor lopers) met een bedrag per rondje, dat na afloop vermenigvuldigd wordt met het aantal rondjes dat je gelopen hebt.
 
 Meedoen kan vanaf elk bedrag.

@@ -686,7 +686,8 @@ a { color: var(--oranje); }
 
 /* Keuzevakjes deelnemer: titel met uitleg eronder */
 .keuze-tekst { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
-.keuze-tekst small { white-space: nowrap; font-size: .8rem; font-weight: 600; color: var(--zalm); }
+.keuze-tekst small { font-size: .8rem; font-weight: 600; color: var(--zalm); overflow-wrap: anywhere; }
+.keuze-rij .keuze-tekst small { white-space: nowrap; }  /* korte uitleg naast elkaar: op één regel */
 .keuze label input { flex: none; }
 
 /* Footer: socials en e-mail */
@@ -819,3 +820,7 @@ a { color: var(--oranje); }
 
 /* Menu: Beheer (enkel voor beheerders) */
 .hoofdmenu a.nav-admin { border: 2px dashed var(--kaart); }
+
+/* Keuzes met lange tekst (bv. "Hoe laat je de sponsor weten…") mogen nooit breder dan het formulier */
+.keuze label { min-width: 0; }
+.keuze legend { white-space: normal; }

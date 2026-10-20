@@ -824,3 +824,15 @@ a { color: var(--oranje); }
 /* Keuzes met lange tekst (bv. "Hoe laat je de sponsor weten…") mogen nooit breder dan het formulier */
 .keuze label { min-width: 0; }
 .keuze legend { white-space: normal; }
+
+/* Beheer: starten door op het nummer te klikken */
+.start-knop {
+  min-width: 2.6rem; padding: .3rem .55rem; border-radius: 10px; cursor: pointer;
+  font-family: var(--font-titel); font-size: 1.3rem; line-height: 1;
+  background: #fff; color: var(--oranje); border: 2px solid var(--oranje);
+}
+.start-knop:hover { background: #fff3ea; }
+.start-knop.gestart { background: #2f8a3a; border-color: #2f8a3a; color: #fff; }
+.start-uur { display: block; font-size: .75rem; color: #2f6b2a; font-weight: 600; margin-top: .15rem; }
+/* Mijn deelname: nog niet gestart */
+.dn-niet-gestart { margin: 0; background: var(--creme); border: 2px dashed var(--kaart); border-radius: 12px; padding: .75rem 1rem; }

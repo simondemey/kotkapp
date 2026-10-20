@@ -64,12 +64,13 @@
 
   // ---------- Laden en tonen ----------
   async function laad() {
-    const [ins, sp, ro] = await Promise.all([
+    const [ins, sp, ro, st] = await Promise.all([
       db.from("inschrijvingen").select("deelnemers").eq("user_id", gebruiker.id).maybeSingle(),
       db.from("sponsors").select("*").eq("user_id", gebruiker.id).order("created_at"),
       db.from("rondjes").select("deelnemer_id, aantal").eq("user_id", gebruiker.id),
+      db.from("starts").select("deelnemer_id, gestart_op").eq("user_id", gebruiker.id),
     ]);
-    const fout = ins.error || sp.error || ro.error;
+    const fout = ins.error || sp.error || ro.error || st.error;
     if (fout) {
       console.error(fout);
       status.textContent = "Je gegevens konden niet geladen worden. Probeer de pagina te verversen.";
@@ -81,16 +82,17 @@
     }
 
     const rondjes = Object.fromEntries((ro.data || []).map((r) => [r.deelnemer_id, r.aantal]));
+    const starts = Object.fromEntries((st.data || []).map((r) => [r.deelnemer_id, r.gestart_op]));
     lijst.replaceChildren(
       ...ins.data.deelnemers.map((d) =>
-        deelnemerKaart(d, (sp.data || []).filter((s) => s.deelnemer_id === d.id), rondjes[d.id])
+        deelnemerKaart(d, (sp.data || []).filter((s) => s.deelnemer_id === d.id), rondjes[d.id], starts[d.id])
       )
     );
     status.hidden = true;
     inhoud.hidden = false;
   }
 
-  function deelnemerKaart(d, sponsors, rondjes) {
+  function deelnemerKaart(d, sponsors, rondjes, gestartOp) {
     const kaart = sjabloon.content.firstElementChild.cloneNode(true);
     const loperOfWandelaar = d.loopt || d.wandelt;
 
@@ -119,7 +121,7 @@
 
     toonSponsors(kaart, d, sponsors, rondjes);
     koppelFormulier(kaart, d);
-    koppelKlaar(kaart, d, sponsors, rondjes);
+    koppelKlaar(kaart, d, sponsors, rondjes, gestartOp);
     return kaart;
   }
 
@@ -243,7 +245,7 @@
     });
   }
 
-  function koppelKlaar(kaart, d, sponsors, rondjes) {
+  function koppelKlaar(kaart, d, sponsors, rondjes, gestartOp) {
     const vraag = kaart.querySelector(".dn-klaar-vraag");
     const resultaat = kaart.querySelector(".dn-klaar-resultaat");
     const form = kaart.querySelector(".dn-rondjes-form");
@@ -251,6 +253,15 @@
     const wat = d.loopt ? "gelopen" : "gewandeld";
     kaart.querySelector(".dn-klaar-vraag h3").textContent = d.loopt ? "Klaar met lopen?" : "Klaar met wandelen?";
     form.querySelector("button").textContent = d.loopt ? "🏁 Klaar met lopen" : "🏁 Klaar met wandelen";
+
+    // Pas na de start (door een beheerder aan de administratiepost) kan je je rondjes ingeven
+    if (!gestartOp && rondjes == null) {
+      vraag.hidden = true;
+      kaart.querySelector(".dn-niet-gestart").hidden = false;
+    } else if (gestartOp && rondjes == null) {
+      const uur = new Intl.DateTimeFormat("nl-BE", { hour: "2-digit", minute: "2-digit" }).format(new Date(gestartOp));
+      kaart.querySelector(".dn-klaar-vraag h3").textContent += ` (gestart om ${uur})`;
+    }
 
     if (rondjes != null) {
       vraag.hidden = true;
@@ -288,7 +299,9 @@
         console.error(error);
         melding.hidden = false;
         melding.classList.add("fout");
-        melding.textContent = "Opslaan mislukt. Probeer het opnieuw.";
+        melding.textContent = /niet gestart/i.test(error.message)
+          ? "Je bent nog niet gestart. Meld je aan bij de administratiepost."
+          : "Opslaan mislukt. Probeer het opnieuw.";
         return;
       }
       if (data?.gemaild) alert(`Bedankt! ${data.gemaild} sponsor(s) kregen een mail met het bedrag.`);

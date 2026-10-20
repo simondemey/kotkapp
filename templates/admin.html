@@ -13,6 +13,7 @@
       <div class="stat"><span class="stat-getal" id="stat-lopers">0</span><span class="stat-label">lopers</span></div>
       <div class="stat"><span class="stat-getal" id="stat-wandelaars">0</span><span class="stat-label">wandelaars</span></div>
       <div class="stat"><span class="stat-getal" id="stat-supporters">0</span><span class="stat-label">supporters</span></div>
+      <div class="stat"><span class="stat-getal" id="stat-gestart">0</span><span class="stat-label">gestart</span></div>
       <div class="stat"><span class="stat-getal" id="stat-klaar">0</span><span class="stat-label">klaar met lopen</span></div>
       <div class="stat"><span class="stat-getal" id="stat-rondjes">0</span><span class="stat-label">rondjes</span></div>
       <div class="stat stat-breed"><span class="stat-getal" id="stat-opgehaald">€ 0</span><span class="stat-label">opgehaald (na lopen)</span></div>
@@ -28,6 +29,7 @@
     </div>
 
     <h2 class="sectie-titel" style="margin-top:2.5rem">Deelnemers</h2>
+    <p class="intro klein">Aan de administratiepost: <strong>klik op het nummer</strong> (of ▶ bij wandelaars) om iemand te laten starten. Groen = gestart.</p>
     <label class="veld admin-zoek">
       <span>Zoeken <small>(naam, nummer of e-mail)</small></span>
       <input type="search" id="zoek" autocomplete="off">
@@ -35,7 +37,7 @@
     <div class="tabel-wrap">
       <table class="admin-tabel">
         <thead>
-          <tr><th>Nr</th><th>Naam</th><th>Loopt</th><th>Wandelt</th><th>Supporter</th><th>Rondjes</th><th>Sponsors</th><th>Opgehaald</th><th>Ingeschreven door</th><th>Datum</th><th></th></tr>
+          <tr><th title="Klik op het nummer om te starten">Start / nr</th><th>Naam</th><th>Loopt</th><th>Wandelt</th><th>Supporter</th><th>Rondjes</th><th>Sponsors</th><th>Opgehaald</th><th>Ingeschreven door</th><th>Datum</th><th></th></tr>
         </thead>
         <tbody id="admin-rijen"></tbody>
       </table>

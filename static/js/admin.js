@@ -28,13 +28,14 @@
   }
 
   async function laad() {
-    const [ins, sp, ro] = await Promise.all([
+    const [ins, sp, ro, st] = await Promise.all([
       db.from("inschrijvingen").select("*").order("created_at"),
       db.from("sponsors").select("*").order("created_at"),
       db.from("rondjes").select("deelnemer_id, aantal"),
+      db.from("starts").select("deelnemer_id, gestart_op"),
     ]);
     const data = ins.data;
-    const error = ins.error || sp.error || ro.error;
+    const error = ins.error || sp.error || ro.error || st.error;
     if (error) {
       console.error(error);
       status.hidden = false;
@@ -44,13 +45,14 @@
     inschrijvingen = data;
     sponsors = sp.data;
     const rondjesVan = Object.fromEntries(ro.data.map((r) => [r.deelnemer_id, r.aantal]));
+    const startVan = Object.fromEntries(st.data.map((r) => [r.deelnemer_id, r.gestart_op]));
     deelnemers = data.flatMap((i) =>
       i.deelnemers.map((d) => {
         const eigen = sponsors.filter((s) => s.deelnemer_id === d.id);
         const rondjes = rondjesVan[d.id] ?? null;
         return {
           ...d, email: i.email, created_at: i.created_at, vragen: i.vragen, user_id: i.user_id,
-          sponsors: eigen, rondjes,
+          sponsors: eigen, rondjes, gestart_op: startVan[d.id] ?? null,
           opgehaald: eigen.reduce((som, s) => som + bedragVan(s, rondjes), 0),
         };
       })
@@ -70,6 +72,7 @@
     zet("stat-wandelaars", deelnemers.filter((d) => d.wandelt).length);
     zet("stat-supporters", deelnemers.filter((d) => d.supporter).length);
     zet("stat-inschrijvingen", inschrijvingen.length);
+    zet("stat-gestart", deelnemers.filter((d) => d.gestart_op).length);
     zet("stat-klaar", deelnemers.filter((d) => d.rondjes != null).length);
     zet("stat-rondjes", deelnemers.reduce((som, d) => som + (d.rondjes || 0), 0));
     zet("stat-opgehaald", euro(deelnemers.filter((d) => d.rondjes != null).reduce((som, d) => som + d.opgehaald, 0)).replace(",00", ""));
@@ -99,7 +102,7 @@
     tbody.replaceChildren(
       ...zichtbaar.map((d) => {
         const tr = document.createElement("tr");
-        cel(tr, d.nr ?? "–");
+        startCel(tr, d);
         cel(tr, d.naam);
         cel(tr, d.loopt ? "✓" : "", "ja");
         cel(tr, d.wandelt ? "✓" : "", "ja");
@@ -125,6 +128,39 @@
       const tr = document.createElement("tr");
       cel(tr, term ? "Geen deelnemers gevonden." : "Nog geen inschrijvingen.").colSpan = 11;
       tbody.append(tr);
+    }
+  }
+
+  // Starten aan de administratiepost: klik op het nummer (wandelaars: op "Start")
+  const uur = new Intl.DateTimeFormat("nl-BE", { hour: "2-digit", minute: "2-digit" });
+  function startCel(tr, d) {
+    const td = cel(tr, "");
+    if (d.supporter) return void (td.textContent = "–");
+    const knop = document.createElement("button");
+    knop.type = "button";
+    knop.className = "start-knop" + (d.gestart_op ? " gestart" : "");
+    knop.textContent = d.nr ?? "▶";
+    knop.title = d.gestart_op
+      ? `Gestart om ${uur.format(new Date(d.gestart_op))} – klik om de start ongedaan te maken`
+      : `Klik om ${d.naam} te laten starten`;
+    knop.addEventListener("click", async () => {
+      const starten = !d.gestart_op;
+      if (!starten && !confirm(`De start van ${d.naam} ongedaan maken?`)) return;
+      knop.disabled = true;
+      const { error } = await db.rpc("start_deelnemer", { p_deelnemer: d.id, p_start: starten });
+      knop.disabled = false;
+      if (error) {
+        console.error(error);
+        return alert("Starten mislukt.");
+      }
+      laad();
+    });
+    td.append(knop);
+    if (d.gestart_op) {
+      const t = document.createElement("small");
+      t.className = "start-uur";
+      t.textContent = uur.format(new Date(d.gestart_op));
+      td.append(t);
     }
   }
 
@@ -203,10 +239,10 @@
 
   // CSV (één rij per deelnemer) met ; en BOM zodat Excel met Belgische instellingen het meteen goed opent
   document.getElementById("csv-knop").addEventListener("click", () => {
-    const kop = ["nr", "naam", "loopt", "wandelt", "supporter", "rondjes", "aantal sponsors", "opgehaald", "ingeschreven door", "vragen", "datum"];
+    const kop = ["nr", "naam", "loopt", "wandelt", "supporter", "gestart om", "rondjes", "aantal sponsors", "opgehaald", "ingeschreven door", "vragen", "datum"];
     const veilig = (w) => `"${String(w ?? "").replace(/"/g, '""')}"`;
     const regels = deelnemers.map((d) =>
-      [d.nr ?? "", d.naam, d.loopt ? "ja" : "nee", d.wandelt ? "ja" : "nee", d.supporter ? "ja" : "nee", d.rondjes ?? "", d.sponsors.length, d.sponsors.length ? d.opgehaald.toFixed(2).replace(".", ",") : "", d.email, d.vragen, new Date(d.created_at).toLocaleString("nl-BE")].map(veilig).join(";")
+      [d.nr ?? "", d.naam, d.loopt ? "ja" : "nee", d.wandelt ? "ja" : "nee", d.supporter ? "ja" : "nee", d.gestart_op ? new Date(d.gestart_op).toLocaleTimeString("nl-BE") : "", d.rondjes ?? "", d.sponsors.length, d.sponsors.length ? d.opgehaald.toFixed(2).replace(".", ",") : "", d.email, d.vragen, new Date(d.created_at).toLocaleString("nl-BE")].map(veilig).join(";")
     );
     const csv = [kop.join(";"), ...regels].join("\r\n");
     const url = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" }));

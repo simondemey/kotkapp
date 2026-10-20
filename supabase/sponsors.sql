@@ -264,6 +264,7 @@ revoke all on function public.stuur_sponsormail(uuid) from public, anon, authent
 -- 5. Rondjes opslaan (deelnemer zelf of beheerder) + sponsors mailen
 -- =====================================================================
 -- p_opnieuw = true: ook sponsors die al een mail kregen opnieuw mailen (bv. na een correctie)
+-- (in starts.sql vervangen door een versie die eerst een start door een beheerder vereist)
 create or replace function public.rondjes_opslaan(p_deelnemer uuid, p_aantal integer, p_opnieuw boolean default false)
 returns json
 language plpgsql

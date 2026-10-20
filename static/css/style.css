@@ -740,10 +740,17 @@ a { color: var(--oranje); }
 /* Footer: zin over het zelfgemaakte projectje (onderaan, volle breedte) */
 .footer-vibe { order: 3; flex-basis: 100%; margin: 0; font-size: .8rem; color: var(--zalm); text-align: center; overflow-wrap: anywhere; }
 
-/* Zet in je agenda */
-.agenda { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .5rem; margin: .75rem 0 0; }
-.agenda-label { font-weight: 800; color: var(--zalm); font-size: .95rem; }
-.agenda .knop-klein { text-decoration: none; font-size: .9rem; }
+/* Zet in je agenda: kleine ronde knoppen met logo */
+.agenda { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .4rem; margin: .75rem 0 0; }
+.agenda-label { font-weight: 800; color: var(--zalm); font-size: .9rem; margin-right: .2rem; }
+.agenda-knop {
+  display: inline-grid; place-items: center;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: #fff; border: 2px solid var(--lint);
+  transition: transform .15s, border-color .2s;
+}
+.agenda-knop:hover { transform: translateY(-2px); border-color: var(--kaart); }
+.agenda-knop svg { width: 20px; height: 20px; }
 
 /* Live teller op de homepagina */
 .teller {

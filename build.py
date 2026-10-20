@@ -65,6 +65,11 @@ def agenda(event: dict) -> dict:
     google = "https://calendar.google.com/calendar/render?" + urllib.parse.urlencode(
         {"action": "TEMPLATE", "text": titel, "dates": f"{start}/{einde}", "location": plaats, "details": info}
     )
+    iso = lambda s: datetime.fromisoformat(s).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    outlook = "https://outlook.live.com/calendar/0/deeplink/compose?" + urllib.parse.urlencode(
+        {"path": "/calendar/action/compose", "rru": "addevent", "subject": titel,
+         "startdt": iso(event["start"]), "enddt": iso(event["einde"]), "location": plaats, "body": info}
+    )
     escape = lambda t: t.replace("\\", "\\\\").replace(",", r"\,").replace(";", r"\;")
     ics = "\r\n".join([
         "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Running for Pauline//NL", "CALSCALE:GREGORIAN",
@@ -75,7 +80,7 @@ def agenda(event: dict) -> dict:
         f"URL:{event['site_url']}",
         "END:VEVENT", "END:VCALENDAR", "",
     ])
-    return {"google_url": google, "ics": "running-for-pauline.ics", "ics_inhoud": ics}
+    return {"google_url": google, "outlook_url": outlook, "ics": "running-for-pauline.ics", "ics_inhoud": ics}
 
 
 def build() -> None:

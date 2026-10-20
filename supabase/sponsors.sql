@@ -265,7 +265,8 @@ revoke all on function public.stuur_sponsormail(uuid) from public, anon, authent
 -- 5. Rondjes opslaan (deelnemer zelf of beheerder) + sponsors mailen
 -- =====================================================================
 -- p_opnieuw = true: ook sponsors die al een mail kregen opnieuw mailen (bv. na een correctie)
--- (in starts.sql vervangen door een versie die eerst een start door een beheerder vereist)
+-- Deelnemers kunnen pas rondjes ingeven na een start door een beheerder (tabel starts, zie starts.sql).
+-- Deze functie is identiek aan die in starts.sql; pas ze altijd in beide bestanden aan.
 create or replace function public.rondjes_opslaan(p_deelnemer uuid, p_aantal integer, p_opnieuw boolean default false)
 returns json
 language plpgsql
@@ -277,14 +278,18 @@ declare
   d        jsonb;
   s        record;
   gemaild  integer := 0;
+  admin    boolean := public.is_admin();
 begin
   select i.user_id, e into eigenaar, d
     from public.inschrijvingen i, jsonb_array_elements(i.deelnemers) e
    where e ->> 'id' = p_deelnemer::text limit 1;
 
   if eigenaar is null then raise exception 'Deelnemer niet gevonden'; end if;
-  if auth.uid() is distinct from eigenaar and not public.is_admin() then
+  if auth.uid() is distinct from eigenaar and not admin then
     raise exception 'Geen toegang' using errcode = '42501';
+  end if;
+  if not admin and not exists (select 1 from public.starts where deelnemer_id = p_deelnemer) then
+    raise exception 'Je bent nog niet gestart. Meld je aan bij de administratiepost.' using errcode = 'P0001';
   end if;
   if not (coalesce((d ->> 'loopt')::boolean, false) or coalesce((d ->> 'wandelt')::boolean, false)) then
     raise exception 'Supporters hebben geen rondjes';

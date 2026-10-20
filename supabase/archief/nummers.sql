@@ -1,3 +1,8 @@
+-- NIET OPNIEUW UITVOEREN – al toegepast op de live database in oktober 2026.
+-- Reden: achterhaald: de nummer-trigger zit nu in accounts.sql en sponsors.sql; dit bestand bevat ook een lus die alle inschrijvingen opnieuw opslaat.
+-- Dit bestand staat enkel nog in supabase/archief/ als geschiedenis. Zie supabase/README.md.
+-- ============================================================================================
+
 -- Elke deelnemer krijgt een vast, uniek nummer (1, 2, 3, …) bij het inschrijven.
 -- Voer uit in Supabase > SQL Editor. Je kan het veilig opnieuw uitvoeren.
 --

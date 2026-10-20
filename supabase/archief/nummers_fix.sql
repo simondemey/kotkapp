@@ -1,3 +1,8 @@
+-- NIET OPNIEUW UITVOEREN – al toegepast op de live database in oktober 2026.
+-- Reden: hernummert alle lopers en zet een oude versie van de nummer-trigger terug (zonder deelnemer-id's).
+-- Dit bestand staat enkel nog in supabase/archief/ als geschiedenis. Zie supabase/README.md.
+-- ============================================================================================
+
 -- Herstel: nummers bleven veranderen bij elke "Inschrijving opslaan".
 -- Oorzaak: de site bewaart met een upsert (INSERT … ON CONFLICT DO UPDATE). Daarbij loopt eerst
 -- de INSERT-trigger, die geen "oude" nummers kende en dus altijd nieuwe uitdeelde.

@@ -1,3 +1,8 @@
+-- NIET OPNIEUW UITVOEREN – al toegepast op de live database in oktober 2026.
+-- Reden: herschrijft de keuze van bestaande deelnemers; de validatie zit nu in accounts.sql.
+-- Dit bestand staat enkel nog in supabase/archief/ als geschiedenis. Zie supabase/README.md.
+-- ============================================================================================
+
 -- Elke deelnemer kiest precies één: loopt, wandelt of supporter.
 -- Voer uit in Supabase > SQL Editor.
 -- Stap 1 zet bestaande deelnemers met meerdere keuzes recht (voorrang: loopt > wandelt > supporter).

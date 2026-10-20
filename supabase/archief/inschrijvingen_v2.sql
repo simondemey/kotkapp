@@ -1,3 +1,8 @@
+-- NIET OPNIEUW UITVOEREN – al toegepast op de live database in oktober 2026.
+-- Reden: verwijdert de tabel inschrijvingen met ALLE inschrijvingen (drop table) en maakt ze leeg opnieuw aan.
+-- Dit bestand staat enkel nog in supabase/archief/ als geschiedenis. Zie supabase/README.md.
+-- ============================================================================================
+
 -- Inschrijvingen v2: één inschrijving per account met 1 tot 10 deelnemers (zoals het vroegere Google-formulier).
 -- Voer uit in Supabase > SQL Editor. LET OP: dit verwijdert de bestaande (test)inschrijvingen.
 -- Nieuwe projecten: voer schema.sql en accounts.sql uit; accounts.sql bevat deze versie al.

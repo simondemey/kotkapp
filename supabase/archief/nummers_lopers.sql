@@ -1,3 +1,8 @@
+-- NIET OPNIEUW UITVOEREN – al toegepast op de live database in oktober 2026.
+-- Reden: hernummert alle lopers en zet een oude versie van de nummer-trigger terug (zonder deelnemer-id's).
+-- Dit bestand staat enkel nog in supabase/archief/ als geschiedenis. Zie supabase/README.md.
+-- ============================================================================================
+
 -- Enkel lopers krijgen een nummer; wandelaars en supporters niet.
 -- Voer uit in Supabase > SQL Editor (samen met de bijgewerkte bevestigingsmail.sql die erboven staat).
 

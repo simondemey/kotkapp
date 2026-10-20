@@ -6,15 +6,19 @@ Website voor de sponsorloop **Running for Pauline – Valentines Edition**
 ## Architectuur
 
 Statische, responsieve website (werkt ook op gsm), gebouwd met een klein Python-script.
-Geen server of database nodig: de countdown draait in de browser.
+Inschrijvingen, sponsors, fotomuur en beheer gebruiken Supabase (database, logins, opslag);
+mails gaan via Brevo.
 
 ```
 content/      Inhoud – hier pas je teksten, timeline, sponsors, menu en praktische info aan
 templates/    Jinja2-templates (base.html + één per pagina)
 static/       CSS, JavaScript en afbeeldingen
+supabase/     SQL-scripts van de database – zie supabase/README.md (nooit iets uit supabase/archief/ uitvoeren)
 build.py      Genereert de site in dist/
 dist/         Resultaat (niet zelf aanpassen; dit wordt gepubliceerd)
 ```
+
+Database opzetten of aanpassen: zie [supabase/README.md](supabase/README.md).
 
 Pagina's: Home (countdown) · Over · Timeline · Sponsors · Food & Drinks · Praktische info
 

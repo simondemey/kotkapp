@@ -1,3 +1,8 @@
+-- NIET OPNIEUW UITVOEREN – al toegepast op de live database in oktober 2026.
+-- Reden: achterhaald: de validatie van deelnemers zit nu in accounts.sql.
+-- Dit bestand staat enkel nog in supabase/archief/ als geschiedenis. Zie supabase/README.md.
+-- ============================================================================================
+
 -- Deelnemers mogen ook als supporter komen (aanmoedigen, niet lopen of wandelen).
 -- Voer uit in Supabase > SQL Editor. Bestaande inschrijvingen blijven geldig.
 -- Elke deelnemer: {"naam": "...", "loopt": bool, "wandelt": bool, "supporter": bool (optioneel)}, minstens één ervan true.

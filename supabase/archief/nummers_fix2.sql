@@ -1,3 +1,8 @@
+-- NIET OPNIEUW UITVOEREN – al toegepast op de live database in oktober 2026.
+-- Reden: hernummert alle lopers en zet een oude versie van de nummer-trigger terug (zonder deelnemer-id's).
+-- Dit bestand staat enkel nog in supabase/archief/ als geschiedenis. Zie supabase/README.md.
+-- ============================================================================================
+
 -- Herstel 2: nummers bleven oplopen bij herhaald opslaan wanneer de pagina geen nummer meestuurde
 -- (bv. een oude, onthouden versie van de pagina).
 -- Nieuwe regel per deelnemer, in deze volgorde:

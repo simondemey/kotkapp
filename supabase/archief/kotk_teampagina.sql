@@ -1,3 +1,8 @@
+-- NIET OPNIEUW UITVOEREN – al toegepast op de live database in oktober 2026.
+-- Reden: achterhaald: de sponsormail zit nu in sponsors.sql en wandelen.sql.
+-- Dit bestand staat enkel nog in supabase/archief/ als geschiedenis. Zie supabase/README.md.
+-- ============================================================================================
+
 -- Sponsormail: betalen aan Kom op tegen Kanker enkel nog via de teampagina (geen rekeningnummer meer).
 -- Voer uit in Supabase > SQL Editor. Veilig om opnieuw uit te voeren.
 

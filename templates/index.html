@@ -23,6 +23,10 @@
     {{ event.datum_label }}<br>{{ event.uren_label }}
   </p>
 
+  {% include "_agenda.html" %}
+
+  <p class="teller" id="teller" hidden aria-live="polite"></p>
+
   <div class="knoppen">
     <a class="knop knop-groot" href="inschrijven.html">Schrijf je nu in 🏃</a>
     <a class="knop" href="{{ event.goed_doel.steun_url }}" target="_blank" rel="noopener">{{ event.goed_doel.steun_label }} ♡</a>
@@ -34,4 +38,7 @@
 </section>
 {% endblock %}
 
-{% block scripts %}<script src="static/js/countdown.js?v={{ versie }}" defer></script>{% endblock %}
+{% block scripts %}
+<script src="static/js/countdown.js?v={{ versie }}" defer></script>
+<script src="static/js/teller.js?v={{ versie }}" defer></script>
+{% endblock %}

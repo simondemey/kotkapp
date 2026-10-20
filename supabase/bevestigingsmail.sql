@@ -30,6 +30,7 @@ declare
   sleutel text;
   rijen   text;
   html    text;
+  lopers  boolean;   -- minstens één loper? dan zinnen over nummers tonen
 begin
   -- Enkel bij een nieuwe inschrijving of als de deelnemers veranderd zijn
   if tg_op = 'UPDATE' and old.deelnemers is not distinct from new.deelnemers then
@@ -47,6 +48,11 @@ begin
     raise warning 'bevestigingsmail: geen brevo_api_key in de Vault';
     return new;
   end if;
+
+  select exists (
+           select 1 from jsonb_array_elements(new.deelnemers) e
+            where coalesce((e ->> 'loopt')::boolean, false))
+    into lopers;
 
   select string_agg(
            format(
@@ -75,7 +81,9 @@ begin
     '<tr><td align="center" style="padding:4px 28px 0;font-family:Impact,''Arial Narrow Bold'',Arial,sans-serif;font-size:20px;color:#E0611F;">RUNNING FOR <span style="color:#F6B21C;">PAULINE</span></td></tr>'
     '<tr><td style="padding:24px 28px 8px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#3A2A20;">'
     '<p style="margin:0 0 12px;">Hallo!</p>'
-    '<p style="margin:0;">Bedankt voor je inschrijving voor de sponsorloop op <strong>zondag 14 februari 2027</strong>. Dit zijn jullie deelnemers. Lopers krijgen een nummer.</p>'
+    '<p style="margin:0;">Bedankt voor je inschrijving voor de sponsorloop op <strong>zondag 14 februari 2027</strong>. Dit zijn jullie deelnemers'
+    || case when lopers then '. Elke loper krijgt een nummer:' else ':' end ||
+    '</p>'
     '</td></tr>'
     '<tr><td style="padding:8px 16px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FDF8EC;border-radius:12px;">'
     || coalesce(rijen, '') ||
@@ -86,8 +94,10 @@ begin
     '</td></tr>'
     '<tr><td style="padding:4px 16px 8px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FBE3B0;border-radius:12px;"><tr>'
     '<td style="padding:14px 16px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.5;color:#3A2A20;">'
-    '📌 <strong>Belangrijk:</strong> meld je op de dag zelf eerst aan bij de <strong>administratiepost</strong>. '
-    '<strong>Lopers</strong> geven daar hun <strong>nummer</strong> door. Bewaar deze mail dus goed!'
+    '📌 <strong>Belangrijk:</strong> meld je op de dag zelf eerst aan bij de <strong>administratiepost</strong>.'
+    || case when lopers
+            then ' <strong>Lopers</strong> geven daar hun <strong>nummer</strong> door. Bewaar deze mail dus goed!'
+            else ' Tot dan!' end ||
     '</td></tr></table></td></tr>'
     '<tr><td align="center" style="padding:12px 28px 24px;">'
     '<a href="https://runningforpauline.be/inschrijven.html" style="display:inline-block;background:#E0611F;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;text-decoration:none;padding:12px 26px;border-radius:999px;">Mijn inschrijving bekijken</a>'

@@ -1,0 +1,41 @@
+# Houdt het gratis Supabase-project wakker: dat wordt gepauzeerd na 7 dagen zonder activiteit.
+# Elke 3 dagen een kleine leesvraag naar de database (met de publieke sleutel, enkel lezen).
+# Daarnaast één keer per maand een mini-commit, want GitHub zet geplande taken stil
+# in een repository zonder commits gedurende 60 dagen.
+name: Supabase wakker houden
+
+on:
+  schedule:
+    - cron: "17 6 */3 * *"   # om 06:17 UTC, elke 3 dagen
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Database aanspreken
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://bulyalhdjcwvbjicgoqz.supabase.co/rest/v1/posts?select=id&limit=1" \
+            -H "apikey: sb_publishable_qifEhl2cBYVjf94L6w1tKA_sZu8o4U3")
+          echo "Supabase antwoordde met $code"
+          test "$code" = "200"
+
+      - uses: actions/checkout@v4
+        if: github.event_name == 'schedule'
+
+      - name: Maandelijkse mini-commit (GitHub-taken blijven actief)
+        if: github.event_name == 'schedule'
+        run: |
+          maand=$(date -u +%Y-%m)
+          if [ "$(cat .github/wakker.txt 2>/dev/null)" != "$maand" ]; then
+            echo "$maand" > .github/wakker.txt
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .github/wakker.txt
+            git commit -m "Supabase wakker houden ($maand)"
+            git push
+          fi

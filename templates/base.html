@@ -48,10 +48,13 @@
     </button>
     <nav id="hoofdmenu" class="hoofdmenu">
       {% for href, label in nav %}
+      {% if href == "inschrijven.html" and current == "deelname.html" %}
+      <a href="deelname.html" class="nav-cta" aria-current="page">Mijn deelname</a>
+      {% else %}
       <a href="{{ href }}"{% if href == "inschrijven.html" %} class="nav-cta"{% endif %}{% if href == current %} aria-current="page"{% endif %}>{{ label }}</a>
+      {% endif %}
       {% endfor %}
-      {# Enkel zichtbaar voor wie ingeschreven is / beheerders (main.js controleert dat) #}
-      <a href="deelname.html" class="nav-deelname"{% if current == "deelname.html" %} aria-current="page"{% else %} hidden{% endif %}>Mijn deelname</a>
+      {# Enkel zichtbaar voor beheerders; wie ingeschreven is krijgt "Mijn deelname" i.p.v. "Inschrijven" (main.js controleert dat) #}
       <a href="admin.html" class="nav-admin"{% if current == "admin.html" %} aria-current="page"{% else %} hidden{% endif %}>🛠️ Beheer</a>
     </nav>
   </header>

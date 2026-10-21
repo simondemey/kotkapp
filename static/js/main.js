@@ -24,12 +24,13 @@ document.querySelectorAll("[data-kopieer]").forEach((knop) => {
   });
 });
 
-// Menu-items "Mijn deelname" (ingeschreven) en "Beheer" (beheerders) tonen.
+// Wie ingeschreven is: menuknop "Inschrijven" wordt "Mijn deelname" en de andere inschrijfknoppen verdwijnen
+// (aanpassen kan via Mijn deelname). "Beheer" tonen voor beheerders.
 // Menu-item "Beheer" tonen voor beheerders. Werkt op elke pagina, ook zonder de Supabase-bibliotheek:
 // we lezen de login uit de browser en vragen de database of dit account beheerder is.
 (function () {
   const link = document.querySelector(".nav-admin");
-  const deelnameLink = document.querySelector(".nav-deelname");
+  const cta = document.querySelector('.nav-cta[href="inschrijven.html"]');
   if (!link) return;
   const { sbUrl, sbKey } = document.body.dataset;
 
@@ -43,13 +44,18 @@ document.querySelectorAll("[data-kopieer]").forEach((knop) => {
   }
   if (!token) return;
 
-  // Mijn deelname: ingeschreven? (de database toont enkel je eigen inschrijving)
-  if (deelnameLink && deelnameLink.hidden) {
+  // Ingeschreven? (de database toont enkel je eigen inschrijving)
+  if (cta) {
     fetch(`${sbUrl}/rest/v1/inschrijvingen?select=user_id&limit=1`, {
       headers: { apikey: sbKey, Authorization: `Bearer ${token}` },
     })
       .then((r) => (r.ok ? r.json() : []))
-      .then((rijen) => (deelnameLink.hidden = !rijen.length))
+      .then((rijen) => {
+        if (!rijen.length) return;
+        cta.href = "deelname.html";
+        cta.textContent = "Mijn deelname";
+        document.querySelectorAll('main a[href="inschrijven.html"]').forEach((a) => (a.hidden = true));
+      })
       .catch(() => {});
   }
   if (!link.hidden) return;

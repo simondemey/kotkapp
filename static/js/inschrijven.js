@@ -126,7 +126,7 @@
     adminLink.hidden = !(await window.sbIsAdmin());
     const metNummer = (data?.deelnemers ?? []).filter((d) => d.nr);
     toonNummers(metNummer);
-    return metNummer;
+    return !!data;
   }
 
   // Overzicht met grote nummers bovenaan
@@ -205,12 +205,21 @@
   }
 
   // ---------- Juiste stap tonen ----------
+  // Al ingeschreven? Dan is "Mijn deelname" de startpagina; aanpassen kan via ?aanpassen=1
+  const aanpassen = new URLSearchParams(location.search).has("aanpassen");
+
   async function render(session) {
     gebruiker = session?.user ?? null;
-    laden.hidden = true;
     loginForm.hidden = !!gebruiker;
-    form.hidden = !gebruiker;
-    if (gebruiker) await toonInschrijving();
+    form.hidden = true;
+    if (!gebruiker) {
+      laden.hidden = true;
+      return;
+    }
+    const ingeschreven = await toonInschrijving();
+    if (ingeschreven && !aanpassen) return location.replace("deelname.html");
+    laden.hidden = true;
+    form.hidden = false;
   }
 
   db.auth.onAuthStateChange((_event, session) => {
